@@ -1,0 +1,39 @@
+import 'package:flutter/material.dart';
+import 'package:mustye/core/res/colors.dart';
+
+class RoundedButton extends StatelessWidget {
+  const RoundedButton(
+    this.label, {
+    required this.onPressed,
+    super.key,
+    this.elevation,
+    this.labelColor,
+    this.buttonColor,
+  });
+
+  final String label;
+  final Color? labelColor;
+  final Color? buttonColor;
+  final double? elevation;
+  final void Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        elevation: elevation,
+        backgroundColor: buttonColor ?? Colours.primaryColor,
+        foregroundColor: labelColor ?? Colors.white,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 50,
+          vertical: 17,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(90),
+        ),
+      ),
+      child: Text(label),
+    );
+  }
+}

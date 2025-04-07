@@ -6,6 +6,7 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   await _initAuth();
+  await _initContacts();
 }
 
 /// Feature --> Auth
@@ -15,14 +16,16 @@ Future<void> _initAuth() async{
   sl
     ..registerFactory(
       () => AuthBloc(
-        signUp: sl(),
+        googleSignIn: sl(),
         signIn: sl(),
+        signUp: sl(),
         forgotPassword: sl(),
-        updateUser: sl(),
+        updateUser: sl(), 
       ),
     )
-    ..registerLazySingleton(() => SignUp(sl()))
     ..registerLazySingleton(() => SignIn(sl()))
+    ..registerLazySingleton(() => GoogleLoginIn(sl()))
+    ..registerLazySingleton(() => SignUp(sl()))
     ..registerLazySingleton(() => ForgotPassword(sl()))
     ..registerLazySingleton(() => UpdateUser(sl()))
     ..registerLazySingleton<AuthRepo>(() => AuthRepoImpl(sl()))
@@ -31,9 +34,34 @@ Future<void> _initAuth() async{
         authClient: sl(),
         cloudStoreClient: sl(),
         dbClient: sl(),
+        googleSignIn: sl(),
       ),
     )
     ..registerLazySingleton(() => FirebaseAuth.instance)
     ..registerLazySingleton(() => FirebaseFirestore.instance)
-    ..registerLazySingleton(() => FirebaseStorage.instance);
+    ..registerLazySingleton(() => FirebaseStorage.instance)
+    ..registerLazySingleton(() => GoogleSignIn(
+        scopes: ['openid', 'email', 'profile'],
+      ),
+    );
+}
+
+/// Feature --> Auth
+
+Future<void> _initContacts() async{
+
+  sl
+    ..registerFactory(
+      () => ContactCubit(
+        getContacts: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => GetContacts(sl()))
+    ..registerLazySingleton<ContactRepo>(() => ContactRepoImpl(sl()))
+    ..registerLazySingleton<ContactRemoteDataSrc>(
+      () => ContactRemoteDataSrcImpl(
+        auth: sl(),
+        firestore: sl(),
+      ),
+    );
 }

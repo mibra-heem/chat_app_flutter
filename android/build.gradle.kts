@@ -1,3 +1,14 @@
+// Root project configuration
+buildscript {
+    repositories {
+        google()  // Make sure google() is defined here
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.google.gms:google-services:4.3.15")  // Correct syntax for Kotlin DSL
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -12,6 +23,7 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }
