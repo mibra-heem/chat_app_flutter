@@ -16,13 +16,13 @@ class Colours {
   ];
 
   static const primaryGradient = [
-    Color.fromARGB(255, 254, 255, 247),
-    Color.fromARGB(255, 254, 255, 249),
+    Color.fromARGB(255, 249, 251, 231),
+    Color.fromARGB(255, 249, 255, 218),
     Color.fromARGB(255, 253, 255, 245),
     Color.fromARGB(255, 253, 255, 247),
   ];
 
-  static const primaryColor = Color(0xFF458CFF);
+  static const primaryColor = Colors.amber;
   static const neutralTextColor = Color.fromARGB(255, 125, 125, 125);
 
 }

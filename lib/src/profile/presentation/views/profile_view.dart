@@ -4,8 +4,8 @@ import 'package:mustye/src/profile/presentation/parts/profile_app_bar.dart';
 import 'package:mustye/src/profile/presentation/parts/profile_body.dart';
 import 'package:mustye/src/profile/presentation/parts/profile_header.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileView extends StatelessWidget {
+  const ProfileView({super.key});
 
   static const routeName = '/profile';
 
@@ -20,7 +20,7 @@ class ProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: const [
             ProfileHeader(),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
             ProfileBody(),
           ],
         ),

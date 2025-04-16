@@ -20,7 +20,6 @@ class Contact extends Equatable {
           image: '',
           bio: '',
           lastSeen: null,
-          isOnline: false,
           fcmToken: '',
         );
 
@@ -29,7 +28,7 @@ class Contact extends Equatable {
   final String? image;
   final String? bio;
   final String fullName;
-  final DateTime? lastSeen;
+  final String? lastSeen;
   final bool isOnline;
   final String? fcmToken;
 

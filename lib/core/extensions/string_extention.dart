@@ -14,4 +14,21 @@ extension StringExtention on String{
     return '$username@$domain';
   }
 
+  String get firstName {
+    final index = indexOf(' ');
+    final name = substring(0, index + 2);
+    
+    return '$name.';
+
+  }
+
+  String get lastName {
+    final firstLetter = this[0];
+    final index = indexOf(' ');
+    final name = substring(index);
+    
+    return '$firstLetter.$name';
+
+  }
+
 }

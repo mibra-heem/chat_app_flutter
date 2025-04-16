@@ -16,16 +16,16 @@ import 'package:mustye/src/profile/presentation/forms/edit_profile_form.dart';
 import 'package:mustye/src/profile/presentation/provider/edit_profile_provider.dart';
 import 'package:provider/provider.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+class EditProfileView extends StatefulWidget {
+  const EditProfileView({super.key});
 
   static const routeName = '/edit-profile';
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  State<EditProfileView> createState() => _EditProfileViewState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _EditProfileViewState extends State<EditProfileView> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final bioController = TextEditingController();
@@ -69,14 +69,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       canPop: false,
       onPopInvokedWithResult: (canPop, _) {
         if (!canPop) {
-          Navigator.pop(context);
+          context.pop();
         }
       },
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) {
           if (state is UserUpdated) {
             CoreUtils.showSnackbar(context, 'Profile updated successfully.');
-            Navigator.pop(context);
+            context.pop();
           } else if (state is AuthError) {
             CoreUtils.showSnackbar(context, state.message);
           }
@@ -97,7 +97,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   builder: (_, provider, __) {
                     return TextButton(
                       onPressed: () {
-                        if (nothingChanged) Navigator.pop(context);
+                        if (nothingChanged) context.pop();
                         final bloc = context.read<AuthBloc>();
                         if (passwordChanged) {
                           if (oldPasswordController.text.trim().isEmpty) {
@@ -153,7 +153,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       },
                       child: state is AuthLoading
                           ? const Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                color: Colours.primaryColor,
+                              ),
                             )
                           : StatefulBuilder(
                               builder: (_, refresh) {

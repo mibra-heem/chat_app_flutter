@@ -12,6 +12,7 @@ import 'package:mustye/core/utils/constants.dart';
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
+import 'package:mustye/src/contact/data/model/contact_model.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
@@ -86,6 +87,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
         print('..... User Email : ${userCredential.user!.email} .......');
         print('..... User PhotoURL : ${userCredential.user!.photoURL} .......');
       }
+      
 
       return await getLocalUserModel(userCredential);
     } on FirebaseAuthException catch (e) {
@@ -266,15 +268,36 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       fullName: user.displayName ?? '',
       image: user.photoURL ?? '',
     );
+
+    final contact = ContactModel(
+      uid: user.uid,
+      email: user.email ?? fallbackEmail,
+      fullName: user.displayName ?? '',
+      image: user.photoURL ?? '',
+    );
+
     await _cloudStoreClient
         .collection('users')
         .doc(user.uid)
         .set(localUser.toMap());
+    
+    await _cloudStoreClient
+        .collection('contacts')
+        .doc(user.uid)
+        .set(contact.toMap());
   }
 
   Future<void> _updateUserData(DataMap userData) async {
     await _cloudStoreClient
         .collection('users')
+        .doc(_authClient.currentUser!.uid)
+        .update(userData);
+    // await _cloudStoreClient
+    //     .collection('users')
+    //     .doc(_authClient.currentUser!.uid)
+    //     .update(userData);
+    await _cloudStoreClient
+        .collection('contacts')
         .doc(_authClient.currentUser!.uid)
         .update(userData);
   }

@@ -1,10 +1,15 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mustye/core/common/widgets/popup_item.dart';
+import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
-import 'package:mustye/src/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
+import 'package:mustye/src/profile/presentation/provider/edit_profile_provider.dart';
+import 'package:mustye/src/profile/presentation/views/edit_profile_view.dart';
+import 'package:provider/provider.dart';
 
 class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ProfileAppBar({super.key});
@@ -28,9 +33,14 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
                 title: 'Edit Profile',
                 icon: Icons.edit_outlined,
               ),
-              onTap: () => Navigator.pushNamed(
-                context, 
-                EditProfileScreen.routeName,
+              onTap: () => context.push(
+                BlocProvider(
+                  create: (context) => sl<AuthBloc>(),
+                  child: ChangeNotifierProvider(
+                    create: (_) => EditProfileProvider(),
+                    child: const EditProfileView(),
+                  ),
+                ),
               ),
             ),
             PopupMenuItem<void>(
@@ -38,9 +48,8 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
                 title: 'Notifications',
                 icon: Icons.notifications_outlined,
               ),
-              onTap: () => Navigator.pushNamed(
-                context, 
-                EditProfileScreen.routeName,
+              onTap: () => context.push(
+                const Center(child: Text('Notifications Page')),
               ),
             ),
             PopupMenuItem<void>(
@@ -48,9 +57,8 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
                 title: 'Settings',
                 icon: Icons.settings_outlined,
               ),
-              onTap: () => Navigator.pushNamed(
-                context, 
-                EditProfileScreen.routeName,
+              onTap: () => context.push(
+                const Center(child: Text('Settings Page')),
               ),
             ),
             PopupMenuItem<void>(

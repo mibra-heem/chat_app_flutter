@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mustye/core/common/widgets/gradient_background.dart';
 import 'package:mustye/core/common/widgets/rounded_button.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
+import 'package:mustye/core/res/colors.dart';
 import 'package:mustye/core/res/fonts.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/core_utils.dart';
@@ -14,7 +15,7 @@ import 'package:mustye/src/auth/presentation/forms/sign_in_form.dart';
 import 'package:mustye/src/auth/presentation/views/forgot_password_screen.dart';
 import 'package:mustye/src/auth/presentation/views/sign_up_screen.dart';
 import 'package:mustye/src/auth/presentation/widgets/auth_button.dart';
-import 'package:mustye/src/home/presentation/screen/home_screen.dart';
+import 'package:mustye/src/dashboard/presentation/views/dashboard.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -46,7 +47,7 @@ class _SignInScreenState extends State<SignInScreen> {
             CoreUtils.showSnackbar(context, state.message);
           } else if (state is SignedIn) {
             context.userProvider.initUser(state.user as LocalUserModel);
-            Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+            Navigator.pushReplacementNamed(context, Dashboard.routeName);
             if (kDebugMode) print('...........Signed In successfully.........');
           }
         },
@@ -76,6 +77,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: TextButton(
                       style: const ButtonStyle(
                         padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                        splashFactory: NoSplash.splashFactory,
+
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -90,7 +93,13 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         );
                       },
-                      child: const Text('Forgot Password?'),
+                      child: const Text(
+                        'Forgot Password?', 
+                        style: TextStyle(
+                          color: Colours.neutralTextColor,
+                          // decoration: TextDecoration.underline,
+                          // decorationThickness: 2
+                        ),),
                     ),
                   ),
                   SizedBox(height: context.height * 0.02),
@@ -114,10 +123,15 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   SizedBox(height: context.height * 0.02),
                   const Row(
+                    spacing: 10,
                     children: <Widget>[
-                      Expanded(child: Divider(thickness: 1)),
+                      Expanded(
+                        child: Divider(thickness: 1, color: Colors.black),
+                      ),
                       Text('OR'),
-                      Expanded(child: Divider(thickness: 1)),
+                      Expanded(
+                        child: Divider(thickness: 1, color: Colors.black),
+                      ),
                     ],
                   ),
                   SizedBox(height: context.height * 0.02),
@@ -128,18 +142,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       AuthButton(
                         title: 'G',
                         color: Colors.orange,
-                        onTap: (){
-                          context.read<AuthBloc>().add(const GoogleSignInEvent());
+                        onTap: () {
+                          context.read<AuthBloc>().add(
+                            const GoogleSignInEvent(),
+                          );
                         },
                       ),
-                      const AuthButton(
-                        title: 'f',
-                        color: Colors.blueAccent,
-                      ),
-                      const AuthButton(
-                        title: 'X',
-                        color: Colors.black,
-                      ),
+                      const AuthButton(title: 'f', color: Colors.blueAccent),
+                      const AuthButton(title: 'X', color: Colors.black),
                     ],
                   ),
                   SizedBox(height: context.height * 0.02),

@@ -33,7 +33,7 @@ class RoundedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(90),
         ),
       ),
-      child: Text(label),
+      child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600),),
     );
   }
 }

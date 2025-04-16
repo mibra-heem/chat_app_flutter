@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/src/home/presentation/screen/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      Navigator.pushReplacementNamed(context, '/');
     });
   }
 

@@ -13,6 +13,7 @@ class MyField extends StatelessWidget {
     this.keyboardType,
     this.readOnly = false,
     this.suffixIcon,
+    this.prefixIcon,
     this.hintText,
     this.hintStyle,
     this.overrideValidator = false,
@@ -20,6 +21,7 @@ class MyField extends StatelessWidget {
     this.maxLines,
     this.counterText,
     this.maxLength,
+    this.isFocusOnTapOutside = true,
     super.key,
   });
 
@@ -32,6 +34,7 @@ class MyField extends StatelessWidget {
   final bool validatePassword;
   final bool readOnly;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
   final String? hintText;
   final TextInputType? keyboardType;
   final TextStyle? hintStyle;
@@ -40,6 +43,7 @@ class MyField extends StatelessWidget {
   final bool isTextArea;
   final String? counterText;
   final int? maxLength;
+  final bool isFocusOnTapOutside;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +55,9 @@ class MyField extends StatelessWidget {
         }
         return validator?.call(value);
       },
-      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+      onTapOutside: isFocusOnTapOutside 
+        ? (_) => FocusScope.of(context).unfocus() 
+        : null,
       obscureText: obscureText,
       readOnly: readOnly,
       keyboardType: keyboardType,
@@ -60,6 +66,7 @@ class MyField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: hintStyle,
+        prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         filled: filled,
         fillColor: fillColor,

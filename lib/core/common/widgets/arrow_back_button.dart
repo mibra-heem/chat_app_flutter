@@ -8,17 +8,17 @@ class ArrowBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: (){
-        // try{
-        //   // context.pop();
-        // } on Exception catch(_){
+        try{
+          context.pop();
+        } on Exception catch(_){
           Navigator.of(context).pop();
-        // }
+        }
       }, 
       icon: Icon(
         Theme.of(context).platform == TargetPlatform.iOS 
         ? Icons.arrow_back_ios_new 
         : Icons.arrow_back,
-    
+        color: Colors.white,
       ),
     );
   }

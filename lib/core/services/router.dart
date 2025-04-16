@@ -9,12 +9,11 @@ import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/auth/presentation/views/forgot_password_screen.dart';
 import 'package:mustye/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:mustye/src/auth/presentation/views/sign_up_screen.dart';
-import 'package:mustye/src/contact/presentation/cubit/contact_cubit.dart';
+import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
 import 'package:mustye/src/contact/presentation/screen/contact_screen.dart';
-import 'package:mustye/src/home/presentation/screen/home_screen.dart';
-import 'package:mustye/src/profile/presentation/provider/edit_profile_provider.dart';
-import 'package:mustye/src/profile/presentation/screens/edit_profile_screen.dart';
-import 'package:mustye/src/profile/presentation/screens/profile_screen.dart';
+import 'package:mustye/src/dashboard/presentation/views/dashboard.dart';
+import 'package:mustye/src/message/presentation/provider/message_provider.dart';
+import 'package:mustye/src/message/presentation/screen/message_screen.dart';
 import 'package:mustye/src/splash/presentation/views/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +22,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case SplashScreen.routeName:
       return _buildPage((context) {
         return const SplashScreen();
-      }, settings: settings);
+      }, settings: settings,);
 
     case '/':
       // final prefs = sl<SharedPreferences>();
@@ -36,16 +35,18 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             uid: user.uid,
             email: user.email ?? '',
             fullName: user.displayName ?? '',
+            image: user.photoURL ?? '',
+            bio: context.currentUser != null ? context.currentUser!.bio : '',
           );
           context.userProvider.initUser(localUser);
 
-          return const HomeScreen();
+          return const Dashboard();
         }
         return BlocProvider(
           create: (context) => sl<AuthBloc>(),
           child: const SignInScreen(),
         );
-      }, settings: settings);
+      }, settings: settings,);
 
     case SignInScreen.routeName:
       return _buildPage(
@@ -73,37 +74,45 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
         settings: settings,
       );
-    case HomeScreen.routeName:
-      return _buildPage((context) {
-        return const HomeScreen();
-      }, settings: settings);
+    case Dashboard.routeName:
+      return _buildPage((_) {
+        return const Dashboard();
+      }, settings: settings,);
     case ContactScreen.routeName:
       return _buildPage(
-        (_) => BlocProvider(
-          create: (context) => sl<ContactCubit>(),
+        (_) => ChangeNotifierProvider(
+          create: (context) => sl<ContactProvider>(),
           child: const ContactScreen(),
         ),
         settings: settings,
       );
-    case ProfileScreen.routeName:
+    case MessageScreen.routeName:
       return _buildPage(
-        (_) => BlocProvider(
-          create: (context) => sl<AuthBloc>(),
-          child: const ProfileScreen(),
+        (_) => ChangeNotifierProvider(
+          create: (context) => sl<MessageProvider>(),
+          child: const MessageScreen(),
         ),
         settings: settings,
       );
-    case EditProfileScreen.routeName:
-      return _buildPage(
-        (_) => BlocProvider(
-          create: (context) => sl<AuthBloc>(),
-          child: ChangeNotifierProvider(
-            create: (_) => EditProfileProvider(),
-            child: const EditProfileScreen(),
-          ),
-        ),
-        settings: settings,
-      );
+    // case ProfileView.routeName:
+    //   return _buildPage(
+    //     (_) => BlocProvider(
+    //       create: (context) => sl<AuthBloc>(),
+    //       child: const ProfileView(),
+    //     ),
+    //     settings: settings,
+    //   );
+    // case EditProfileView.routeName:
+    //   return _buildPage(
+    //     (_) => BlocProvider(
+    //       create: (context) => sl<AuthBloc>(),
+    //       child: ChangeNotifierProvider(
+    //         create: (_) => EditProfileProvider(),
+    //         child: const EditProfileView(),
+    //       ),
+    //     ),
+    //     settings: settings,
+    //   );
     default:
       return _buildPage(
         (_) => const UnderDevelopmentScreen(),

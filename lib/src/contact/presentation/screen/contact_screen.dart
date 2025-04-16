@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mustye/core/common/views/loading_view.dart';
-import 'package:mustye/core/common/widgets/gradient_background.dart';
+import 'package:mustye/core/common/widgets/contact_tile.dart';
 import 'package:mustye/core/res/fonts.dart';
-import 'package:mustye/core/res/media_res.dart';
-import 'package:mustye/core/utils/core_utils.dart';
-import 'package:mustye/src/contact/presentation/cubit/contact_cubit.dart';
+import 'package:mustye/src/chat/data/model/chat_model.dart';
+import 'package:mustye/src/contact/data/model/contact_model.dart';
+import 'package:mustye/src/contact/domain/entity/contact.dart';
+import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
+import 'package:mustye/src/contact/presentation/utils/contact_utils.dart';
+import 'package:mustye/src/message/presentation/screen/message_screen.dart';
+import 'package:provider/provider.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -18,77 +21,86 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-
-  void getContacts() {
-    context.read<ContactCubit>().getContacts();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getContacts();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: BlocConsumer<ContactCubit, ContactState>(
-        listener: (context, state) {
-          if (state is ContactError) {
-            CoreUtils.showSnackbar(context, state.message);
-          }
-        },
-        builder: (context, state) {
-          if (state is LoadingContacts) {
+      body: StreamBuilder<List<Contact>>(
+        stream: ContactUtils.getContacts,
+        builder: (context, snapshot) {
+          if(kDebugMode) print('....... Streaming Contacts .........');
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingView();
-          } else if (state is ContactsLoaded) {
-            if(kDebugMode) print('....... Contacts : ${state.contacts} ......');
-            return GradientBackground(
-              child: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    backgroundColor: Colors.white,
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Select Contacts', 
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: Fonts.aeonik,
-                          ),
-                        ),
-                        Text(
-                          'Total Contacts ${state.contacts.length}', 
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SliverList.builder(
-                    itemCount: state.contacts.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(state.contacts[index].fullName),
-                        subtitle: Text(state.contacts[index].bio ?? ''),
-                        leading: CircleAvatar(
-                          radius: 25,
-                          backgroundImage: state.contacts[index].image != null 
-                                ? NetworkImage(state.contacts[index].image!) 
-                                : const AssetImage(
-                                    MediaRes.youngManWorkingOnDesk,
-                                ) as ImageProvider,
-                        ),
-                      );
-                    },
-                  ),
-                ],
+          }
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                'Error loading contacts',
+                style: TextStyle(color: Colors.red),
               ),
             );
           }
-          return const SizedBox.shrink();
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No contacts found.'));
+          }
+          final contacts = snapshot.data!;
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                backgroundColor: Colors.white,
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Select Contacts',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: Fonts.aeonik,
+                      ),
+                    ),
+                    Text(
+                      'Total Contacts ${contacts.length}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final contact = contacts[index];
+                    return Consumer<ContactProvider>(
+                      builder: (context, provider, child) {
+                        return ContactTile(
+                        title: contact.fullName,
+                        subtitle: contact.bio ?? '',
+                        image: contact.image,
+                        onTap: () {
+                          // context.read<ContactProvider>().addContact(contact)
+                          Navigator.pushReplacementNamed(
+                            context,
+                            MessageScreen.routeName,
+                            arguments: ContactModel(
+                              uid: contact.uid,
+                              fullName: contact.fullName,
+                              email: contact.email,
+                              image: contact.image,
+                              bio: contact.bio,
+                              lastSeen: contact.lastSeen,
+                              isOnline: contact.isOnline,
+                            ),
+                          );
+                        },
+                      );
+                      },
+                    );
+                  },
+                  childCount: contacts.length,
+                ),
+              ),
+            ],
+          );
         },
       ),
     );

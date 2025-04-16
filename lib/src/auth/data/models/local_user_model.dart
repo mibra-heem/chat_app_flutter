@@ -1,6 +1,7 @@
-
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
+import 'package:mustye/src/contact/data/model/contact_model.dart';
+import 'package:mustye/src/contact/domain/entity/contact.dart';
 
 class LocalUserModel extends LocalUser{
   const LocalUserModel({
@@ -9,11 +10,10 @@ class LocalUserModel extends LocalUser{
     required super.fullName, 
     super.image,
     super.bio,
+    super.contacts = const [],
   });
 
-  const LocalUserModel.empty() : this(
-    uid: '', email: '', fullName: '',
-  );
+  const LocalUserModel.empty() : super.empty();
 
   LocalUserModel.fromMap(DataMap map) : super(
     uid:  map['uid'] as String, 
@@ -21,9 +21,14 @@ class LocalUserModel extends LocalUser{
     fullName: map['fullName'] as String,
     image: map['image'] as String?,
     bio: map['bio'] as String?,
+    contacts: map['contacts'] != null 
+      ? List<Contact>.from(
+          (map['contacts'] as List).map(
+            (m) => ContactModel.fromMap(m as DataMap),
+          ),
+        )
+      : const [],
   );
-
-  get enrolledCourseIds => null;
 
   LocalUserModel copyWith({
     String? uid, 
@@ -31,6 +36,7 @@ class LocalUserModel extends LocalUser{
     String? fullName, 
     String? image,
     String? bio,
+    List<Contact>? contacts,
   }){
     return LocalUserModel(
       uid: uid ?? this.uid,
@@ -38,6 +44,7 @@ class LocalUserModel extends LocalUser{
       fullName: fullName ?? this.fullName,
       image: image ?? this.image,
       bio: bio ?? this.bio,
+      contacts: contacts ?? this.contacts,
     );
   }
 
@@ -48,6 +55,7 @@ class LocalUserModel extends LocalUser{
       'fullName' : fullName,
       'image' : image,
       'bio' : bio,
+      'contacts' : contacts,
     };
   }
 

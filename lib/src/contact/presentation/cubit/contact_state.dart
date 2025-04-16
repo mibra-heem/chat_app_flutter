@@ -16,11 +16,24 @@ class LoadingContacts extends ContactState{
 class ContactsLoaded extends ContactState{
   const ContactsLoaded(this.contacts);
 
-  final List<LocalUser> contacts;
+  final List<Contact> contacts;
 
   @override
   List<Object> get props => [contacts];
 
+}
+
+class AddingContact extends ContactState{
+  const AddingContact();
+}
+
+class ContactAdded extends ContactState{
+  const ContactAdded();
+
+  // final Chat chat;
+
+  @override
+  List<Object> get props => [];
 }
 
 class ContactError extends ContactState{
