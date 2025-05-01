@@ -3,23 +3,35 @@ import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/errors/failure.dart';
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/chat/data/datasource/chat_remote_data_src.dart';
+import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/chat/domain/repo/chat_repo.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
 
-class ChatRepoImpl implements ChatRepo{
-
+class ChatRepoImpl implements ChatRepo {
   ChatRepoImpl(this._remoteDataSrc);
 
   final ChatRemoteDataSrc _remoteDataSrc;
 
   @override
-  RFuture<List<Contact>> getChats() async{
-    try{
-      final contacts = await _remoteDataSrc.getChats(); 
-      return Right(contacts);
-    }on ServerException catch(e){
+  RFuture<void> deleteChat(Chat chat) async {
+    try {
+      await _remoteDataSrc.deleteChat(chat);
+      return const Right(null);
+    } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
     }
   }
-  
+
+  @override
+  RFuture<void> messageSeen({
+    required String chatUid,
+  }) async {
+    try {
+      await _remoteDataSrc.messageSeen(
+        chatUid: chatUid,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
 }

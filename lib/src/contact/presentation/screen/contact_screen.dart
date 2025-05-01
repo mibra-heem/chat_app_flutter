@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:mustye/core/common/views/loading_view.dart';
 import 'package:mustye/core/common/widgets/contact_tile.dart';
 import 'package:mustye/core/res/fonts.dart';
+import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/contact/data/model/contact_model.dart';
 import 'package:mustye/src/contact/domain/entity/contact.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
-import 'package:mustye/src/contact/presentation/utils/contact_utils.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -26,17 +26,17 @@ class _ContactScreenState extends State<ContactScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: StreamBuilder<List<Contact>>(
-        stream: ContactUtils.getContacts,
+        stream: StreamUtils.getContacts,
         builder: (context, snapshot) {
-          if(kDebugMode) print('....... Streaming Contacts .........');
+          if (kDebugMode) print('....... Streaming Contacts .........');
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingView();
           }
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Text(
-                'Error loading contacts',
-                style: TextStyle(color: Colors.red),
+                'Error loading contacts = ${snapshot.error}',
+                style: const TextStyle(color: Colors.red),
               ),
             );
           }
@@ -47,7 +47,6 @@ class _ContactScreenState extends State<ContactScreen> {
           return CustomScrollView(
             slivers: [
               SliverAppBar(
-                backgroundColor: Colors.white,
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -67,37 +66,31 @@ class _ContactScreenState extends State<ContactScreen> {
                 ),
               ),
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final contact = contacts[index];
-                    return Consumer<ContactProvider>(
-                      builder: (context, provider, child) {
-                        return ContactTile(
-                        title: contact.fullName,
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final contact = contacts[index];
+                  return Consumer<ContactProvider>(
+                    builder: (context, provider, child) {
+                      return ContactTile(
+                        title: contact.name,
                         subtitle: contact.bio ?? '',
                         image: contact.image,
                         onTap: () {
-                          // context.read<ContactProvider>().addContact(contact)
                           Navigator.pushReplacementNamed(
                             context,
                             MessageScreen.routeName,
-                            arguments: ContactModel(
+                            arguments: ChatModel(
                               uid: contact.uid,
-                              fullName: contact.fullName,
+                              name: contact.name,
                               email: contact.email,
                               image: contact.image,
                               bio: contact.bio,
-                              lastSeen: contact.lastSeen,
-                              isOnline: contact.isOnline,
                             ),
                           );
                         },
                       );
-                      },
-                    );
-                  },
-                  childCount: contacts.length,
-                ),
+                    },
+                  );
+                }, childCount: contacts.length),
               ),
             ],
           );

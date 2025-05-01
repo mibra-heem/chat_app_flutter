@@ -6,12 +6,12 @@ import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mustye/src/auth/presentation/views/forgot_password_screen.dart';
-import 'package:mustye/src/auth/presentation/views/sign_in_screen.dart';
-import 'package:mustye/src/auth/presentation/views/sign_up_screen.dart';
+import 'package:mustye/src/auth/presentation/screens/forgot_password_screen.dart';
+import 'package:mustye/src/auth/presentation/screens/sign_in_screen.dart';
+import 'package:mustye/src/auth/presentation/screens/sign_up_screen.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
 import 'package:mustye/src/contact/presentation/screen/contact_screen.dart';
-import 'package:mustye/src/dashboard/presentation/views/dashboard.dart';
+import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
 import 'package:mustye/src/splash/presentation/views/splash_screen.dart';
@@ -25,21 +25,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       }, settings: settings,);
 
     case '/':
-      // final prefs = sl<SharedPreferences>();
       final authClient = sl<FirebaseAuth>();
 
       return _buildPage((context) {
         if (authClient.currentUser != null) {
-          final user = authClient.currentUser!;
-          final localUser = LocalUserModel(
-            uid: user.uid,
-            email: user.email ?? '',
-            fullName: user.displayName ?? '',
-            image: user.photoURL ?? '',
-            bio: context.currentUser != null ? context.currentUser!.bio : '',
-          );
-          context.userProvider.initUser(localUser);
-
+          context.userProvider.getUserCachedData();
           return const Dashboard();
         }
         return BlocProvider(

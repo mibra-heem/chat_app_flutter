@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/common/widgets/gradient_background.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
-import 'package:mustye/src/message/presentation/parts/message_app_bar.dart';
-import 'package:mustye/src/message/presentation/parts/message_body.dart';
+import 'package:mustye/src/chat/domain/entity/chat.dart';
+import 'package:mustye/src/message/presentation/screen/parts/message_app_bar.dart';
+import 'package:mustye/src/message/presentation/screen/parts/message_body.dart';
 
 class MessageScreen extends StatelessWidget {
   const MessageScreen({super.key});
@@ -11,14 +11,13 @@ class MessageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final contact = ModalRoute.of(context)!.settings.arguments! as Contact;
+    final chat = ModalRoute.of(context)!.settings.arguments! as Chat;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
-      appBar: MessageAppBar(contact: contact),
+      appBar: MessageAppBar(chat: chat),
       body: GradientBackground(
-        child: MessageBody(contact: contact),
+        child: MessageBody(chat: chat),
       ),
     );
   }

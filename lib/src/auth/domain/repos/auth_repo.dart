@@ -21,4 +21,7 @@ abstract class AuthRepo{
     required UpdateUserAction action,
     dynamic userData,
   });
+  RFuture<void> cacheUserData(LocalUser user);
+  RFuture<LocalUser> getUserCachedData();
+
 }

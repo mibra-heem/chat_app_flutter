@@ -5,12 +5,9 @@ class ContactModel extends Contact {
   const ContactModel({
     required super.uid,
     required super.email,
-    required super.fullName,
+    required super.name,
     super.image,
     super.bio,
-    super.lastSeen,
-    super.isOnline = false,
-    super.fcmToken,
   });
 
   const ContactModel.empty() : super.empty();
@@ -19,20 +16,21 @@ class ContactModel extends Contact {
     : super(
         uid: map['uid'] as String,
         email: map['email'] as String,
-        fullName: map['fullName'] as String,
+        name: map['name'] as String,
         image: map['image'] as String?,
         bio: map['bio'] as String?,
-        lastSeen: map['bio'] as String?,
-        isOnline: map['isOnline'] as bool,
-        fcmToken: map['fcmToken'] as String?,
       );
 
   ContactModel copyWith({
     String? uid,
     String? email,
-    String? fullName,
+    String? name,
     String? image,
     String? bio,
+    String? lastMessage,
+    DateTime? lastMessageTime,
+    int? unSeenMsgCount,
+    bool? isMessageSeen,
     String? lastSeen,
     bool? isOnline,
     String? fcmToken,
@@ -40,12 +38,9 @@ class ContactModel extends Contact {
     return ContactModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
-      fullName: fullName ?? this.fullName,
+      name: name ?? this.name,
       image: image ?? this.image,
       bio: bio ?? this.bio,
-      lastSeen: lastSeen ?? this.lastSeen,
-      isOnline: isOnline ?? this.isOnline,
-      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 
@@ -53,12 +48,9 @@ class ContactModel extends Contact {
     return {
       'uid': uid,
       'email': email,
-      'fullName': fullName,
+      'name': name,
       'image': image,
       'bio': bio,
-      'lastSeen': lastSeen,
-      'isOnline': isOnline,
-      'fcmToken': fcmToken,
     };
   }
 }

@@ -1,6 +1,5 @@
 import 'package:mustye/core/usecases/usecases.dart';
 import 'package:mustye/core/utils/typedef.dart';
-// import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/contact/domain/entity/contact.dart';
 import 'package:mustye/src/contact/domain/repo/contact_repo.dart';
 
@@ -11,6 +10,6 @@ class AddContact extends UseCaseWithParams<void, Contact>{
   final ContactRepo _repo;
   
   @override
-  RFuture<void> call(Contact contact) => _repo.startChat(contact);
+  RFuture<void> call(Contact contact) => _repo.addContact(contact);
   
 }

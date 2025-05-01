@@ -22,14 +22,14 @@ class PopupItem extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            color: titleColor ?? Colors.black,
+            color: titleColor,
             fontSize: 16,
             fontWeight: FontWeight.w500
           ),
         ),
         Icon(
           icon,
-          color: iconColor ?? Colors.grey,
+          color: iconColor,
         ),
       ],
     );

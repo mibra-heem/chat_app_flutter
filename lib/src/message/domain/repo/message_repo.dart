@@ -1,13 +1,13 @@
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
+import 'package:mustye/src/chat/domain/entity/chat.dart';
 
 abstract class MessageRepo {
  const MessageRepo();
  
  RFuture<void> sendMessage({
   required LocalUser user, 
-  required Contact contact,
+  required Chat chat,
   required String message,
 });
 }

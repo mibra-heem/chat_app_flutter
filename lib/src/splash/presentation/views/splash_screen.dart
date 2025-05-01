@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mustye/core/res/colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,14 +24,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colours.primaryColor,
       body: Center(
         child: Text(
-          "Musty'e",
+          'Mustye',
           style: TextStyle(
             color: Colors.white,
             fontSize: 32,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

@@ -1,5 +1,7 @@
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
+import 'package:mustye/src/chat/data/model/chat_model.dart';
+import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/contact/data/model/contact_model.dart';
 import 'package:mustye/src/contact/domain/entity/contact.dart';
 
@@ -7,24 +9,27 @@ class LocalUserModel extends LocalUser{
   const LocalUserModel({
     required super.uid, 
     required super.email, 
-    required super.fullName, 
+    required super.name, 
     super.image,
     super.bio,
-    super.contacts = const [],
+    super.chats = const [],
   });
 
   const LocalUserModel.empty() : super.empty();
 
   LocalUserModel.fromMap(DataMap map) : super(
-    uid:  map['uid'] as String, 
+    uid:  map['uid'] as String,
     email: map['email'] as String,
-    fullName: map['fullName'] as String,
+    name: map['name'] as String,
     image: map['image'] as String?,
     bio: map['bio'] as String?,
-    contacts: map['contacts'] != null 
-      ? List<Contact>.from(
-          (map['contacts'] as List).map(
-            (m) => ContactModel.fromMap(m as DataMap),
+    chats: map['chats'] != null 
+      ? List<Chat>.from(
+          (map['chats'] as List).map(
+            (m) {
+              final chat = DataMap.from(m as Map);
+              return ChatModel.fromMap(chat);
+            },
           ),
         )
       : const [],
@@ -33,18 +38,18 @@ class LocalUserModel extends LocalUser{
   LocalUserModel copyWith({
     String? uid, 
     String? email,
-    String? fullName, 
+    String? name, 
     String? image,
     String? bio,
-    List<Contact>? contacts,
+    List<Chat>? chats,
   }){
     return LocalUserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email, 
-      fullName: fullName ?? this.fullName,
+      name: name ?? this.name,
       image: image ?? this.image,
       bio: bio ?? this.bio,
-      contacts: contacts ?? this.contacts,
+      chats: chats ?? this.chats,
     );
   }
 
@@ -52,10 +57,9 @@ class LocalUserModel extends LocalUser{
     return {
       'uid' : uid,
       'email' : email,
-      'fullName' : fullName,
+      'name' : name,
       'image' : image,
       'bio' : bio,
-      'contacts' : contacts,
     };
   }
 

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:mustye/core/common/widgets/arrow_back_button.dart';
 import 'package:mustye/core/common/widgets/gradient_background.dart';
 import 'package:mustye/core/enums/update_user_action.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
@@ -12,8 +11,9 @@ import 'package:mustye/core/res/colors.dart';
 import 'package:mustye/core/res/media_res.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mustye/src/profile/presentation/forms/edit_profile_form.dart';
 import 'package:mustye/src/profile/presentation/provider/edit_profile_provider.dart';
+import 'package:mustye/src/profile/presentation/views/form/edit_profile_form.dart';
+import 'package:mustye/src/profile/presentation/views/parts/edit_profile_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileView extends StatefulWidget {
@@ -33,7 +33,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   final oldPasswordController = TextEditingController();
 
   bool get nameChanged =>
-      context.currentUser?.fullName.trim() != nameController.text.trim();
+      context.currentUser?.name.trim() != nameController.text.trim();
 
   bool get emailChanged => emailController.text.trim().isNotEmpty;
 
@@ -47,7 +47,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   void initState() {
-    nameController.text = context.currentUser!.fullName.trim();
+    nameController.text = context.currentUser!.name.trim();
     bioController.text = context.currentUser!.bio ?? '';
     super.initState();
   }
@@ -83,15 +83,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         },
         builder: (_, state) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text(
-                'Edit Profile',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              leading: const ArrowBackButton(),
+            appBar: EditProfileAppBar(
               actions: [
                 Consumer<EditProfileProvider>(
                   builder: (_, provider, __) {
@@ -154,7 +146,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       child: state is AuthLoading
                           ? const Center(
                               child: CircularProgressIndicator(
-                                color: Colours.primaryColor,
+                                color: Colours.white,
                               ),
                             )
                           : StatefulBuilder(
@@ -174,7 +166,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     color:
                                         nothingChanged && !provider.imageChanged
                                             ? Colors.grey
-                                            : Colours.primaryColor,
+                                            : Colours.white,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   ),

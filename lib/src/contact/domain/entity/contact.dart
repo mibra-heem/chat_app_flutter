@@ -4,45 +4,24 @@ class Contact extends Equatable {
   const Contact({
     required this.uid,
     required this.email,
-    required this.fullName,
+    required this.name,
     this.image,
     this.bio,
-    this.lastSeen,
-    this.isOnline = false,
-    this.fcmToken,
   });
 
-  const Contact.empty()
-      : this(
-          uid: '',
-          email: '',
-          fullName: '',
-          image: '',
-          bio: '',
-          lastSeen: null,
-          fcmToken: '',
-        );
+  const Contact.empty() : this(uid: '', email: '', name: '', image: '');
 
   final String uid;
   final String email;
   final String? image;
   final String? bio;
-  final String fullName;
-  final String? lastSeen;
-  final bool isOnline;
-  final String? fcmToken;
+  final String name;
 
   @override
-  List<Object?> get props => [
-        uid,
-        email,
-        fullName,
-        image,
-        bio,
-      ];
+  List<Object?> get props => [uid, email, name, image, bio];
 
   @override
   String toString() {
-    return 'Contact{uid: $uid, email: $email, fullName: $fullName, bio: $bio}';
+    return 'Contact{uid: $uid, email: $email, name: $name, bio: $bio}';
   }
 }

@@ -1,46 +1,87 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 
-class ChatModel extends Chat{
+class ChatModel extends Chat {
   const ChatModel({
-    required super.id, 
-    required super.name, 
-    required super.image, 
+    required super.uid,
     required super.email,
+    required super.name,
+    super.image,
+    super.bio,
+    super.lastMsg,
+    super.lastMsgTime,
+    super.unSeenMsgCount,
+    super.isMsgSeen,
+    super.lastSeen,
+    super.isOnline = false,
+    super.fcmToken,
   });
 
   const ChatModel.empty() : super.empty();
 
   ChatModel.fromMap(DataMap map)
     : super(
-        id: map['id'] as String,
-        name: map['name'] as String,
-        image: map['image'] as String,
+        uid: map['uid'] as String,
         email: map['email'] as String,
+        name: map['name'] as String,
+        image: map['image'] as String?,
+        bio: map['bio'] as String?,
+        lastMsg: map['lastMsg'] as String?,
+        lastMsgTime: map['lastMsgTime'] != null
+          ? (map['lastMsgTime'] as Timestamp).toDate()
+          : DateTime.now(),
+        unSeenMsgCount: map['unSeenMsgCount'] as int,
+        isMsgSeen: map['isMsgSeen'] as bool,
+        lastSeen: map['lastSeen'] as String?,
+        isOnline: map['isOnline'] as bool,
+        fcmToken: map['fcmToken'] as String?,
       );
 
   ChatModel copyWith({
-    String? id,
+    String? uid,
+    String? email,
     String? name,
     String? image,
-    String? email,
+    String? bio,
+    String? lastMsg,
+    DateTime? lastMsgTime,
+    int? unSeenMsgCount,
+    bool? isMsgSeen,
+    String? lastSeen,
+    bool? isOnline,
+    String? fcmToken,
   }) {
     return ChatModel(
-      id: id ?? this.id,
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
       name: name ?? this.name,
       image: image ?? this.image,
-      email: email ?? this.email,
+      bio: bio ?? this.bio,
+      lastMsg: lastMsg ?? this.lastMsg,
+      lastMsgTime: lastMsgTime ?? this.lastMsgTime,
+      unSeenMsgCount: unSeenMsgCount ?? this.unSeenMsgCount,
+      isMsgSeen: isMsgSeen ?? this.isMsgSeen,
+      lastSeen: lastSeen ?? this.lastSeen,
+      isOnline: isOnline ?? this.isOnline,
+      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 
   DataMap toMap() {
     return {
-      'id': id,
+      'uid': uid,
+      'email': email,
       'name': name,
       'image': image,
-      'email': email,
+      'bio': bio,
+      'lastMsg': lastMsg,
+      'lastMsgTime': FieldValue.serverTimestamp(),
+      'unSeenMsgCount' : unSeenMsgCount,
+      'isMsgSeen' : isMsgSeen,
+      'lastSeen': lastSeen,
+      'isOnline': isOnline,
+      'fcmToken': fcmToken,
     };
   }
-
-  
 }

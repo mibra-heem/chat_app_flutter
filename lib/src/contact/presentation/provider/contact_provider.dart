@@ -15,10 +15,7 @@ class ContactProvider extends ChangeNotifier{
 
     result.fold(
       (failure) => failure.errorMessage,
-      (_){
-        if(kDebugMode) print('Successfully added the contact in users list.');
-        return 'Successfully added the contact in users list.';
-      }
+      (_) => 'Successfully added the contact in users list.',
     );
   }
 }

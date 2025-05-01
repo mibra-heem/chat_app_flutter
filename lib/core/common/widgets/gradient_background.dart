@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/res/colors.dart';
+// import 'package:mustye/core/res/colors.dart';
 
 class GradientBackground extends StatelessWidget {
   const GradientBackground({
@@ -14,12 +14,12 @@ class GradientBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         constraints: const BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: colors ?? Colours.primaryGradient,
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,),
-        ),
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //       colors: colors ?? Colours.primaryGradient,
+        //       begin: Alignment.topRight,
+        //       end: Alignment.bottomLeft,),
+        // ),
         child: SafeArea(
           child: child,
         ),

@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
-import 'package:mustye/src/contact/data/model/contact_model.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
+import 'package:mustye/src/chat/domain/entity/chat.dart';
 
 abstract class ChatRemoteDataSrc {
   const ChatRemoteDataSrc();
 
-  Future<List<Contact>> getChats();
+  Future<void> deleteChat(Chat chat);
+  Future<void> messageSeen({required String chatUid});
 }
 
 class ChatRemoteDataSrcImpl implements ChatRemoteDataSrc {
@@ -23,25 +23,43 @@ class ChatRemoteDataSrcImpl implements ChatRemoteDataSrc {
   final FirebaseFirestore _firestore;
 
   @override
-  Future<List<Contact>> getChats() async {
+  Future<void> deleteChat(Chat chat) async {
     try {
       await DatasourceUtils.authorizeUser(_auth);
 
-      if(kDebugMode){
+      if (kDebugMode) {
+        print('..... Current User while add Chat ${_auth.currentUser}');
+      }
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      if (kDebugMode) print('.......... Exception $e.........');
+      throw ServerException(message: e.toString(), statusCode: '505');
+    }
+  }
+
+  @override
+  Future<void> messageSeen({required String chatUid}) async {
+    try {
+      await DatasourceUtils.authorizeUser(_auth);
+
+      if (kDebugMode) {
         print('..... Current User while add Chat ${_auth.currentUser}');
       }
 
-      // return [Contact.empty()];
-      
-      return await _firestore
-        .collection('users')
-        .doc(_auth.currentUser!.uid)
-        .collection('chats')
-        .get()
-        .then((value) => value.docs.map(
-          (m)=> ContactModel.fromMap(m.data()),
-        ).toList(),);
-        
+      // await _firestore.collection('chats').doc(chatUid).update({
+      //   'isMsgSeen': true,
+      // });
+
+      await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .collection('chats')
+          .doc(chatUid)
+          .update({'isMsgSeen': true, 'unSeenMsgCount': 0});
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
     } on ServerException {

@@ -48,7 +48,7 @@ class _ExpandableTextState extends State<ExpandableText> {
   @override
   Widget build(BuildContext context) {
     const defaultStyle = TextStyle(
-      color: Colours.neutralTextColor,
+      color: Colours.grey,
       height: 1.8,
       letterSpacing: 0.2,
       fontSize: 14,

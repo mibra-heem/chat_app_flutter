@@ -10,7 +10,7 @@ abstract class ContactRemoteDataSrc {
   const ContactRemoteDataSrc();
 
   Future<List<Contact>> getContacts();
-  Future<void> startChat(Contact contact);
+  Future<void> addContact(Contact contact);
 }
 
 class ContactRemoteDataSrcImpl implements ContactRemoteDataSrc {
@@ -49,7 +49,7 @@ class ContactRemoteDataSrcImpl implements ContactRemoteDataSrc {
   }
 
   @override
-  Future<void> startChat(Contact contact) async {
+  Future<void> addContact(Contact contact) async {
     try {
       await DatasourceUtils.authorizeUser(_auth);
 
@@ -60,71 +60,11 @@ class ContactRemoteDataSrcImpl implements ContactRemoteDataSrc {
       final existingChat = await chatsRef.where('uid', isEqualTo: contact.uid)
         .limit(1).get();
       if(existingChat.docs.isEmpty){
-        await chatsRef.doc().set(contactModel.toMap());
+        await chatsRef.add(contactModel.toMap());
       }else{
         if(kDebugMode) print('Chat with ${contact.email} already exists.');
       }
 
-      // final sender =
-      //     await _firestore
-      //         .collection('messages')
-      //         .withConverter<Message>(
-      //           fromFirestore:
-      //               (snapshot, _) => MessageModel.fromMap(snapshot.data()!),
-      //           toFirestore: (msg, _) => (msg as MessageModel).toMap(),
-      //         )
-      //         .where('senderId', isEqualTo: user.uid)
-      //         .where('recieverId', isEqualTo: contact.uid)
-      //         .get();
-
-      // final reciever =
-      //     await _firestore
-      //         .collection('messages')
-      //         .withConverter<Message>(
-      //           fromFirestore:
-      //               (snapshot, _) => MessageModel.fromMap(snapshot.data()!),
-      //           toFirestore: (msg, _) => (msg as MessageModel).toMap(),
-      //         )
-      //         .where('senderId', isEqualTo: contact.uid)
-      //         .where('recieverId', isEqualTo: _auth.currentUser!.uid)
-      //         .get();
-
-      // if (sender.docs.isEmpty && reciever.docs.isEmpty) {
-
-      //   final msg = MessageModel(
-      //     msg: '',
-      //     msgTime: Timestamp.now().toDate(),
-      //     msgNum: 0,
-      //     senderId: user.uid,
-      //     recieverId: contact.uid,
-      //     senderName: user.displayName!,
-      //     recieverName: contact.fullName,
-      //     senderImage: user.photoURL!,
-      //     recieverImage: contact.image!,
-      //   );
-
-      //   final msgDoc = await _firestore
-      //       .collection('messages')
-      //       .withConverter<Message>(
-      //         fromFirestore:
-      //             (snapshot, _) => MessageModel.fromMap(snapshot.data()!),
-      //         toFirestore: (msg, _) => (msg as MessageModel).toMap(),
-      //       )
-      //       .add(msg);
-
-      //   if(kDebugMode) print('.... New chat with ${contact.email} added.');
-
-      //   return Chat(
-      //     id : contact.uid,
-      //     name : contact.fullName,
-      //     image : contact.image ?? '',
-      //     msgDocId: msgDoc.id,
-      //   );
-        
-      // } else {
-      //   if(kDebugMode) print('.... Chat with ${contact.email} already exists.');
-      //   return const Chat.empty();
-      // }
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
     } on ServerException {

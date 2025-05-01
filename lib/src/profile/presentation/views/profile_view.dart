@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mustye/core/common/widgets/gradient_background.dart';
-import 'package:mustye/src/profile/presentation/parts/profile_app_bar.dart';
-import 'package:mustye/src/profile/presentation/parts/profile_body.dart';
-import 'package:mustye/src/profile/presentation/parts/profile_header.dart';
+import 'package:mustye/src/profile/presentation/views/parts/profile_app_bar.dart';
+import 'package:mustye/src/profile/presentation/views/parts/profile_body.dart';
+import 'package:mustye/src/profile/presentation/views/parts/profile_header.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -11,9 +12,10 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(kDebugMode) print('........ ProfileView building .......');
+
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.white,
       appBar: const ProfileAppBar(),
       body: GradientBackground(
         child: ListView(

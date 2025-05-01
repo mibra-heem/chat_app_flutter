@@ -12,6 +12,7 @@ import 'package:mustye/core/utils/constants.dart';
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
+import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/contact/data/model/contact_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -34,16 +35,16 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
   const AuthRemoteDataSrcImpl({
     required FirebaseAuth authClient,
-    required FirebaseFirestore cloudStoreClient,
+    required FirebaseFirestore firestore,
     required FirebaseStorage dbClient,
     required GoogleSignIn googleSignIn,
   }) : _authClient = authClient,
-       _cloudStoreClient = cloudStoreClient,
+       _firestore = firestore,
        _dbClient = dbClient,
        _googleSignIn = googleSignIn;
 
   final FirebaseAuth _authClient;
-  final FirebaseFirestore _cloudStoreClient;
+  final FirebaseFirestore _firestore;
   final FirebaseStorage _dbClient;
   final GoogleSignIn _googleSignIn;
 
@@ -62,7 +63,6 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
   @override
   Future<LocalUser> googleSignIn() async {
     try {
-
       final googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
@@ -81,13 +81,12 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
 
       final userCredential = await _authClient.signInWithCredential(credential);
 
-      if(kDebugMode){
+      if (kDebugMode) {
         print('........ User Object : ${userCredential.user} ......');
         print('..... User Name : ${userCredential.user!.displayName} .......');
         print('..... User Email : ${userCredential.user!.email} .......');
         print('..... User PhotoURL : ${userCredential.user!.photoURL} .......');
       }
-      
 
       return await getLocalUserModel(userCredential);
     } on FirebaseAuthException catch (e) {
@@ -96,7 +95,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
-      if(kDebugMode) print('.......... Exception $e.........');
+      if (kDebugMode) print('.......... Exception $e.........');
       throw ServerException(message: e.toString(), statusCode: '505');
     }
   }
@@ -234,7 +233,6 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
   }
 
   Future<LocalUser> getLocalUserModel(UserCredential credentials) async {
-    
     final user = credentials.user;
 
     if (user == null) {
@@ -244,63 +242,92 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       );
     }
 
-    var userData = await _getUserData(user.uid);
+    // Helper to fetch and build the LocalUserModel
+    Future<LocalUser> buildUserModel() async {
+      final userData = await _getUserData(user.uid);
+      final chats = await _getChatsData(user.uid);
 
-    if (userData.exists) {
-      return LocalUserModel.fromMap(userData.data()!);
+      final chatsModel =
+          chats.docs.map((doc) => ChatModel.fromMap(doc.data())).toList();
+
+      final lastUser = LocalUserModel.fromMap(
+        userData.data()!,
+      ).copyWith(chats: chatsModel);
+
+      if (kDebugMode) print('..... CopyWith User :  $lastUser');
+
+      return lastUser;
+    }
+
+    final userData = await _getUserData(user.uid);
+    final chats = await _getChatsData(user.uid);
+
+    if (userData.exists && chats.docs.isNotEmpty) {
+      return buildUserModel();
     }
 
     await _setUserData(user, user.email!);
 
-    userData = await _getUserData(user.uid);
-
-    return LocalUserModel.fromMap(userData.data()!);
+    return buildUserModel();
   }
 
   Future<DocumentSnapshot<DataMap>> _getUserData(String uid) async {
-    return _cloudStoreClient.collection('users').doc(uid).get();
+    return _firestore.collection('users').doc(uid).get();
+  }
+
+  Future<QuerySnapshot<DataMap>> _getChatsData(String uid) async {
+    return _firestore.collection('users').doc(uid).collection('chats').get();
   }
 
   Future<void> _setUserData(User user, String fallbackEmail) async {
     final localUser = LocalUserModel(
       uid: user.uid,
       email: user.email ?? fallbackEmail,
-      fullName: user.displayName ?? '',
+      name: user.displayName ?? '',
       image: user.photoURL ?? '',
     );
 
     final contact = ContactModel(
       uid: user.uid,
       email: user.email ?? fallbackEmail,
-      fullName: user.displayName ?? '',
+      name: user.displayName ?? '',
       image: user.photoURL ?? '',
     );
 
-    await _cloudStoreClient
-        .collection('users')
-        .doc(user.uid)
-        .set(localUser.toMap());
-    
-    await _cloudStoreClient
-        .collection('contacts')
-        .doc(user.uid)
-        .set(contact.toMap());
+    await _firestore.collection('users').doc(user.uid).set(localUser.toMap());
+
+    await _firestore.collection('contacts').doc(user.uid).set(contact.toMap());
   }
 
   Future<void> _updateUserData(DataMap userData) async {
-    await _cloudStoreClient
-        .collection('users')
-        .doc(_authClient.currentUser!.uid)
-        .update(userData);
-    // await _cloudStoreClient
-    //     .collection('users')
-    //     .doc(_authClient.currentUser!.uid)
-    //     .update(userData);
-    await _cloudStoreClient
+    final currentUser = _authClient.currentUser!;
+
+    // 1. Update current user's own document
+    await _firestore.collection('users').doc(currentUser.uid).update(userData);
+
+    // 2. Optionally update the 'contacts' collection if you're using it
+    await _firestore
         .collection('contacts')
-        .doc(_authClient.currentUser!.uid)
+        .doc(currentUser.uid)
         .update(userData);
+
+    // 3. Fetch all users to find contacts referencing the current user
+    final users = await _firestore.collection('users').get();
+
+    for (final doc in users.docs) {
+      debugPrint('Entered Into Loop .......');
+
+      final chatsCollection = doc.reference.collection('chats');
+      final chatDoc = chatsCollection.doc(currentUser.uid);
+      final snapshot = await chatDoc.get();
+
+      debugPrint('Snapshot exists : ${snapshot.exists} .......');
+      debugPrint('Chat Collection Id : ${chatsCollection.doc()} .......');
+
+      if (snapshot.exists) {
+        debugPrint('Snapshot exists ........ updating chats .......');
+        await chatDoc.update(userData);
+      }
+    }
   }
-
-
 }

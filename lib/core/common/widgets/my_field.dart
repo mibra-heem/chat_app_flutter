@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
+import 'package:mustye/core/res/colors.dart';
 
 class MyField extends StatelessWidget {
   const MyField({
@@ -22,6 +23,10 @@ class MyField extends StatelessWidget {
     this.counterText,
     this.maxLength,
     this.isFocusOnTapOutside = true,
+    this.enableColor,
+    this.focusColor,
+    this.borderColor,
+    this.enabled = true,
     super.key,
   });
 
@@ -44,6 +49,11 @@ class MyField extends StatelessWidget {
   final String? counterText;
   final int? maxLength;
   final bool isFocusOnTapOutside;
+  final Color? borderColor;
+  final Color? enableColor;
+  final Color? focusColor;
+  final bool enabled;
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,19 +81,11 @@ class MyField extends StatelessWidget {
         filled: filled,
         fillColor: fillColor,
         counterText: isTextArea ? counterText : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(
-            color: context.theme.primaryColor,
-          ),
-        ),
+        // enabledBorder: !enabled ? OutlineInputBorder(
+        //   borderRadius:  BorderRadius.circular(30),
+        //   // borderSide: const BorderSide(
+        //   //   color: Colours.white,),
+        // ) : null,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20, vertical: 12,
         ),

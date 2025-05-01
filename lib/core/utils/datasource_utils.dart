@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mustye/core/errors/exception.dart';
+import 'package:mustye/core/services/dependency_injection.dart';
 
 class DatasourceUtils {
   DatasourceUtils._();
@@ -12,5 +13,9 @@ class DatasourceUtils {
         statusCode: '401',
       );
     }
+  }
+
+  static User? getUser(){
+    return sl<FirebaseAuth>().currentUser;
   }
 }

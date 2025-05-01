@@ -18,7 +18,7 @@ class ArrowBackButton extends StatelessWidget {
         Theme.of(context).platform == TargetPlatform.iOS 
         ? Icons.arrow_back_ios_new 
         : Icons.arrow_back,
-        color: Colors.white,
+        // color: Colors.white,
       ),
     );
   }

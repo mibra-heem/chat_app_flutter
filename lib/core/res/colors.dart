@@ -22,7 +22,13 @@ class Colours {
     Color.fromARGB(255, 253, 255, 247),
   ];
 
-  static const primaryColor = Colors.amber;
-  static const neutralTextColor = Color.fromARGB(255, 125, 125, 125);
+  static const primaryColor = Color.fromARGB(255, 60, 20, 130);
+  static const black = Color.fromARGB(255, 25, 25, 25);
+  static const lightBlack = Color.fromARGB(255, 45, 45, 45);
+
+  static const white = Color.fromARGB(255, 245, 245, 245);
+  static const hardWhite = Color.fromARGB(255, 225, 225, 225);
+
+  static const grey = Color.fromARGB(255, 125, 125, 125);
 
 }
