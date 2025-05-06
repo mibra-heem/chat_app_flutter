@@ -5,7 +5,7 @@ abstract class ChatRepo {
   const ChatRepo();
   RFuture<void> deleteChat(Chat chat);
   RFuture<void> messageSeen({
-    required String chatUid
+    required String senderUid,
   });
-
+  
 }

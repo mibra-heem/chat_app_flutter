@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/contact/data/model/contact_model.dart';
 import 'package:mustye/src/contact/domain/entity/contact.dart';
 import 'package:mustye/src/message/data/model/message_model.dart';
-import 'package:mustye/src/message/domain/entity/message.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StreamUtils {
@@ -32,9 +32,7 @@ class StreamUtils {
       final user = LocalUserModel.fromMap(userSnap.data()!);
 
       final chats =
-          chatsSnap.docs
-              .map((doc) => ChatModel.fromMap(doc.data()))
-              .toList();
+          chatsSnap.docs.map((doc) => ChatModel.fromMap(doc.data())).toList();
 
       return user.copyWith(chats: chats);
     });
@@ -51,23 +49,40 @@ class StreamUtils {
                 .toList(),
       );
 
-  static Stream<List<Message>> getMessages(String recieverId) {
+  static Stream<List<MessageModel>> getMessages(String chatId) {
     final user = sl<FirebaseAuth>().currentUser!;
+    final currentUserId = user.uid;
 
-    final ids = [user.uid, recieverId]..sort();
+    final ids = [currentUserId, chatId]..sort();
     final docId = ids.join('_');
 
-    return sl<FirebaseFirestore>()
+    final firestore = sl<FirebaseFirestore>();
+
+    final messages = firestore
         .collection('chats')
         .doc(docId)
         .collection('messages')
         .orderBy('msgTime', descending: false)
         .snapshots()
-        .map(
-          (snapshot) =>
-              snapshot.docs
-                  .map((doc) => MessageModel.fromMap(doc.data()))
-                  .toList(),
-        );
+        .map((snapshot) {
+          final batch = firestore.batch();
+          final msgList =
+              snapshot.docs.map((doc) {
+                final message = MessageModel.fromMap(doc.data());
+
+                if (message.recieverId == currentUserId && !message.isSeen) {
+                  batch.update(doc.reference, {'isSeen': true});
+                }
+
+                return message;
+              }).toList();
+
+          // Commit seen updates (if any)
+          batch.commit();
+
+          return msgList;
+        });
+
+    return messages;
   }
 }

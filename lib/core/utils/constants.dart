@@ -7,4 +7,6 @@ class StorageConsts {
   static const String darkModePrefix = '${userPrefix}dark_mode_';
   static const String userBox = 'user_box';
   static const String settingBox = 'setting_box';
+  static const String chatBox = 'chat_box';
+
 }

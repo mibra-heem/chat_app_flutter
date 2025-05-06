@@ -11,7 +11,7 @@ class MessageSeen extends UseCaseWithParams<void, MessageSeenParams>{
   
   @override
   RFuture<void> call(MessageSeenParams params) => _repo.messageSeen(
-    chatUid: params.chatUid,
+    senderUid: params.senderUid,
   );
   
 }
@@ -19,12 +19,12 @@ class MessageSeen extends UseCaseWithParams<void, MessageSeenParams>{
 class MessageSeenParams extends Equatable{
 
   const MessageSeenParams({
-    required this.chatUid,
+    required this.senderUid,
   });
 
-  final String chatUid;
+  final String senderUid;
 
   @override
-  List<Object?> get props => [chatUid];
+  List<Object?> get props => [senderUid];
   
 }

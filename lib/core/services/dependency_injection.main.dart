@@ -59,7 +59,12 @@ Future<void> _initAuth() async {
     ..registerLazySingleton(() => FirebaseFirestore.instance)
     ..registerLazySingleton(() => FirebaseStorage.instance)
     ..registerLazySingleton(
-      () => GoogleSignIn(scopes: ['openid', 'email', 'profile']),
+      () => GoogleSignIn(
+        scopes: ['openid', 'email', 'profile'],
+        clientId:
+            '194129986069-r3vnqp4i706r775j1f3p2sq1i1mhlfh8.apps'
+            '.googleusercontent.com',
+      ),
     )
     ..registerLazySingleton(() => userBox, instanceName: StorageConsts.userBox);
 }
@@ -117,8 +122,11 @@ Future<void> _initChats() async {
 
 Future<void> _initMessages() async {
   sl
-    ..registerFactory(() => MessageProvider(sendMessage: sl()))
+    ..registerFactory(
+      () => MessageProvider(sendMessage: sl(), activateChat: sl()),
+    )
     ..registerLazySingleton(() => SendMessage(sl()))
+    ..registerLazySingleton(() => ActivateChat(sl()))
     ..registerLazySingleton<MessageRepo>(() => MessageRepoImpl(sl()))
     ..registerLazySingleton<MessageRemoteDataSrc>(
       () => MessageRemoteDataSrcImpl(auth: sl(), firestore: sl()),

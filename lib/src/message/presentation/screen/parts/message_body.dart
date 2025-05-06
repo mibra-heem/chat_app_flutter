@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mustye/core/common/views/loading_view.dart';
 import 'package:mustye/core/common/widgets/message_tile.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/extensions/datetime_extension.dart';
+import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/message/domain/entity/message.dart';
+import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/parts/message_foot.dart';
 
 class MessageBody extends StatefulWidget {
@@ -35,6 +38,34 @@ class _MessageBodyState extends State<MessageBody> {
     return mergedList.reversed.toList();
   }
 
+  final MessageProvider _messageProvider = sl<MessageProvider>();
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   debugPrint('........ Activating the chat .......');
+  //   _messageProvider.setActiveChatId(activeChatId: widget.chat.uid);
+  //   debugPrint('........ Chat Activated .......');
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint('........ Activating the chat .......');
+    _messageProvider.setActiveChatId(activeChatId: widget.chat.uid);
+    debugPrint('........ Chat Activated .......');
+  }
+
+  @override
+  void dispose() {
+    debugPrint('........ De-activating the chat .......');
+
+    _messageProvider.setActiveChatId(activeChatId: null);
+
+    debugPrint('........ Chat De-activated .......');
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -54,6 +85,8 @@ class _MessageBodyState extends State<MessageBody> {
 
             final messages = snapshot.data!;
             final currentUserId = context.currentUser!.uid;
+
+            debugPrint(messages.toString());
 
             final mergedList = mergedMsgAndLabelList(messages);
 
@@ -83,14 +116,12 @@ class _MessageBodyState extends State<MessageBody> {
                           ),
                         );
                       } else if (item is Message) {
-                        // Provider.of<ChatProvider>(context).messageSeen(
-                        //   contactUId: item.recieverId,
-                        //   isMessageSeen: true,
-                        // );
                         final isCurrentUser = currentUserId == item.senderId;
+                        debugPrint(item.toString());
                         return MessageTile(
                           message: item.msg,
                           time: item.msgTime.timePeriodFormat,
+                          isSeen: item.isSeen,
                           isCurrentUser: isCurrentUser,
                         );
                       }

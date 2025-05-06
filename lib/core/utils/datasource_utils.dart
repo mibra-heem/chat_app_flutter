@@ -18,4 +18,9 @@ class DatasourceUtils {
   static User? getUser(){
     return sl<FirebaseAuth>().currentUser;
   }
+
+  static String joinIds({required String userId, required String chatId}) {
+    final ids = [userId, chatId]..sort();
+    return ids.join('_');
+  }
 }

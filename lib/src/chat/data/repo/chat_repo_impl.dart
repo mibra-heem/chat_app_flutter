@@ -23,11 +23,11 @@ class ChatRepoImpl implements ChatRepo {
 
   @override
   RFuture<void> messageSeen({
-    required String chatUid,
+    required String senderUid,
   }) async {
     try {
       await _remoteDataSrc.messageSeen(
-        chatUid: chatUid,
+        senderUid: senderUid,
       );
       return const Right(null);
     } on ServerException catch (e) {

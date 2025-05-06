@@ -7,8 +7,6 @@ import 'package:mustye/core/res/colors.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
-import 'package:mustye/src/contact/data/model/contact_model.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/setting/presentation/provider/setting_provider.dart';
 import 'package:provider/provider.dart';
@@ -48,14 +46,15 @@ class MessageFoot extends StatelessWidget {
               onTap: () {
                 if (messageController.text.isNotEmpty) {
                   context.read<MessageProvider>().sendMessage(
-                    user: LocalUserModel(
+                    sender: LocalUserModel(
                       uid: user.uid,
                       email: user.email,
                       name: user.name,
                       image: user.image,
                       bio: user.bio,
+                      activeChatId: user.activeChatId,
                     ),
-                    chat: ChatModel(
+                    reciever: ChatModel(
                       uid: chat.uid,
                       email: chat.email,
                       name: chat.name,
@@ -71,16 +70,18 @@ class MessageFoot extends StatelessWidget {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  color: context.read<SettingProvider>().isDarkMode 
-                    ? Colours.white
-                    : Colours.primaryColor,
+                  color:
+                      context.read<SettingProvider>().isDarkMode
+                          ? Colours.white
+                          : Colours.primaryColor,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  IconlyBold.send, 
-                  color: context.read<SettingProvider>().isDarkMode 
-                    ? Colours.primaryColor
-                    : Colours.white,
+                  IconlyBold.send,
+                  color:
+                      context.read<SettingProvider>().isDarkMode
+                          ? Colours.primaryColor
+                          : Colours.white,
                 ),
               ),
             ),

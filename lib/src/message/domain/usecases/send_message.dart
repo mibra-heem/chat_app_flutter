@@ -3,7 +3,6 @@ import 'package:mustye/core/usecases/usecases.dart';
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
 import 'package:mustye/src/message/domain/repo/message_repo.dart';
 
 class SendMessage extends UseCaseWithParams<void, SendMessageParams> {
@@ -13,8 +12,8 @@ class SendMessage extends UseCaseWithParams<void, SendMessageParams> {
 
   @override
   RFuture<void> call(SendMessageParams params) => _repo.sendMessage(
-    user: params.user,
-    chat: params.chat,
+    sender: params.sender,
+    reciever: params.reciever,
     message: params.message,
   ); 
 }
@@ -22,17 +21,17 @@ class SendMessage extends UseCaseWithParams<void, SendMessageParams> {
 class SendMessageParams extends Equatable{
 
   const SendMessageParams({
-    required this.user,
-    required this.chat,
+    required this.sender,
+    required this.reciever,
     required this.message,
-
   });
 
-  final LocalUser user;
-  final Chat chat;
+  final LocalUser sender;
+  final Chat reciever;
   final String message;
 
+
   @override
-  List<Object?> get props => [user, chat];
+  List<Object?> get props => [sender, reciever];
   
 }

@@ -29,6 +29,14 @@ class AppTheme {
         color: Colors.white,
       ),
     ),
+    badgeTheme: const BadgeThemeData(
+      backgroundColor: Colours.primaryColor,
+      textStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+        fontFamily: Fonts.poppins,
+      ),
+    ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colours.white,
       type: BottomNavigationBarType.fixed,
@@ -83,10 +91,7 @@ class AppTheme {
         fontSize: 12,
         fontWeight: FontWeight.bold,
         fontFamily: Fonts.poppins,
-      )
-      // textColor: Colours.black,
-      // smallSize: 16,
-      // largeSize: 30
+      ),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colours.black,

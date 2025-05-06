@@ -41,10 +41,10 @@ class _ChatBodyState extends State<ChatBody> {
               subtitle: chat.lastMsg!,
               time: chat.lastMsgTime!.lastTimeFormat,
               image: chat.image,
-              isLabelVisible: !chat.isMsgSeen,
+              isLabelVisible: chat.unSeenMsgCount != 0,
               unSeenMsgCount: chat.unSeenMsgCount,
               onTap: () {
-                context.read<ChatProvider>().messageSeen(chatUid: chat.uid);
+                context.read<ChatProvider>().messageSeen(senderUid: chat.uid);
                 Navigator.pushNamed(
                   context,
                   MessageScreen.routeName,

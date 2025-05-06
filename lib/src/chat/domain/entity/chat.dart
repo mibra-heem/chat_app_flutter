@@ -50,6 +50,6 @@ class Chat extends Equatable {
   String toString() {
     return 'Chat{uid: $uid, email: $email, name: $name, bio: $bio, '
         'lastMsg: $lastMsg, lastMsgTime: $lastMsgTime, '
-        'isMsgSeen: $isMsgSeen }';
+        'isMsgSeen: $isMsgSeen, unSeenMsgCount: $unSeenMsgCount }';
   }
 }

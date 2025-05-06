@@ -14,18 +14,30 @@ class MessageRepoImpl implements MessageRepo{
 
   @override
   RFuture<void> sendMessage({
-    required LocalUser user, 
-    required Chat chat,
+    required LocalUser sender, 
+    required Chat reciever,
     required String message,
   }) async{
     try{
       await _remoteDataSrc.sendMessage(
-        user: user, 
-        chat: chat,
+        sender: sender, 
+        reciever: reciever,
         message: message,
       );
       return const Right(null);      
     }on ServerException catch(e){
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  RFuture<void> setActiveChatId({required String? activeChatId}) async {
+    try {
+      await _remoteDataSrc.setActiveChatId(
+        activeChatId: activeChatId,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
       return Left(ServerFailure.fromException(e));
     }
   }

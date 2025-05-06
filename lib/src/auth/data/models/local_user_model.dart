@@ -2,8 +2,6 @@ import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
-import 'package:mustye/src/contact/data/model/contact_model.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
 
 class LocalUserModel extends LocalUser{
   const LocalUserModel({
@@ -12,7 +10,8 @@ class LocalUserModel extends LocalUser{
     required super.name, 
     super.image,
     super.bio,
-    super.chats = const [],
+    super.chats,
+    super.activeChatId,
   });
 
   const LocalUserModel.empty() : super.empty();
@@ -33,6 +32,7 @@ class LocalUserModel extends LocalUser{
           ),
         )
       : const [],
+    activeChatId: map['activeChatId']  as String? 
   );
 
   LocalUserModel copyWith({
@@ -42,6 +42,7 @@ class LocalUserModel extends LocalUser{
     String? image,
     String? bio,
     List<Chat>? chats,
+    String? activeChatId,
   }){
     return LocalUserModel(
       uid: uid ?? this.uid,
@@ -50,6 +51,7 @@ class LocalUserModel extends LocalUser{
       image: image ?? this.image,
       bio: bio ?? this.bio,
       chats: chats ?? this.chats,
+      activeChatId: activeChatId ?? this.activeChatId,
     );
   }
 
@@ -60,6 +62,7 @@ class LocalUserModel extends LocalUser{
       'name' : name,
       'image' : image,
       'bio' : bio,
+      'activeChatId' : activeChatId,
     };
   }
 

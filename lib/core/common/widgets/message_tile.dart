@@ -9,6 +9,7 @@ class MessageTile extends StatelessWidget {
     this.timeColor,
     this.boxColor,
     this.isCurrentUser = true,
+    this.isSeen,
     super.key,
   });
 
@@ -18,6 +19,8 @@ class MessageTile extends StatelessWidget {
   final Color? timeColor;
   final Color? boxColor;
   final bool isCurrentUser;
+  final bool? isSeen;
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +64,28 @@ class MessageTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    color:
-                        timeColor ??
-                        (isCurrentUser
-                            ? Colors.grey.shade200
-                            : Colors.grey.shade800),
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      time,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                        color:
+                            timeColor ??
+                            (isCurrentUser
+                                ? Colors.grey.shade200
+                                : Colors.grey.shade800),
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                    if(isCurrentUser)
+                    Icon(
+                      Icons.done_all_outlined, 
+                      size: 15,
+                      color: isSeen! ? Colors.green : Colors.white,
+                    ),
+                  ],
                 ),
               ],
             ),

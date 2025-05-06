@@ -35,6 +35,7 @@ import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
 import 'package:mustye/src/message/data/datasource/message_remote_data_src.dart';
 import 'package:mustye/src/message/data/repo/message_repo_impl.dart';
 import 'package:mustye/src/message/domain/repo/message_repo.dart';
+import 'package:mustye/src/message/domain/usecases/activate_chat.dart';
 import 'package:mustye/src/message/domain/usecases/send_message.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/setting/data/datasource/setting_local_data_src.dart';

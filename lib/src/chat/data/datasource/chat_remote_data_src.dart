@@ -9,7 +9,7 @@ abstract class ChatRemoteDataSrc {
   const ChatRemoteDataSrc();
 
   Future<void> deleteChat(Chat chat);
-  Future<void> messageSeen({required String chatUid});
+  Future<void> messageSeen({required String senderUid});
 }
 
 class ChatRemoteDataSrcImpl implements ChatRemoteDataSrc {
@@ -42,23 +42,15 @@ class ChatRemoteDataSrcImpl implements ChatRemoteDataSrc {
   }
 
   @override
-  Future<void> messageSeen({required String chatUid}) async {
+  Future<void> messageSeen({required String senderUid}) async {
     try {
       await DatasourceUtils.authorizeUser(_auth);
-
-      if (kDebugMode) {
-        print('..... Current User while add Chat ${_auth.currentUser}');
-      }
-
-      // await _firestore.collection('chats').doc(chatUid).update({
-      //   'isMsgSeen': true,
-      // });
 
       await _firestore
           .collection('users')
           .doc(_auth.currentUser!.uid)
           .collection('chats')
-          .doc(chatUid)
+          .doc(senderUid)
           .update({'isMsgSeen': true, 'unSeenMsgCount': 0});
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');

@@ -13,11 +13,11 @@ class ChatProvider extends ChangeNotifier{
   final MessageSeen _messageSeen;
 
   Future<void> messageSeen({
-    required String chatUid,
+    required String senderUid,
   }) async{
     final result = await _messageSeen(
       MessageSeenParams(
-        chatUid: chatUid, 
+        senderUid: senderUid, 
       ),
     );
 

@@ -10,6 +10,7 @@ class LocalUser extends Equatable{
     this.image,
     this.bio,
     this.chats = const [],
+    this.activeChatId,
   });
 
   const LocalUser.empty() : this(
@@ -26,16 +27,17 @@ class LocalUser extends Equatable{
   final String? image;
   final String? bio;
   final List<Chat> chats; 
+  final String? activeChatId;
 
   @override
   List<Object?> get props => [
-    uid, email, name, image, bio, chats,
+    uid, email, name, image, bio, chats, activeChatId,
   ];
 
   @override
   String toString(){
     return 'LocalUser{id: $uid, email: $email, bio: $bio, ' 
-    'name: $name, image: $image, chats: $chats}';
+    'name: $name, image: $image, chats: $chats, activeChatUid: $activeChatId}';
   }
 
 
