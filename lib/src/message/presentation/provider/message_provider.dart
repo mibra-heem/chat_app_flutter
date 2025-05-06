@@ -1,6 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
-import 'package:mustye/core/utils/constants.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/message/domain/usecases/activate_chat.dart';

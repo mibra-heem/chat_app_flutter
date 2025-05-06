@@ -10,13 +10,11 @@ import 'package:mustye/core/res/fonts.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mustye/src/auth/presentation/screens/forms/sign_in_form.dart';
 import 'package:mustye/src/auth/presentation/screens/forgot_password_screen.dart';
+import 'package:mustye/src/auth/presentation/screens/forms/sign_in_form.dart';
 import 'package:mustye/src/auth/presentation/screens/sign_up_screen.dart';
 import 'package:mustye/src/auth/presentation/screens/widgets/auth_button.dart';
 import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
-import 'package:mustye/src/setting/presentation/provider/setting_provider.dart';
-import 'package:provider/provider.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

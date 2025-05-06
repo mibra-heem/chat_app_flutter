@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mustye/core/common/views/under_development_screen.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
-import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:mustye/src/auth/presentation/screens/sign_in_screen.dart';
@@ -84,25 +83,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
         settings: settings,
       );
-    // case ProfileView.routeName:
-    //   return _buildPage(
-    //     (_) => BlocProvider(
-    //       create: (context) => sl<AuthBloc>(),
-    //       child: const ProfileView(),
-    //     ),
-    //     settings: settings,
-    //   );
-    // case EditProfileView.routeName:
-    //   return _buildPage(
-    //     (_) => BlocProvider(
-    //       create: (context) => sl<AuthBloc>(),
-    //       child: ChangeNotifierProvider(
-    //         create: (_) => EditProfileProvider(),
-    //         child: const EditProfileView(),
-    //       ),
-    //     ),
-    //     settings: settings,
-    //   );
     default:
       return _buildPage(
         (_) => const UnderDevelopmentScreen(),

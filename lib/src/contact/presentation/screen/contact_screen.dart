@@ -5,7 +5,6 @@ import 'package:mustye/core/common/widgets/contact_tile.dart';
 import 'package:mustye/core/res/fonts.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
-import 'package:mustye/src/contact/data/model/contact_model.dart';
 import 'package:mustye/src/contact/domain/entity/contact.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
@@ -90,7 +89,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       );
                     },
                   );
-                }, childCount: contacts.length),
+                }, childCount: contacts.length,),
               ),
             ],
           );

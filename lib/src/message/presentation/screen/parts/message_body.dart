@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mustye/core/common/views/loading_view.dart';
 import 'package:mustye/core/common/widgets/message_tile.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
@@ -39,15 +38,7 @@ class _MessageBodyState extends State<MessageBody> {
   }
 
   final MessageProvider _messageProvider = sl<MessageProvider>();
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   debugPrint('........ Activating the chat .......');
-  //   _messageProvider.setActiveChatId(activeChatId: widget.chat.uid);
-  //   debugPrint('........ Chat Activated .......');
-  // }
-
+  
   @override
   void initState() {
     super.initState();

@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:mustye/core/errors/exception.dart';
-import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/constants.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
 
