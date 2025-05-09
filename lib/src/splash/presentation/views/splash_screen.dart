@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/res/colors.dart';
+import 'package:mustye/core/res/media_res.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,13 +27,23 @@ class _SplashScreenState extends State<SplashScreen> {
     return const Scaffold(
       backgroundColor: Colours.primaryColor,
       body: Center(
-        child: Text(
-          'Mustye',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 32,
-            fontWeight: FontWeight.w600,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage(MediaRes.appIcon),
+              height: 150,
+              width: 150,
+            ),
+            Text(
+              'Mustye',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 32,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
       ),
     );

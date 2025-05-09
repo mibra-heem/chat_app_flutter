@@ -14,6 +14,10 @@ class TabNavigator extends ChangeNotifier{
 
   TabItem get currentPage => _navigationStack.last;
 
+  List<TabItem> get allPages => _navigationStack;
+
+  int get totalPages => _navigationStack.length;
+
   void push(TabItem page){
     _navigationStack.add(page);
     notifyListeners();
@@ -62,5 +66,10 @@ class TabItem extends Equatable{
 
   @override
   List<Object?> get props => [id];
+
+  @override 
+  String toString() {
+    return 'id: $id, child: $child';
+  }
   
 }

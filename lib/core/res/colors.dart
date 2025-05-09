@@ -24,10 +24,13 @@ class Colours {
 
   static const primaryColor = Color.fromARGB(255, 60, 20, 130);
   static const black = Color.fromARGB(255, 25, 25, 25);
-  static const lightBlack = Color.fromARGB(255, 45, 45, 45);
+  static const lightBlack = Color.fromARGB(255, 35, 35, 35);
+  static const darkTextFieldColor = Color.fromARGB(255, 45, 45, 45);
+  static const lightTextFieldColor = Color.fromARGB(255, 235, 235, 235);
+
 
   static const white = Color.fromARGB(255, 245, 245, 245);
-  static const hardWhite = Color.fromARGB(255, 225, 225, 225);
+  static const lightWhite = Color.fromARGB(255, 235, 235, 235);
 
   static const grey = Color.fromARGB(255, 125, 125, 125);
 

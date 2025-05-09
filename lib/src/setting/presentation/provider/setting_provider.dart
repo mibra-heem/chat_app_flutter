@@ -11,7 +11,7 @@ class SettingProvider extends ChangeNotifier {
        _checkIfDarkModeOn = checkIfDarkModeOn {
         
     loadInitialTheme();
-    print('Initializing setting Provider......');
+    debugPrint('Initializing setting Provider......');
   }
 
   final CacheDarkMode _cacheDarkMode;

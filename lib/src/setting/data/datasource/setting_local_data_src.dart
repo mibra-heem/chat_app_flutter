@@ -21,7 +21,7 @@ class SettingLocalDataSrcImpl implements SettingLocalDataSrc {
   Future<void> cacheDarkMode({required bool isDarkMode}) async {
     try {
       final uid = DatasourceUtils.getUser()!.uid;
-      await _settingBox.put(StorageConsts.darkModePrefix + uid, isDarkMode);
+      await _settingBox.put(StorageConstant.darkMode + uid, isDarkMode);
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw CacheException(
@@ -40,8 +40,8 @@ class SettingLocalDataSrcImpl implements SettingLocalDataSrc {
         return false;
       }
 
-      if (_settingBox.containsKey(StorageConsts.darkModePrefix + user.uid)) {
-        return _settingBox.get(StorageConsts.darkModePrefix + user.uid) as bool;
+      if (_settingBox.containsKey(StorageConstant.darkMode + user.uid)) {
+        return _settingBox.get(StorageConstant.darkMode + user.uid) as bool;
       }
       return false;
 

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 
-class EditProfileProvider extends ChangeNotifier {
+class ProfileProvider extends ChangeNotifier {
   File? pickedImage;
   bool get imageChanged => pickedImage != null;
 

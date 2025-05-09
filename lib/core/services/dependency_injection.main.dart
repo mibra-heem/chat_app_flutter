@@ -5,6 +5,8 @@ final sl = GetIt.instance;
 /// Injectiing Dependencies
 
 Future<void> init() async {
+  // await _initTabs();
+  await _initDashboard();
   await _initAuth();
   await _initSettings();
   await _initContacts();
@@ -12,12 +14,32 @@ Future<void> init() async {
   await _initMessages();
 }
 
+/// DashBoard Tabs Initialization
+
+Future<void> _initTabs() async {
+  sl
+    ..registerLazySingleton<TabNavigator>(
+      () => TabNavigator(TabItem(child: const ChatView())),
+      instanceName: GetItConstant.chatView,
+    )
+    ..registerLazySingleton<TabNavigator>(
+      () => TabNavigator(TabItem(child: const ProfileView())),
+      instanceName: GetItConstant.profileView,
+    );
+}
+
+/// Feature --> DashBoard
+
+Future<void> _initDashboard() async {
+  sl.registerLazySingleton(DashboardProvider.new);
+}
+
 /// Feature --> Auth
 
 Future<void> _initAuth() async {
   await Hive.initFlutter();
 
-  final userBox = await Hive.openBox<dynamic>(StorageConsts.userBox);
+  final userBox = await Hive.openBox<dynamic>(StorageConstant.userBox);
 
   sl
     ..registerFactory(
@@ -52,7 +74,7 @@ Future<void> _initAuth() async {
     )
     ..registerLazySingleton<AuthLocalDataSource>(
       () => AuthLocalDataSrcImpl(
-        userBox: sl<Box<dynamic>>(instanceName: StorageConsts.userBox),
+        userBox: sl<Box<dynamic>>(instanceName: StorageConstant.userBox),
       ),
     )
     ..registerLazySingleton(() => FirebaseAuth.instance)
@@ -60,19 +82,20 @@ Future<void> _initAuth() async {
     ..registerLazySingleton(() => FirebaseStorage.instance)
     ..registerLazySingleton(
       () => GoogleSignIn(
-        scopes: ['openid', 'email', 'profile'],
-        clientId:
-            '194129986069-r3vnqp4i706r775j1f3p2sq1i1mhlfh8.apps'
-            '.googleusercontent.com',
+        scopes: AuthConstant.scopes,
+        clientId: AuthConstant.clientId,
       ),
     )
-    ..registerLazySingleton(() => userBox, instanceName: StorageConsts.userBox);
+    ..registerLazySingleton(
+      () => userBox,
+      instanceName: StorageConstant.userBox,
+    );
 }
 
 /// Feature --> Settings
 
 Future<void> _initSettings() async {
-  final settingBox = await Hive.openBox<dynamic>(StorageConsts.settingBox);
+  final settingBox = await Hive.openBox<dynamic>(StorageConstant.settingBox);
 
   sl
     ..registerFactory(
@@ -83,12 +106,12 @@ Future<void> _initSettings() async {
     ..registerLazySingleton<SettingRepo>(() => SettingRepoImpl(sl()))
     ..registerLazySingleton<SettingLocalDataSrc>(
       () => SettingLocalDataSrcImpl(
-        settingBox: sl<Box<dynamic>>(instanceName: StorageConsts.settingBox),
+        settingBox: sl<Box<dynamic>>(instanceName: StorageConstant.settingBox),
       ),
     )
     ..registerLazySingleton(
       () => settingBox,
-      instanceName: StorageConsts.settingBox,
+      instanceName: StorageConstant.settingBox,
     );
 }
 
@@ -121,6 +144,8 @@ Future<void> _initChats() async {
 /// Feature --> Messages
 
 Future<void> _initMessages() async {
+  final chatBox = await Hive.openBox<dynamic>(StorageConstant.chatBox);
+
   sl
     ..registerFactory(
       () => MessageProvider(sendMessage: sl(), activateChat: sl()),
@@ -129,6 +154,14 @@ Future<void> _initMessages() async {
     ..registerLazySingleton(() => ActivateChat(sl()))
     ..registerLazySingleton<MessageRepo>(() => MessageRepoImpl(sl()))
     ..registerLazySingleton<MessageRemoteDataSrc>(
-      () => MessageRemoteDataSrcImpl(auth: sl(), firestore: sl()),
+      () => MessageRemoteDataSrcImpl(
+        auth: sl(),
+        firestore: sl(),
+        chatBox: sl<Box<dynamic>>(instanceName: StorageConstant.chatBox),
+      ),
+    )
+    ..registerLazySingleton(
+      () => chatBox,
+      instanceName: StorageConstant.chatBox,
     );
 }

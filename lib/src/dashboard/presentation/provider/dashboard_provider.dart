@@ -6,6 +6,7 @@ import 'package:mustye/src/profile/presentation/views/profile_view.dart';
 import 'package:provider/provider.dart';
 
 class DashboardProvider extends ChangeNotifier {
+  DashboardProvider();
   List<int> _indexHistory = [0];
 
   final List<Widget> _screens = [
@@ -18,6 +19,17 @@ class DashboardProvider extends ChangeNotifier {
       child: const PersistentView(),
     ),
   ];
+
+  int profileTabNavStackCount = 1;
+
+  bool _canPop = false;
+
+  bool get canPop => _canPop;
+
+  set canPop(bool canPop){
+    _canPop = canPop;
+    notifyListeners();
+  }
 
   List<Widget> get screens => _screens;
 

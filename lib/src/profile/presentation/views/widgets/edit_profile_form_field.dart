@@ -43,7 +43,6 @@ class EditProfileFormField extends StatelessWidget {
           hintText: hintText,
           controller: controller,
           readOnly: readOnly,
-          // counterText: counterText != null ? '$counterText/$maxLength' : null,
           maxLength: maxLength,
           isTextArea: isTextArea,
           filled: true,

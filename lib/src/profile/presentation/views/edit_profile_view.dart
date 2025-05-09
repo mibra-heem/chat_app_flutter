@@ -1,19 +1,18 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
 import 'package:mustye/core/common/widgets/gradient_background.dart';
 import 'package:mustye/core/enums/update_user_action.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/res/colors.dart';
-import 'package:mustye/core/res/media_res.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
+import 'package:mustye/src/dashboard/presentation/provider/dashboard_provider.dart';
 import 'package:mustye/src/profile/presentation/provider/edit_profile_provider.dart';
 import 'package:mustye/src/profile/presentation/views/form/edit_profile_form.dart';
 import 'package:mustye/src/profile/presentation/views/parts/edit_profile_app_bar.dart';
+import 'package:mustye/src/profile/presentation/views/widgets/edit_profile_image.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileView extends StatefulWidget {
@@ -64,14 +63,9 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) print('Building the whole method');
+    final provider = Provider.of<DashboardProvider>(context);
     return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (canPop, _) {
-        if (!canPop) {
-          context.pop();
-        }
-      },
+      canPop: provider.canPop,
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) {
           if (state is UserUpdated) {
@@ -85,7 +79,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           return Scaffold(
             appBar: EditProfileAppBar(
               actions: [
-                Consumer<EditProfileProvider>(
+                Consumer<ProfileProvider>(
                   builder: (_, provider, __) {
                     return TextButton(
                       onPressed: () {
@@ -143,36 +137,41 @@ class _EditProfileViewState extends State<EditProfileView> {
                           );
                         }
                       },
-                      child: state is AuthLoading
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: Colours.white,
+                      child:
+                          state is AuthLoading
+                              ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colours.white,
+                                ),
+                              )
+                              : StatefulBuilder(
+                                builder: (_, refresh) {
+                                  nameController.addListener(
+                                    () => refresh(() {}),
+                                  );
+                                  emailController.addListener(
+                                    () => refresh(() {}),
+                                  );
+                                  bioController.addListener(
+                                    () => refresh(() {}),
+                                  );
+                                  passwordController.addListener(
+                                    () => refresh(() {}),
+                                  );
+                                  return Text(
+                                    'Done',
+                                    style: TextStyle(
+                                      color:
+                                          nothingChanged &&
+                                                  !provider.imageChanged
+                                              ? Colors.grey
+                                              : Colours.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                },
                               ),
-                            )
-                          : StatefulBuilder(
-                              builder: (_, refresh) {
-                                nameController.addListener(
-                                  () => refresh(() {}),
-                                );
-                                emailController.addListener(
-                                  () => refresh(() {}),
-                                );
-                                bioController.addListener(() => refresh(() {}));
-                                passwordController
-                                    .addListener(() => refresh(() {}));
-                                return Text(
-                                  'Done',
-                                  style: TextStyle(
-                                    color:
-                                        nothingChanged && !provider.imageChanged
-                                            ? Colors.grey
-                                            : Colours.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                );
-                              },
-                            ),
                     );
                   },
                 ),
@@ -182,58 +181,14 @@ class _EditProfileViewState extends State<EditProfileView> {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                  Consumer<EditProfileProvider>(
-                    builder: (_, provider, __) {
-                      final user = context.currentUser!;
-                      final image = user.image == null || user.image!.isEmpty
-                          ? null
-                          : user.image;
-                      return Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.blue,
-                          image: DecorationImage(
-                            fit: BoxFit.contain,
-                            image: provider.pickedImage != null
-                                ? FileImage(provider.pickedImage!)
-                                : image != null
-                                    ? NetworkImage(image)
-                                    : const AssetImage(
-                                        MediaRes.cartoonTeenageBoyCharacter,
-                                      ) as ImageProvider,
-                          ),
-                        ),
-                        child: Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.black.withAlpha(128),
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                onPressed: provider.pickImage,
-                                icon: const Icon(
-                                  IconlyBold.edit,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 30,),
+                  const SizedBox(height: 20),
+                  EditProfileImage(user: context.currentUser!),
+                  const SizedBox(height: 30),
                   EditProfileForm(
-                    emailController: emailController, 
-                    nameController: nameController, 
-                    passwordController: passwordController, 
-                    oldPasswordController: oldPasswordController, 
+                    emailController: emailController,
+                    nameController: nameController,
+                    passwordController: passwordController,
+                    oldPasswordController: oldPasswordController,
                     bioController: bioController,
                   ),
                 ],

@@ -11,7 +11,11 @@ class AppTheme {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     brightness: Brightness.light,
     primaryColor: Colours.primaryColor,
-    colorScheme: ColorScheme.fromSeed(seedColor: Colours.primaryColor),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colours.primaryColor,
+      primary: Colours.primaryColor,
+      secondary: Colours.lightWhite,
+    ),
     applyElevationOverlayColor: false,
     shadowColor: Colors.transparent,
     splashColor: Colors.transparent,
@@ -25,9 +29,17 @@ class AppTheme {
         fontSize: 24,
         fontWeight: FontWeight.w600,
       ),
-      iconTheme: IconThemeData(
-        color: Colors.white,
+      iconTheme: IconThemeData(color: Colors.white),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        surfaceTintColor: Colours.white,
+        foregroundColor: Colours.black,
       ),
+    ),
+    dialogTheme: const DialogTheme(
+      insetPadding: EdgeInsets.zero,
+      backgroundColor: Colours.white,
     ),
     badgeTheme: const BadgeThemeData(
       backgroundColor: Colours.primaryColor,
@@ -51,19 +63,19 @@ class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colours.hardWhite,
+      fillColor: Colours.lightTextFieldColor,
       hintStyle: const TextStyle(color: Colours.black),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.hardWhite),
+        borderSide: const BorderSide(color: Colours.lightTextFieldColor),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.hardWhite),
+        borderSide: const BorderSide(color: Colours.lightTextFieldColor),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.hardWhite),
+        borderSide: const BorderSide(color: Colours.lightTextFieldColor),
       ),
       suffixIconColor: Colours.black,
       prefixIconColor: Colours.black,
@@ -80,11 +92,23 @@ class AppTheme {
     primaryColor: Colours.primaryColor,
     colorScheme: ColorScheme.fromSeed(
       seedColor: Colours.primaryColor,
+      secondary: Colours.lightBlack,
       brightness: Brightness.dark,
     ),
     applyElevationOverlayColor: false,
     scaffoldBackgroundColor: Colours.black,
     splashFactory: NoSplash.splashFactory,
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        textStyle: const TextStyle(color: Colours.white),
+        surfaceTintColor: Colours.white,
+        foregroundColor: Colours.white,
+      ),
+    ),
+    dialogTheme: const DialogTheme(
+      insetPadding: EdgeInsets.zero,
+      backgroundColor: Colours.lightBlack,
+    ),
     badgeTheme: const BadgeThemeData(
       backgroundColor: Colours.white,
       textStyle: TextStyle(
@@ -100,12 +124,8 @@ class AppTheme {
         fontSize: 24,
         fontWeight: FontWeight.w600,
       ),
-      iconTheme: IconThemeData(
-        color: Colors.white,
-      ),
-      actionsIconTheme: IconThemeData(
-         color: Colors.white,
-      )
+      iconTheme: IconThemeData(color: Colors.white),
+      actionsIconTheme: IconThemeData(color: Colors.white),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Colours.primaryColor,
@@ -119,19 +139,19 @@ class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colours.lightBlack,
+      fillColor: Colours.darkTextFieldColor,
       hintStyle: const TextStyle(color: Colours.white),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.lightBlack),
+        borderSide: const BorderSide(color: Colours.darkTextFieldColor),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.lightBlack),
+        borderSide: const BorderSide(color: Colours.darkTextFieldColor),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.lightBlack),
+        borderSide: const BorderSide(color: Colours.darkTextFieldColor),
       ),
       suffixIconColor: Colours.white,
       prefixIconColor: Colours.white,
