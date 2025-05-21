@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mustye/core/common/views/loading_view.dart';
 import 'package:mustye/core/common/widgets/contact_tile.dart';
+import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/res/fonts.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
@@ -12,8 +14,6 @@ import 'package:provider/provider.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
-
-  static const routeName = '/contacts';
 
   @override
   State<ContactScreen> createState() => _ContactScreenState();
@@ -74,10 +74,9 @@ class _ContactScreenState extends State<ContactScreen> {
                         subtitle: contact.bio ?? '',
                         image: contact.image,
                         onTap: () {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            MessageScreen.routeName,
-                            arguments: ChatModel(
+                          context.pushReplacementNamed(
+                            RouteName.message, 
+                            extra: ChatModel(
                               uid: contact.uid,
                               name: contact.name,
                               email: contact.email,
@@ -85,6 +84,17 @@ class _ContactScreenState extends State<ContactScreen> {
                               bio: contact.bio,
                             ),
                           );
+                          // Navigator.pushReplacementNamed(
+                          //   context,
+                          //   RouteConst.message,
+                          //   arguments: ChatModel(
+                          //     uid: contact.uid,
+                          //     name: contact.name,
+                          //     email: contact.email,
+                          //     image: contact.image,
+                          //     bio: contact.bio,
+                          //   ),
+                          // );
                         },
                       );
                     },

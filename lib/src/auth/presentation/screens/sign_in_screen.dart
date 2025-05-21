@@ -2,24 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mustye/core/common/widgets/gradient_background.dart';
 import 'package:mustye/core/common/widgets/rounded_button.dart';
+import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/res/colors.dart';
 import 'package:mustye/core/res/fonts.dart';
-import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mustye/src/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:mustye/src/auth/presentation/screens/forms/sign_in_form.dart';
-import 'package:mustye/src/auth/presentation/screens/sign_up_screen.dart';
 import 'package:mustye/src/auth/presentation/screens/widgets/auth_button.dart';
-import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
-
-  static const routeName = '/sign-in';
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -47,7 +43,7 @@ class _SignInScreenState extends State<SignInScreen> {
           } else if (state is SignedIn) {
             context.userProvider.cacheUserData(state.user);
             context.settingProvider.loadInitialTheme();
-            Navigator.pushReplacementNamed(context, Dashboard.routeName);
+            context.goNamed(RouteName.chat);
             if (kDebugMode) print('........ Signed In successfully ........');
           }
         },
@@ -78,26 +74,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       style: const ButtonStyle(
                         padding: WidgetStatePropertyAll(EdgeInsets.zero),
                         splashFactory: NoSplash.splashFactory,
-
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (_) {
-                              return BlocProvider(
-                                create: (_) => sl<AuthBloc>(),
-                                child: const ForgotPasswordScreen(),
-                              );
-                            },
-                          ),
-                        );
+                        context.pushNamed(RouteName.forgetPassword);
                       },
                       child: const Text(
-                        'Forgot Password?', 
-                        style: TextStyle(
-                          color: Colours.grey,
-                        ),),
+                        'Forgot Password?',
+                        style: TextStyle(color: Colours.grey),
+                      ),
                     ),
                   ),
                   SizedBox(height: context.height * 0.02),
@@ -162,17 +146,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (_) {
-                                return BlocProvider(
-                                  create: (_) => sl<AuthBloc>(),
-                                  child: const SignUpScreen(),
-                                );
-                              },
-                            ),
-                          );
+                          context.pushNamed(RouteName.signUp);
                         },
                         child: const Text('Create Account'),
                       ),

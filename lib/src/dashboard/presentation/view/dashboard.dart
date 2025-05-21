@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
@@ -8,9 +9,9 @@ import 'package:mustye/src/dashboard/presentation/provider/dashboard_provider.da
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  const Dashboard({required this.shell, super.key});
 
-  static const routeName = '/dashboard';
+  final StatefulNavigationShell shell;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -29,14 +30,28 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     debugPrint('............ Dashboard .............');
-    final provider = Provider.of<DashboardProvider>(context);
 
     return PopScope(
-      canPop: provider.canPop,
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        debugPrint('On Pop Invoked From Dashboard');
-      },
+        const tabBasePaths = ['/chat', '/profile'];
 
+        if (didPop) return;
+        final currentLocation = GoRouterState.of(context).uri.toString();
+        final isNestedRoute = tabBasePaths.any(
+          (basePath) =>
+              currentLocation.startsWith(basePath) &&
+              currentLocation != basePath,
+        );
+
+        if (isNestedRoute) {
+          context.pop();
+        } else if (widget.shell.currentIndex != 0) {
+          widget.shell.goBranch(0);
+        } else {
+          SystemNavigator.pop();
+        }
+      },
       child: StreamBuilder<LocalUser>(
         stream: StreamUtils.getUserData,
         builder: (_, snapshot) {
@@ -54,37 +69,30 @@ class _DashboardState extends State<Dashboard> {
           if (snapshot.hasError) {
             debugPrint('Firestore error while Streaming: ${snapshot.error}');
           }
-          return Consumer<DashboardProvider>(
-            builder: (_, provider, __) {
-              return Scaffold(
-                body: IndexedStack(
-                  index: provider.currentIndex,
-                  children: provider.screens,
+          return Scaffold(
+            body: widget.shell,
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: widget.shell.currentIndex,
+              onTap: widget.shell.goBranch,
+              items: [
+                BottomNavigationBarItem(
+                  label: 'Chat',
+                  icon: Icon(
+                    widget.shell.currentIndex == 0
+                        ? IconlyBold.paper
+                        : IconlyLight.paper,
+                  ),
                 ),
-                bottomNavigationBar: BottomNavigationBar(
-                  currentIndex: provider.currentIndex,
-                  onTap: provider.changeIndex,
-                  items: [
-                    BottomNavigationBarItem(
-                      label: 'Chat',
-                      icon: Icon(
-                        provider.currentIndex == 0
-                            ? IconlyBold.paper
-                            : IconlyLight.paper,
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      label: 'Profile',
-                      icon: Icon(
-                        provider.currentIndex == 1
-                            ? IconlyBold.profile
-                            : IconlyLight.profile,
-                      ),
-                    ),
-                  ],
+                BottomNavigationBarItem(
+                  label: 'Profile',
+                  icon: Icon(
+                    widget.shell.currentIndex == 1
+                        ? IconlyBold.profile
+                        : IconlyLight.profile,
+                  ),
                 ),
-              );
-            },
+              ],
+            ),
           );
         },
       ),

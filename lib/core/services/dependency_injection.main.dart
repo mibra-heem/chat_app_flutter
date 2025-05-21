@@ -5,7 +5,8 @@ final sl = GetIt.instance;
 /// Injectiing Dependencies
 
 Future<void> init() async {
-  // await _initTabs();
+  await dotenv.load();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await _initDashboard();
   await _initAuth();
   await _initSettings();
@@ -14,24 +15,20 @@ Future<void> init() async {
   await _initMessages();
 }
 
-/// DashBoard Tabs Initialization
-
-Future<void> _initTabs() async {
-  sl
-    ..registerLazySingleton<TabNavigator>(
-      () => TabNavigator(TabItem(child: const ChatView())),
-      instanceName: GetItConstant.chatView,
-    )
-    ..registerLazySingleton<TabNavigator>(
-      () => TabNavigator(TabItem(child: const ProfileView())),
-      instanceName: GetItConstant.profileView,
-    );
-}
-
 /// Feature --> DashBoard
 
+// intializing the dashboard controller and tab navigator keys
 Future<void> _initDashboard() async {
-  sl.registerLazySingleton(DashboardProvider.new);
+  debugPrint('intializing the dashboard controller and tab navigator keys .....');
+  final tabKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+  ];
+
+  sl..registerSingleton<List<GlobalKey<NavigatorState>>>(tabKeys)
+  ..registerSingleton<DashboardProvider>(
+    DashboardProvider(tabKeys: tabKeys),
+  );
 }
 
 /// Feature --> Auth

@@ -50,9 +50,17 @@ class AppTheme {
       ),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colours.white,
+      backgroundColor: Colors.white,
       type: BottomNavigationBarType.fixed,
+      elevation: 1,
     ),
+    navigationBarTheme: const NavigationBarThemeData(
+      backgroundColor: Colours.white,
+      indicatorColor: Colours.primaryColor,
+      iconTheme: WidgetStatePropertyAll(IconThemeData(
+        color: Colours.white,
+      ),),
+    ),    
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Colours.primaryColor,
       foregroundColor: Colours.white,
@@ -136,6 +144,11 @@ class AppTheme {
       backgroundColor: Colours.black,
       selectedIconTheme: IconThemeData(color: Colours.white),
       selectedItemColor: Colours.white,
+    ),
+    navigationBarTheme: const NavigationBarThemeData(
+      backgroundColor: Colours.black,
+      iconTheme: WidgetStatePropertyAll(IconThemeData(color: Colours.white)),
+      indicatorColor: Colours.white,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

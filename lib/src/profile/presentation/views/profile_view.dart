@@ -7,8 +7,6 @@ import 'package:mustye/src/profile/presentation/views/parts/profile_header.dart'
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
 
-  static const routeName = '/profile';
-
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }

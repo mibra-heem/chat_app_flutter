@@ -14,8 +14,6 @@ import 'package:mustye/src/auth/presentation/screens/sign_in_screen.dart';
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
-  static const routeName = '/forgot-password';
-
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }

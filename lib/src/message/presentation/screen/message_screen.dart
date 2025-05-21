@@ -5,13 +5,15 @@ import 'package:mustye/src/message/presentation/screen/parts/message_app_bar.dar
 import 'package:mustye/src/message/presentation/screen/parts/message_body.dart';
 
 class MessageScreen extends StatelessWidget {
-  const MessageScreen({super.key});
-
-  static const routeName = '/message';
+  const MessageScreen({
+    required this.chat,
+    super.key,
+  });
+  final Chat chat;
 
   @override
   Widget build(BuildContext context) {
-    final chat = ModalRoute.of(context)!.settings.arguments! as Chat;
+    // final chat = ModalRoute.of(context)!.settings.arguments! as Chat;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
