@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/common/widgets/chat_tile.dart';
+import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/extensions/datetime_extension.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
-import 'package:mustye/src/message/presentation/screen/message_screen.dart';
 import 'package:provider/provider.dart';
 
 class ChatBody extends StatefulWidget {
@@ -19,7 +20,7 @@ class _ChatBodyState extends State<ChatBody> {
 
   @override
   Widget build(BuildContext context) {
-    final chats = Provider.of<UserProvider>(context).user!.chats;
+    final chats = Provider.of<UserProvider>(context).user?.chats ?? [];
 
     if (chats.isEmpty) {
       return const Center(
@@ -45,10 +46,9 @@ class _ChatBodyState extends State<ChatBody> {
               unSeenMsgCount: chat.unSeenMsgCount,
               onTap: () {
                 context.read<ChatProvider>().messageSeen(senderUid: chat.uid);
-                Navigator.pushNamed(
-                  context,
-                  MessageScreen.routeName,
-                  arguments: ChatModel(
+                context.pushNamed(
+                  RouteName.message,
+                  extra: ChatModel(
                     uid: chat.uid,
                     name: chat.name,
                     email: chat.email,

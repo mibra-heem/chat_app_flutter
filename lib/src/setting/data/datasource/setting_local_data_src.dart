@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:mustye/core/constants/storage_const.dart';
 import 'package:mustye/core/errors/exception.dart';
-import 'package:mustye/core/utils/constants.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
 
 abstract class SettingLocalDataSrc {

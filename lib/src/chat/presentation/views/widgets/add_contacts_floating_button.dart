@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
-import 'package:mustye/src/contact/presentation/screen/contact_screen.dart';
+import 'package:mustye/core/constants/route_const.dart';
 
 class AddContactsFloatingButton extends StatelessWidget {
   const AddContactsFloatingButton({super.key});
@@ -12,7 +13,7 @@ class AddContactsFloatingButton extends StatelessWidget {
       tooltip: 'Select Contacts',
       shape: const CircleBorder(),
       onPressed: (){
-        Navigator.pushNamed(context, ContactScreen.routeName);
+        context.pushNamed(RouteName.contact);
       },
       child: const Icon(IconlyBold.add_user),
 

@@ -1,19 +1,13 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/common/widgets/my_dialog_box.dart';
-import 'package:mustye/core/extensions/context_extension.dart';
+import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
-import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mustye/src/profile/presentation/provider/edit_profile_provider.dart';
-import 'package:mustye/src/profile/presentation/views/edit_profile_view.dart';
 import 'package:mustye/src/profile/presentation/views/widgets/user_profile_card.dart';
-import 'package:mustye/src/setting/presentation/views/setting_view.dart';
 import 'package:provider/provider.dart';
 
 class ProfileBody extends StatelessWidget {
@@ -31,31 +25,19 @@ class ProfileBody extends StatelessWidget {
               title: 'Edit Profile',
               icon: IconlyLight.edit_square,
               iconColor: Colors.amber,
-              onTap:
-                  () => context.push(
-                    BlocProvider(
-                      create: (context) => sl<AuthBloc>(),
-                      child: ChangeNotifierProvider(
-                        create: (_) => ProfileProvider(),
-                        child: const EditProfileView(),
-                      ),
-                    ),
-                  ),
+              onTap: () => context.pushNamed(RouteName.editProfile),
             ),
             UserProfileCard(
               title: 'Notification',
               icon: IconlyLight.notification,
               iconColor: Colors.lightGreen,
-              onTap:
-                  () => context.push(
-                    const Center(child: Text('Notifications Page')),
-                  ),
+              onTap: () => context.pushNamed(RouteName.notification),
             ),
             UserProfileCard(
               title: 'Setting',
               icon: IconlyLight.setting,
               iconColor: Colors.lightBlue,
-              onTap: () => context.push(const SettingView()),
+              onTap: () => context.pushNamed(RouteName.setting),
             ),
             UserProfileCard(
               title: 'Logout',
@@ -69,19 +51,11 @@ class ProfileBody extends StatelessWidget {
                       title: 'Logout',
                       content: 'You want to logout from this account.',
                       onConfirm: () async {
-                        final navigator = Navigator.of(context);
+                        context.goNamed(RouteName.signIn);
                         await sl<FirebaseAuth>().signOut();
                         await sl<GoogleSignIn>().signOut();
-                        unawaited(
-                          navigator.pushNamedAndRemoveUntil(
-                            '/',
-                            (route) => false,
-                          ),
-                        );
+                        debugPrint('Check if it is even coming here or not?');
                       },
-                      // onCancel: (){
-
-                      // },
                     );
                   },
                 );

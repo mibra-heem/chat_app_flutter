@@ -1,59 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/app/providers/tab_navigator.dart';
-import 'package:mustye/core/common/views/persistent_view.dart';
-import 'package:mustye/src/chat/presentation/views/chat_view.dart';
-import 'package:mustye/src/profile/presentation/views/profile_view.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
+import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/services/on_generate_route.dart';
+import 'package:mustye/src/dashboard/presentation/view/tab_navigator.dart';
 
 class DashboardProvider extends ChangeNotifier {
-  DashboardProvider();
-  List<int> _indexHistory = [0];
+  DashboardProvider({required List<GlobalKey<NavigatorState>> tabKeys})
+    : _tabKeys = tabKeys;
 
-  final List<Widget> _screens = [
-    ChangeNotifierProvider(
-      create: (_) => TabNavigator(TabItem(child: const ChatView())),
-      child: const PersistentView(),
-    ),
-    ChangeNotifierProvider(
-      create: (_) => TabNavigator(TabItem(child: const ProfileView())),
-      child: const PersistentView(),
-    ),
-  ];
+  final List<GlobalKey<NavigatorState>> _tabKeys;
 
-  int profileTabNavStackCount = 1;
-
-  bool _canPop = false;
-
-  bool get canPop => _canPop;
-
-  set canPop(bool canPop){
-    _canPop = canPop;
-    notifyListeners();
-  }
-
-  List<Widget> get screens => _screens;
+  List<GlobalKey<NavigatorState>> get tabKeys => _tabKeys;
 
   int _currentIndex = 0;
 
   int get currentIndex => _currentIndex;
 
-  void changeIndex(int index) {
+  set currentIndex(int index) {
     if (_currentIndex == index) return;
     _currentIndex = index;
-    _indexHistory.add(index);
     notifyListeners();
   }
 
-  void goBack() {
-    if (_indexHistory.length == 1) return;
-    _indexHistory.removeLast();
-    _currentIndex = _indexHistory.last;
-    notifyListeners();
-  }
+  // List<Widget> get screens => <TabNavigator>[
+  //   TabNavigator(
+  //     initialRoute: RouteConst.chat,
+  //     navigatorKey: _tabKeys[0],
+  //     onGenerateRoute: RouteGenerator.onGenerateRouteChatTab,
+  //   ),
+  //   TabNavigator(
+  //     initialRoute: RouteConst.profile,
+  //     navigatorKey: _tabKeys[1],
+  //     onGenerateRoute: RouteGenerator.onGenerateRouteProfileTab,
+  //   ),
+  // ];
 
-  void resetIndex() {
-    _indexHistory = [0];
-    _currentIndex = 0;
-    notifyListeners();
+  void onPopInvokedWithResult(_, __) {
+    final currentState = _tabKeys[currentIndex].currentState;
+
+    if (currentState!.canPop() == true) {
+      currentState.pop();
+    } else {
+      if (_currentIndex != 0) {
+        currentIndex = 0;
+        debugPrint('Switched to home tab (index 0)');
+      } else {
+        SystemNavigator.pop();
+      }
+    }
   }
 }
