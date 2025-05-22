@@ -3,7 +3,6 @@ import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/services/router.dart';
 import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
-import 'package:mustye/src/dashboard/presentation/provider/dashboard_provider.dart';
 import 'package:mustye/src/setting/presentation/provider/setting_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +19,6 @@ class AppRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => sl<DashboardProvider>()),
         ChangeNotifierProvider(create: (_) => sl<UserProvider>()),
         ChangeNotifierProvider(create: (_) => sl<ChatProvider>()),
         ChangeNotifierProvider(create: (_) => sl<SettingProvider>()),
@@ -41,15 +39,6 @@ class MainApp extends StatelessWidget {
       title: 'Chat App',
       theme: themeProvider.theme,
       debugShowCheckedModeBanner: false,
-      // onGenerateRoute: RouteGenerator.generateRoute,
-      // initialRoute: RouteConst.splash,
-      // onGenerateInitialRoutes: (_) {
-      //   return [
-      //     RouteGenerator.generateRoute(
-      //       const RouteSettings(name: RouteConst.splash),
-      //     ),
-      //   ];
-      // },
     );
   }
 }

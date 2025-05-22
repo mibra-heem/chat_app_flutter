@@ -7,28 +7,11 @@ final sl = GetIt.instance;
 Future<void> init() async {
   await dotenv.load();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await _initDashboard();
   await _initAuth();
   await _initSettings();
   await _initContacts();
   await _initChats();
   await _initMessages();
-}
-
-/// Feature --> DashBoard
-
-// intializing the dashboard controller and tab navigator keys
-Future<void> _initDashboard() async {
-  debugPrint('intializing the dashboard controller and tab navigator keys .....');
-  final tabKeys = [
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-  ];
-
-  sl..registerSingleton<List<GlobalKey<NavigatorState>>>(tabKeys)
-  ..registerSingleton<DashboardProvider>(
-    DashboardProvider(tabKeys: tabKeys),
-  );
 }
 
 /// Feature --> Auth

@@ -30,7 +30,7 @@ class SettingView extends StatelessWidget {
               color: context.theme.colorScheme.onSecondary.withAlpha(100),
               borderRadius: BorderRadius.circular(20),
             ),
-    
+
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -44,10 +44,10 @@ class SettingView extends StatelessWidget {
                     if (kDebugMode) {
                       print('onChanged Value : $value');
                       print(
-                        'isDarkMode : ${context.read<SettingProvider>().isDarkMode}',
+                        'isDarkMode : '
+                        '${context.read<SettingProvider>().isDarkMode}',
                       );
                     }
-                    
                     context.read<SettingProvider>().toggleTheme();
                   },
                   activeTrackColor: Colours.primaryColor,

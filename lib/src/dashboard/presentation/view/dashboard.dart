@@ -5,7 +5,6 @@ import 'package:iconly/iconly.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
-import 'package:mustye/src/dashboard/presentation/provider/dashboard_provider.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
