@@ -9,7 +9,6 @@ import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:mustye/src/auth/presentation/screens/sign_in_screen.dart';
 import 'package:mustye/src/auth/presentation/screens/sign_up_screen.dart';
-import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/chat/presentation/views/chat_view.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
@@ -17,11 +16,9 @@ import 'package:mustye/src/contact/presentation/screen/contact_screen.dart';
 import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
-import 'package:mustye/src/profile/presentation/provider/edit_profile_provider.dart';
+import 'package:mustye/src/profile/presentation/provider/profile_controller.dart';
 import 'package:mustye/src/profile/presentation/views/edit_profile_view.dart';
 import 'package:mustye/src/profile/presentation/views/profile_view.dart';
-import 'package:mustye/src/setting/presentation/provider/setting_provider.dart';
-import 'package:mustye/src/setting/presentation/views/setting_view.dart';
 import 'package:mustye/src/splash/presentation/views/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -75,14 +72,13 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.message,
       name: RouteName.message,
-      builder:
-          (context, state) {
-            final chat = state.extra! as Chat;
-            return ChangeNotifierProvider(
-            create: (context) => sl<MessageProvider>(),
-            child: MessageScreen(chat: chat,),
-          );
-          },
+      builder: (context, state) {
+        final chat = state.extra! as Chat;
+        return ChangeNotifierProvider(
+          create: (context) => sl<MessageProvider>(),
+          child: MessageScreen(chat: chat),
+        );
+      },
     ),
     GoRoute(
       path: RoutePath.contact,
@@ -122,26 +118,30 @@ final GoRouter router = GoRouter(
                   (context, state) => BlocProvider(
                     create: (context) => sl<AuthBloc>(),
                     child: ChangeNotifierProvider(
-                      create: (_) => ProfileProvider(),
+                      create: (_) => ProfileController(),
                       child: const EditProfileView(),
                     ),
                   ),
             ),
             GoRoute(
-              path: RoutePath.setting,
-              name: RouteName.setting,
+              path: RoutePath.favourite,
+              name: RouteName.favourite,
               builder:
-                  (context, state) => ChangeNotifierProvider(
-                    create: (_) => sl<SettingProvider>(),
-                    child: const SettingView(),
-                  ),
+                  (context, state) =>
+                      const Center(child: Text('Favourite View')),
             ),
             GoRoute(
               path: RoutePath.notification,
               name: RouteName.notification,
               builder:
                   (context, state) =>
-                      const Center(child: Text('Notification Page View')),
+                      const Center(child: Text('Notification View')),
+            ),
+            GoRoute(
+              path: RoutePath.privacy,
+              name: RouteName.privacy,
+              builder:
+                  (context, state) => const Center(child: Text('Privacy View')),
             ),
           ],
         ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
+import 'package:mustye/core/res/themes.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/services/router.dart';
 import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
-import 'package:mustye/src/setting/presentation/provider/setting_provider.dart';
+import 'package:mustye/src/profile/features/theme/presentation/controller/theme_controller.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -21,7 +22,7 @@ class AppRoot extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => sl<UserProvider>()),
         ChangeNotifierProvider(create: (_) => sl<ChatProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<SettingProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<ThemeController>()),
       ],
       child: const MainApp(),
     );
@@ -33,11 +34,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<SettingProvider>(context);
+    debugPrint('Change Detected ...................');
     return MaterialApp.router(
       routerConfig: router,
       title: 'Chat App',
-      theme: themeProvider.theme,
+      darkTheme: AppTheme.dark,
+      theme: AppTheme.light,
+      themeMode: Provider.of<ThemeController>(context).themeMode,
       debugShowCheckedModeBanner: false,
     );
   }

@@ -6,8 +6,13 @@ import 'package:iconly/iconly.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/common/widgets/my_dialog_box.dart';
 import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/enums/themes.dart';
+import 'package:mustye/core/extensions/context_extension.dart';
+import 'package:mustye/core/extensions/string_extention.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
-import 'package:mustye/src/profile/presentation/views/widgets/user_profile_card.dart';
+import 'package:mustye/src/profile/features/theme/presentation/controller/theme_controller.dart';
+import 'package:mustye/src/profile/presentation/provider/profile_controller.dart';
+import 'package:mustye/src/profile/presentation/views/widgets/user_profile_tile.dart';
 import 'package:provider/provider.dart';
 
 class ProfileBody extends StatelessWidget {
@@ -21,25 +26,72 @@ class ProfileBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 20,
           children: [
-            UserProfileCard(
+            UserProfileTile(
               title: 'Edit Profile',
               icon: IconlyLight.edit_square,
-              iconColor: Colors.amber,
+              iconColor: Colors.cyan,
               onTap: () => context.pushNamed(RouteName.editProfile),
             ),
-            UserProfileCard(
-              title: 'Notification',
-              icon: IconlyLight.notification,
-              iconColor: Colors.lightGreen,
-              onTap: () => context.pushNamed(RouteName.notification),
+            UserProfileTile(
+              title: 'Favourites',
+              icon: IconlyLight.heart,
+              iconColor: Colors.amber,
+              onTap: () => context.pushNamed(RouteName.favourite),
             ),
-            UserProfileCard(
-              title: 'Setting',
-              icon: IconlyLight.setting,
+            UserProfileTile(
+              title: 'Theme',
+              icon: IconlyLight.filter,
               iconColor: Colors.lightBlue,
-              onTap: () => context.pushNamed(RouteName.setting),
+              onTap: () {
+                showDialog<Navigator>(
+                  context: context,
+                  builder: (_) {
+                    return Dialog(
+                      child: SizedBox(
+                        width: context.width * 0.75,
+                        child: Consumer<ThemeController>(
+                          builder: (_, controller, __) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 3,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  children: [
+                                    Radio<Themes>(
+                                      value: Themes.values[index],
+                                      groupValue:
+                                          Themes.values[controller
+                                              .themeMode
+                                              .index],
+                                      onChanged: (v) {
+                                        if (v != null) controller.setTheme(v);
+                                      },
+                                    ),
+                                    Text(
+                                      ThemeMode
+                                          .values[index]
+                                          .name
+                                          .firstLetterCapital,
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
-            UserProfileCard(
+            UserProfileTile(
+              title: 'Privacy',
+              icon: IconlyLight.shield_done,
+              iconColor: Colors.lightGreen,
+              onTap: () => context.pushNamed(RouteName.privacy),
+            ),
+            UserProfileTile(
               title: 'Logout',
               icon: IconlyLight.logout,
               iconColor: Colors.red,

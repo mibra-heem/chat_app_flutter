@@ -8,7 +8,7 @@ import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
-import 'package:mustye/src/setting/presentation/provider/setting_provider.dart';
+import 'package:mustye/src/profile/features/theme/presentation/controller/theme_controller.dart';
 import 'package:provider/provider.dart';
 
 class MessageFoot extends StatelessWidget {
@@ -71,7 +71,8 @@ class MessageFoot extends StatelessWidget {
                 width: 50,
                 decoration: BoxDecoration(
                   color:
-                      context.read<SettingProvider>().isDarkMode
+                      context.read<ThemeController>().themeMode ==
+                              ThemeMode.dark
                           ? Colours.white
                           : Colours.primaryColor,
                   shape: BoxShape.circle,
@@ -79,7 +80,8 @@ class MessageFoot extends StatelessWidget {
                 child: Icon(
                   IconlyBold.send,
                   color:
-                      context.read<SettingProvider>().isDarkMode
+                      context.read<ThemeController>().themeMode ==
+                              ThemeMode.dark
                           ? Colours.primaryColor
                           : Colours.white,
                 ),

@@ -10,7 +10,6 @@ class ChatView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint('........... Chat View ...........');
-    // final provider = Provider.of<DashboardProvider>(context);
     return const Scaffold(
       extendBodyBehindAppBar: true,
       floatingActionButton: AddContactsFloatingButton(),

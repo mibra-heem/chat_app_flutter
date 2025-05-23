@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 
-class UserProfileCard extends StatelessWidget {
-  const UserProfileCard({
+class UserProfileTile extends StatelessWidget {
+  const UserProfileTile({
     required this.title,
     required this.icon,
     required this.iconColor,
@@ -23,7 +23,7 @@ class UserProfileCard extends StatelessWidget {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: context.theme.colorScheme.secondary,
+          color: context.theme.colorScheme.onPrimary,
           borderRadius: BorderRadius.circular(20),
           // border: Border.all(color: Colours.grey),
         ),
@@ -32,11 +32,12 @@ class UserProfileCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: iconColor.withAlpha(75),
-                  child: Icon(icon, color: iconColor),
-                ),
+                Icon(icon, color: iconColor),
+                // Container(
+                //   // height: 20,
+                //   // backgroundColor: iconColor.withAlpha(75),
+                //   child: ,
+                // ),
                 const SizedBox(width: 10),
                 Text(
                   title,

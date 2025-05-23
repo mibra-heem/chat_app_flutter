@@ -1,8 +1,9 @@
 class StorageConstant {
   const StorageConstant._();
+  static const String theme = 'theme_';
   static const String userBox = 'user_box';
-  static const String darkMode = 'dark_mode_';
   static const String messageBox = 'message_box';
-  static const String settingBox = 'setting_box';
+  static const String profileBox = 'profile_box';
+  static const String themeBox = 'theme_box';
   static const String chatBox = 'chat_box';
 }

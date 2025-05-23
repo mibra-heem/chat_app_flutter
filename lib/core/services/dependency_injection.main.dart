@@ -8,7 +8,7 @@ Future<void> init() async {
   await dotenv.load();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await _initAuth();
-  await _initSettings();
+  await _initTheme();
   await _initContacts();
   await _initChats();
   await _initMessages();
@@ -72,26 +72,27 @@ Future<void> _initAuth() async {
     );
 }
 
-/// Feature --> Settings
 
-Future<void> _initSettings() async {
-  final settingBox = await Hive.openBox<dynamic>(StorageConstant.settingBox);
+/// Feature --> Theme
+
+Future<void> _initTheme() async {
+  final themeBox = await Hive.openBox<dynamic>(StorageConstant.themeBox);
 
   sl
     ..registerFactory(
-      () => SettingProvider(cacheDarkMode: sl(), checkIfDarkModeOn: sl()),
+      () => ThemeController(cacheThemeMode: sl(), loadThemeMode: sl()),
     )
-    ..registerLazySingleton(() => CacheDarkMode(sl()))
-    ..registerLazySingleton(() => CheckIfDarkModeOn(sl()))
-    ..registerLazySingleton<SettingRepo>(() => SettingRepoImpl(sl()))
-    ..registerLazySingleton<SettingLocalDataSrc>(
-      () => SettingLocalDataSrcImpl(
-        settingBox: sl<Box<dynamic>>(instanceName: StorageConstant.settingBox),
+    ..registerLazySingleton(() => CacheThemeMode(sl()))
+    ..registerLazySingleton(() => LoadThemeMode(sl()))
+    ..registerLazySingleton<ThemeRepo>(() => ThemeRepoImpl(sl()))
+    ..registerLazySingleton<ThemeLocalDataSrc>(
+      () => ThemeLocalDataSrcImpl(
+        themeBox: sl<Box<dynamic>>(instanceName: StorageConstant.themeBox),
       ),
     )
     ..registerLazySingleton(
-      () => settingBox,
-      instanceName: StorageConstant.settingBox,
+      () => themeBox,
+      instanceName: StorageConstant.themeBox,
     );
 }
 
