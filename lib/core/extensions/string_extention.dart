@@ -31,4 +31,12 @@ extension StringExtention on String{
 
   }
 
+  String get firstLetterCapital {
+    final firstLetter = this[0].toUpperCase();
+    final withoutFirstLetter = substring(1);
+    
+    return '$firstLetter$withoutFirstLetter';
+
+  }
+
 }

@@ -52,16 +52,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             );
           } else if (state is SignedIn) {
             if (kDebugMode) print('SignedIn state and User is : ${state.user}');
-            Navigator.push(
-              context,
-              MaterialPageRoute<void>(
-                builder: (_) {
-                  return const Placeholder();
-                },
-              ),
-            );
-            // context.userProvider.initUser(state.user);
-            // Navigator.pushReplacementNamed(context, Dashboard.routeName);
+            
+            context.pushReplacementNamed(RouteName.dashboard);
           }
         },
         builder: (_, state) {

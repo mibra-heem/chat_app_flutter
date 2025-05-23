@@ -42,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
             CoreUtils.showSnackbar(context, state.message);
           } else if (state is SignedIn) {
             context.userProvider.cacheUserData(state.user);
-            context.settingProvider.loadInitialTheme();
+            context.themeController.loadTheme();
             context.goNamed(RouteName.chat);
             if (kDebugMode) print('........ Signed In successfully ........');
           }

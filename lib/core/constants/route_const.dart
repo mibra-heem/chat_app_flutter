@@ -19,6 +19,10 @@ class RoutePath{
   static const editProfile = '$profile/edit-profile';
   static const setting = '$profile/setting';
   static const notification = '$profile/notiflcation';
+  static const privacy = '$profile/privacy';
+  static const favourite = '$profile/favourite';
+
+
 
 }
 
@@ -42,5 +46,7 @@ class RouteName{
   static const editProfile = 'edit-profile';
   static const setting = 'setting';
   static const notification = 'notiflcation';
+  static const privacy = 'privacy';
+  static const favourite = 'favourite';
 
 }

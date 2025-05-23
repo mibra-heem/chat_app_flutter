@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mustye/core/common/widgets/gradient_background.dart';
 import 'package:mustye/core/enums/update_user_action.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/res/colors.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mustye/src/profile/presentation/provider/edit_profile_provider.dart';
+import 'package:mustye/src/profile/presentation/provider/profile_controller.dart';
 import 'package:mustye/src/profile/presentation/views/form/edit_profile_form.dart';
 import 'package:mustye/src/profile/presentation/views/parts/edit_profile_app_bar.dart';
 import 'package:mustye/src/profile/presentation/views/widgets/edit_profile_image.dart';
@@ -73,11 +74,11 @@ class _EditProfileViewState extends State<EditProfileView> {
         return Scaffold(
           appBar: EditProfileAppBar(
             actions: [
-              Consumer<ProfileProvider>(
+              Consumer<ProfileController>(
                 builder: (_, provider, __) {
                   return TextButton(
                     onPressed: () {
-                      if (nothingChanged) Navigator.pop(context);
+                      if (nothingChanged) context.pop();
                       final bloc = context.read<AuthBloc>();
                       if (passwordChanged) {
                         if (oldPasswordController.text.trim().isEmpty) {
@@ -91,8 +92,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           UpdateUserEvent(
                             action: UpdateUserAction.password,
                             userData: jsonEncode({
-                              'oldPassword':
-                                  oldPasswordController.text.trim(),
+                              'oldPassword': oldPasswordController.text.trim(),
                               'newPassword': passwordController.text.trim(),
                             }),
                           ),
@@ -146,9 +146,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 emailController.addListener(
                                   () => refresh(() {}),
                                 );
-                                bioController.addListener(
-                                  () => refresh(() {}),
-                                );
+                                bioController.addListener(() => refresh(() {}));
                                 passwordController.addListener(
                                   () => refresh(() {}),
                                 );
@@ -156,8 +154,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   'Done',
                                   style: TextStyle(
                                     color:
-                                        nothingChanged &&
-                                                !provider.imageChanged
+                                        nothingChanged && !provider.imageChanged
                                             ? Colors.grey
                                             : Colours.white,
                                     fontSize: 16,
@@ -169,6 +166,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   );
                 },
               ),
+              
             ],
           ),
           body: GradientBackground(
