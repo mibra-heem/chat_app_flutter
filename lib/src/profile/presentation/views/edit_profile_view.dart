@@ -9,7 +9,7 @@ import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/res/colors.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mustye/src/profile/presentation/provider/profile_controller.dart';
+import 'package:mustye/src/profile/presentation/provider/profile_provider.dart';
 import 'package:mustye/src/profile/presentation/views/form/edit_profile_form.dart';
 import 'package:mustye/src/profile/presentation/views/parts/edit_profile_app_bar.dart';
 import 'package:mustye/src/profile/presentation/views/widgets/edit_profile_image.dart';
@@ -74,7 +74,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         return Scaffold(
           appBar: EditProfileAppBar(
             actions: [
-              Consumer<ProfileController>(
+              Consumer<ProfileProvider>(
                 builder: (_, provider, __) {
                   return TextButton(
                     onPressed: () {

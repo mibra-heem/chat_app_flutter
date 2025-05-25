@@ -4,12 +4,12 @@ import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/auth/domain/usecases/cache_user_data.dart';
 import 'package:mustye/src/auth/domain/usecases/get_user_cached_data.dart';
 
-class UserProvider extends ChangeNotifier{
-
+class UserProvider extends ChangeNotifier {
   UserProvider({
     required CacheUserData cacheUserData,
     required GetUserCachedData getUserCachedData,
-  }) : _cacheUserData = cacheUserData, _getUserCachedData = getUserCachedData;
+  }) : _cacheUserData = cacheUserData,
+       _getUserCachedData = getUserCachedData;
 
   final CacheUserData _cacheUserData;
   final GetUserCachedData _getUserCachedData;
@@ -18,42 +18,51 @@ class UserProvider extends ChangeNotifier{
 
   LocalUserModel? get user => _user;
 
-  void initUser(LocalUserModel? user){
-    if(_user != user) _user = user;
+  bool _isUserLoading = false;
+
+  bool get isUserLoading => _isUserLoading;
+
+  set isUserLoading(bool loading){
+    _isUserLoading = loading;
+    notifyListeners();
   }
 
-  set user(LocalUserModel? user){
-    if(_user != user){
+  void initUser(LocalUserModel? user) {
+    if (_user != user) _user = user;
+  }
+
+  set user(LocalUserModel? user) {
+    if (_user != user) {
       _user = user;
       Future.delayed(Duration.zero, notifyListeners);
     }
   }
 
-  Future<void> getUserCachedData() async{
+  Future<void> getUserCachedData() async {
+
+    isUserLoading = true;
+
     final result = await _getUserCachedData();
 
     result.fold(
-      (failure){
-        if(kDebugMode) print(failure.errorMessage);
+      (failure) {
+        if (kDebugMode) print(failure.errorMessage);
       },
-      (u){
+      (u) {
         initUser(u as LocalUserModel?);
-      }
+      },
     );
+    isUserLoading = false;
   }
 
-  Future<void> cacheUserData(LocalUser user) async{
-    this.user = user as LocalUserModel;
+  Future<void> cacheUserData(LocalUser u) async {
+    user = u as LocalUserModel;
 
-    final result = await _cacheUserData(user);
+    final result = await _cacheUserData(u);
 
-    result.fold(
-      (failure){
-        if(kDebugMode) print(failure.errorMessage);
-      },
-      (_){
-        
-      }
-    );
+    result.fold((failure) {
+      if (kDebugMode) print(failure.errorMessage);
+    }, (_) {
+    },);
   }
 }

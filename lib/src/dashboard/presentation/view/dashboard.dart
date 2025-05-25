@@ -58,8 +58,10 @@ class _DashboardState extends State<Dashboard> {
             debugPrint('......... ${snapshot.connectionState.name} ..........');
           }
           if (snapshot.hasData && snapshot.data is LocalUser) {
+            debugPrint('....... snapshot.hasData ........');
             final userProvider = context.read<UserProvider>();
             if (userProvider.user != snapshot.data) {
+              debugPrint('..... cacheUserData starting from Dashboard .......');
               userProvider.cacheUserData(snapshot.data!);
             } else {
               debugPrint('....... No need to cache user data is same ........');

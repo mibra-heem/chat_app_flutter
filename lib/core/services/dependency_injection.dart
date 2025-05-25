@@ -46,6 +46,6 @@ import 'package:mustye/src/profile/features/theme/data/repo/theme_repo_impl.dart
 import 'package:mustye/src/profile/features/theme/domain/repo/theme_repo.dart';
 import 'package:mustye/src/profile/features/theme/domain/usecases/cache_theme_mode.dart';
 import 'package:mustye/src/profile/features/theme/domain/usecases/load_theme_mode.dart';
-import 'package:mustye/src/profile/features/theme/presentation/controller/theme_controller.dart';
+import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 
 part 'dependency_injection.main.dart';

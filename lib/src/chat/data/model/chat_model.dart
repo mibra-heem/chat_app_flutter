@@ -28,9 +28,7 @@ class ChatModel extends Chat {
         image: map['image'] as String?,
         bio: map['bio'] as String?,
         lastMsg: map['lastMsg'] as String?,
-        lastMsgTime: map['lastMsgTime'] != null
-          ? (map['lastMsgTime'] as Timestamp).toDate()
-          : DateTime.now(),
+        lastMsgTime: _parseDateTime(map['lastMsgTime']),
         unSeenMsgCount: map['unSeenMsgCount'] as int,
         isMsgSeen: map['isMsgSeen'] as bool,
         lastSeen: map['lastSeen'] as String?,
@@ -77,11 +75,36 @@ class ChatModel extends Chat {
       'bio': bio,
       'lastMsg': lastMsg,
       'lastMsgTime': FieldValue.serverTimestamp(),
-      'unSeenMsgCount' : unSeenMsgCount,
-      'isMsgSeen' : isMsgSeen,
+      'unSeenMsgCount': unSeenMsgCount,
+      'isMsgSeen': isMsgSeen,
       'lastSeen': lastSeen,
       'isOnline': isOnline,
       'fcmToken': fcmToken,
     };
+  }
+
+  DataMap toMapLocal() {
+    return {
+      'uid': uid,
+      'email': email,
+      'name': name,
+      'image': image,
+      'bio': bio,
+      'lastMsg': lastMsg,
+      'lastMsgTime': lastMsgTime?.millisecondsSinceEpoch,
+      'unSeenMsgCount': unSeenMsgCount,
+      'isMsgSeen': isMsgSeen,
+      'lastSeen': lastSeen,
+      'isOnline': isOnline,
+      'fcmToken': fcmToken,
+    };
+  }
+
+  static DateTime _parseDateTime(dynamic value) {
+    if (value == null) return DateTime.now();
+    if (value is Timestamp) return value.toDate();
+    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+    if (value is String) return DateTime.tryParse(value) ?? DateTime.now();
+    return DateTime.now();
   }
 }

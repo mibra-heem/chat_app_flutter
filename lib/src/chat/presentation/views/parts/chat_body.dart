@@ -16,13 +16,12 @@ class ChatBody extends StatefulWidget {
 }
 
 class _ChatBodyState extends State<ChatBody> {
-  bool isLabelVisible = true;
-
   @override
   Widget build(BuildContext context) {
-    final chats = Provider.of<UserProvider>(context).user?.chats ?? [];
+    final provider = Provider.of<UserProvider>(context);
+    final chats = provider.user?.chats;
 
-    if (chats.isEmpty) {
+    if (chats!.isEmpty) {
       return const Center(
         child: Text(
           'Start a new chat',

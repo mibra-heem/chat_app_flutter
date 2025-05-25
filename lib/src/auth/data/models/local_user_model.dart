@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
@@ -26,13 +27,14 @@ class LocalUserModel extends LocalUser{
       ? List<Chat>.from(
           (map['chats'] as List).map(
             (m) {
+              debugPrint('LocalUserModel.fromMap chats are not null .....');
               final chat = DataMap.from(m as Map);
               return ChatModel.fromMap(chat);
             },
           ),
         )
       : const [],
-    activeChatId: map['activeChatId']  as String? 
+    activeChatId: map['activeChatId']  as String?,
   );
 
   LocalUserModel copyWith({
@@ -62,6 +64,18 @@ class LocalUserModel extends LocalUser{
       'name' : name,
       'image' : image,
       'bio' : bio,
+      'activeChatId' : activeChatId,
+    };
+  }
+
+  DataMap toMapLocal(){
+    return {
+      'uid' : uid,
+      'email' : email,
+      'name' : name,
+      'image' : image,
+      'bio' : bio,
+      'chats' : chats.map((m)=> (m as ChatModel).toMapLocal()).toList(),
       'activeChatId' : activeChatId,
     };
   }

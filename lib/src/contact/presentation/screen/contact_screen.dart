@@ -9,7 +9,6 @@ import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/contact/domain/entity/contact.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
-import 'package:mustye/src/message/presentation/screen/message_screen.dart';
 import 'package:provider/provider.dart';
 
 class ContactScreen extends StatefulWidget {
@@ -27,7 +26,7 @@ class _ContactScreenState extends State<ContactScreen> {
       body: StreamBuilder<List<Contact>>(
         stream: StreamUtils.getContacts,
         builder: (context, snapshot) {
-          if (kDebugMode) print('....... Streaming Contacts .........');
+          if (kDebugMode) print('....... Getting Contacts .........');
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingView();
           }
@@ -84,17 +83,6 @@ class _ContactScreenState extends State<ContactScreen> {
                               bio: contact.bio,
                             ),
                           );
-                          // Navigator.pushReplacementNamed(
-                          //   context,
-                          //   RouteConst.message,
-                          //   arguments: ChatModel(
-                          //     uid: contact.uid,
-                          //     name: contact.name,
-                          //     email: contact.email,
-                          //     image: contact.image,
-                          //     bio: contact.bio,
-                          //   ),
-                          // );
                         },
                       );
                     },

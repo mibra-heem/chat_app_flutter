@@ -16,7 +16,7 @@ import 'package:mustye/src/contact/presentation/screen/contact_screen.dart';
 import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
-import 'package:mustye/src/profile/presentation/provider/profile_controller.dart';
+import 'package:mustye/src/profile/presentation/provider/profile_provider.dart';
 import 'package:mustye/src/profile/presentation/views/edit_profile_view.dart';
 import 'package:mustye/src/profile/presentation/views/profile_view.dart';
 import 'package:mustye/src/splash/presentation/views/splash_screen.dart';
@@ -29,7 +29,9 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.splash,
       name: RouteName.splash,
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) {
+        return const SplashScreen();
+      },
     ),
     GoRoute(
       path: RoutePath.initial,
@@ -118,7 +120,7 @@ final GoRouter router = GoRouter(
                   (context, state) => BlocProvider(
                     create: (context) => sl<AuthBloc>(),
                     child: ChangeNotifierProvider(
-                      create: (_) => ProfileController(),
+                      create: (_) => ProfileProvider(),
                       child: const EditProfileView(),
                     ),
                   ),
