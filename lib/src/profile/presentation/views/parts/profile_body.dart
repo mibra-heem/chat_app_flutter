@@ -10,8 +10,7 @@ import 'package:mustye/core/enums/themes.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/extensions/string_extention.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
-import 'package:mustye/src/profile/features/theme/presentation/controller/theme_controller.dart';
-import 'package:mustye/src/profile/presentation/provider/profile_controller.dart';
+import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 import 'package:mustye/src/profile/presentation/views/widgets/user_profile_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +48,7 @@ class ProfileBody extends StatelessWidget {
                     return Dialog(
                       child: SizedBox(
                         width: context.width * 0.75,
-                        child: Consumer<ThemeController>(
+                        child: Consumer<ThemeProvider>(
                           builder: (_, controller, __) {
                             return ListView.builder(
                               shrinkWrap: true,

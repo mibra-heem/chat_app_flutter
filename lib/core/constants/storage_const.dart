@@ -1,5 +1,6 @@
 class StorageConstant {
   const StorageConstant._();
+  static const String user = 'user_';
   static const String theme = 'theme_';
   static const String userBox = 'user_box';
   static const String messageBox = 'message_box';

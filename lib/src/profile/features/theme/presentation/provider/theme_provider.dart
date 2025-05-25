@@ -3,8 +3,8 @@ import 'package:mustye/core/enums/themes.dart';
 import 'package:mustye/src/profile/features/theme/domain/usecases/cache_theme_mode.dart';
 import 'package:mustye/src/profile/features/theme/domain/usecases/load_theme_mode.dart';
 
-class ThemeController extends ChangeNotifier {
-  ThemeController({
+class ThemeProvider extends ChangeNotifier {
+  ThemeProvider({
     required CacheThemeMode cacheThemeMode,
     required LoadThemeMode loadThemeMode,
   }) : _cacheThemeMode = cacheThemeMode,

@@ -247,8 +247,9 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       final userData = await _getUserData(user.uid);
       final chats = await _getChatsData(user.uid);
 
-      final chatsModel =
-          chats.docs.map((doc) => ChatModel.fromMap(doc.data())).toList();
+      final chatsModel = chats.docs
+                  .map((doc) => ChatModel.fromMap(doc.data()))
+                  .toList();      
 
       final lastUser = LocalUserModel.fromMap(
         userData.data()!,

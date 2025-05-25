@@ -9,10 +9,12 @@ import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/res/colors.dart';
 import 'package:mustye/core/res/fonts.dart';
+import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/auth/presentation/screens/forms/sign_in_form.dart';
 import 'package:mustye/src/auth/presentation/screens/widgets/auth_button.dart';
+import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -42,7 +44,7 @@ class _SignInScreenState extends State<SignInScreen> {
             CoreUtils.showSnackbar(context, state.message);
           } else if (state is SignedIn) {
             context.userProvider.cacheUserData(state.user);
-            context.themeController.loadTheme();
+            sl<ThemeProvider>().loadTheme();
             context.goNamed(RouteName.chat);
             if (kDebugMode) print('........ Signed In successfully ........');
           }

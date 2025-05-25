@@ -31,7 +31,7 @@ Future<void> _initAuth() async {
         updateUser: sl(),
       ),
     )
-    ..registerFactory(
+    ..registerLazySingleton(
       () => UserProvider(getUserCachedData: sl(), cacheUserData: sl()),
     )
     ..registerLazySingleton(() => SignIn(sl()))
@@ -80,7 +80,7 @@ Future<void> _initTheme() async {
 
   sl
     ..registerFactory(
-      () => ThemeController(cacheThemeMode: sl(), loadThemeMode: sl()),
+      () => ThemeProvider(cacheThemeMode: sl(), loadThemeMode: sl()),
     )
     ..registerLazySingleton(() => CacheThemeMode(sl()))
     ..registerLazySingleton(() => LoadThemeMode(sl()))

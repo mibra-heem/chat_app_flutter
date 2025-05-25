@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 
-class ProfileController extends ChangeNotifier {
+class ProfileProvider extends ChangeNotifier {
 
   File? pickedImage;
   bool get imageChanged => pickedImage != null;

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:mustye/core/constants/storage_const.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/typedef.dart';
@@ -12,44 +13,43 @@ abstract class AuthLocalDataSource {
 
   Future<void> cacheUserData(LocalUser user);
   Future<LocalUser> getUserCachedData();
-
 }
 
-class AuthLocalDataSrcImpl implements AuthLocalDataSource{
-
-  const AuthLocalDataSrcImpl({
-    required Box<dynamic> userBox,
-  }) : _userBox = userBox;
+class AuthLocalDataSrcImpl implements AuthLocalDataSource {
+  const AuthLocalDataSrcImpl({required Box<dynamic> userBox})
+    : _userBox = userBox;
 
   final Box<dynamic> _userBox;
 
   @override
-  Future<void> cacheUserData(LocalUser user) async{
-    try{
-      await _userBox.put('user_${user.uid}', (user as LocalUserModel).toMap());
-    }catch (e, s) {
+  Future<void> cacheUserData(LocalUser user) async {
+    try {
+      await _userBox.put(
+        StorageConstant.user+user.uid,
+        (user as LocalUserModel).toMapLocal(),
+      );
+    } catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw CacheException(
-        message: e.toString(), 
+        message: e.toString(),
         statusCode: 'cache-user-failed',
       );
     }
   }
 
   @override
-  Future<LocalUser> getUserCachedData() async{
-    try{
+  Future<LocalUser> getUserCachedData() async {
+    try {
       final currentUser = sl<FirebaseAuth>().currentUser!;
-      final userMap = _userBox.get('user_${currentUser.uid}');
+      final userMap = _userBox.get(StorageConstant.user+currentUser.uid);
       final user = DataMap.from(userMap as Map);
       return LocalUserModel.fromMap(user);
-    }catch (e, s) {
+    } catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw CacheException(
-        message: e.toString(), 
+        message: e.toString(),
         statusCode: 'get-user-cache-failed',
       );
     }
   }
-  
 }

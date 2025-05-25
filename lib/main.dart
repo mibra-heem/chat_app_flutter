@@ -4,7 +4,7 @@ import 'package:mustye/core/res/themes.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/services/router.dart';
 import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
-import 'package:mustye/src/profile/features/theme/presentation/controller/theme_controller.dart';
+import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -22,7 +22,7 @@ class AppRoot extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => sl<UserProvider>()),
         ChangeNotifierProvider(create: (_) => sl<ChatProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<ThemeController>()),
+        ChangeNotifierProvider(create: (_) => sl<ThemeProvider>()),
       ],
       child: const MainApp(),
     );
@@ -34,13 +34,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Change Detected ...................');
     return MaterialApp.router(
       routerConfig: router,
       title: 'Chat App',
       darkTheme: AppTheme.dark,
       theme: AppTheme.light,
-      themeMode: Provider.of<ThemeController>(context).themeMode,
+      themeMode: Provider.of<ThemeProvider>(context).themeMode,
       debugShowCheckedModeBanner: false,
     );
   }
