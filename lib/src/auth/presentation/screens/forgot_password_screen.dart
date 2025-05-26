@@ -70,7 +70,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         context.read<AuthBloc>().add(
-                          ForgotPasswordEvent(email: emailController.text.trim()),
+                          ForgotPasswordEvent(
+                            email: emailController.text.trim(),
+                          ),
                         );
                       }
                     },
@@ -78,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   SizedBox(height: context.height * 0.02),
                   RoundedButton(
                     'Go back',
-                    labelColor: Colours.primaryColor,
+                    labelColor: Colours.primary,
                     buttonColor: Colors.white,
                     elevation: 0,
                     onPressed: () {

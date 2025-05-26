@@ -23,9 +23,8 @@ class UserProfileTile extends StatelessWidget {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: context.theme.colorScheme.onPrimary,
+          color: context.theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
-          // border: Border.all(color: Colours.grey),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,11 +32,7 @@ class UserProfileTile extends StatelessWidget {
             Row(
               children: [
                 Icon(icon, color: iconColor),
-                // Container(
-                //   // height: 20,
-                //   // backgroundColor: iconColor.withAlpha(75),
-                //   child: ,
-                // ),
+
                 const SizedBox(width: 10),
                 Text(
                   title,

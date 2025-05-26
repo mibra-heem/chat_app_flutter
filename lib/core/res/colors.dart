@@ -22,16 +22,38 @@ class Colours {
     Color.fromARGB(255, 253, 255, 247),
   ];
 
-  static const primaryColor = Color.fromARGB(255, 60, 20, 130);
-  static const black = Color.fromARGB(255, 25, 25, 25);
-  static const lightBlack = Color.fromARGB(255, 35, 35, 35);
-  static const darkTextFieldColor = Color.fromARGB(255, 45, 45, 45);
-  static const lightTextFieldColor = Color.fromARGB(255, 235, 235, 235);
+  // Main colors
+  static const primary = Color(0xFF3C1482);
+  static const primaryLight = Color(0xFF5D34A3);
+  static const primaryDark = Color(0xFF2A0F5F);
 
+  // Accent colors
+  static const secondary = Color(0xFFFFC107);      
+  static const secondaryDark = Color(0xFFFFA000);
+  static const secondaryLight = Color(0xFFFFD54F);
 
-  static const white = Color.fromARGB(255, 245, 245, 245);
-  static const lightWhite = Color.fromARGB(255, 235, 235, 235);
+  // Neutral colors
+  static const white = Color(0xFFFFFFFF);
+  static const black = Color(0xFF000000);
 
-  static const grey = Color.fromARGB(255, 125, 125, 125);
+  static const grey100 = Color(0xFFF5F5F5);
+  static const grey300 = Color(0xFFE0E0E0);
+  static const grey600 = Color(0xFF757575);
+  static const grey900 = Color(0xFF212121);
+  
+  static const textFieldLight = Color(0xFFDADADA);
+  static const textFieldDark = Color(0xFF1E1E1E);
+
+  static const scaffoldLight = Color(0xFFEFEFEE);
+  static const scaffoldDark = Color(0xFF121212);
+
+  static const appBarLight = primary;
+  static const appBarDark = Color(0xFF1C1C1C);  
+  
+  static const navBarLight = Color(0xFFF7F7F7);
+  static const navBarDark = Color(0xFF181818);
+
+  static const tileLight = white;
+  static const tileDark = Color(0xFF1E1E1E);
 
 }

@@ -21,6 +21,7 @@ class CoreUtils {
               fontWeight: FontWeight.bold,
             ),
           ),
+          duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
           backgroundColor: context.theme.primaryColor,
           shape: RoundedRectangleBorder(
@@ -38,7 +39,7 @@ class CoreUtils {
       barrierDismissible: false,
       builder: (_){
         return const Center(child: CircularProgressIndicator(
-          color: Colours.primaryColor,
+          color: Colours.primary,
           ),
         );
       },

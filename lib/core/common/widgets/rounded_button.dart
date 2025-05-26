@@ -23,7 +23,7 @@ class RoundedButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         elevation: elevation,
-        backgroundColor: buttonColor ?? Colours.primaryColor,
+        backgroundColor: buttonColor ?? Colours.primary,
         foregroundColor: labelColor ?? Colors.white,
         padding: const EdgeInsets.symmetric(
           horizontal: 50,
