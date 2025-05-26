@@ -48,7 +48,7 @@ class _ExpandableTextState extends State<ExpandableText> {
   @override
   Widget build(BuildContext context) {
     const defaultStyle = TextStyle(
-      color: Colours.grey,
+      color: Colours.grey600,
       height: 1.8,
       letterSpacing: 0.2,
       fontSize: 14,
@@ -72,7 +72,7 @@ class _ExpandableTextState extends State<ExpandableText> {
                 TextSpan(
                   text: expanded ? ' See less' : 'See more',
                   style: const TextStyle(
-                    color: Colours.primaryColor,
+                    color: Colours.primary,
                     fontSize: 14,
                   ),
                   recognizer: TapGestureRecognizer()

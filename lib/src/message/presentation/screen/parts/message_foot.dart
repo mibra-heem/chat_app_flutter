@@ -74,7 +74,7 @@ class MessageFoot extends StatelessWidget {
                       context.read<ThemeProvider>().themeMode ==
                               ThemeMode.dark
                           ? Colours.white
-                          : Colours.primaryColor,
+                          : Colours.primary,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -82,7 +82,7 @@ class MessageFoot extends StatelessWidget {
                   color:
                       context.read<ThemeProvider>().themeMode ==
                               ThemeMode.dark
-                          ? Colours.primaryColor
+                          ? Colours.primary
                           : Colours.white,
                 ),
               ),

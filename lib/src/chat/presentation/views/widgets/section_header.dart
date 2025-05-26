@@ -35,7 +35,7 @@ class SectionHeader extends StatelessWidget {
             child: const Text(
               'See all',
               style: TextStyle(
-                color: Colours.primaryColor,
+                color: Colours.primary,
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -82,7 +82,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                       child: const Text(
                         'Forgot Password?',
-                        style: TextStyle(color: Colours.grey),
+                        style: TextStyle(color: Colours.grey600),
                       ),
                     ),
                   ),

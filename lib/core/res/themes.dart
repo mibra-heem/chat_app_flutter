@@ -10,39 +10,38 @@ class AppTheme {
     fontFamily: Fonts.poppins,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     brightness: Brightness.light,
-    primaryColor: Colours.primaryColor,
+    primaryColor: Colours.primary,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Colours.primaryColor,
-      primary: Colours.primaryColor,
-      secondary: Colours.lightWhite,
+      seedColor: Colours.primary,
+      surface: Colours.tileLight,
     ),
     applyElevationOverlayColor: false,
     shadowColor: Colors.transparent,
     splashColor: Colors.transparent,
     splashFactory: NoSplash.splashFactory,
-    scaffoldBackgroundColor: Colours.white,
+    scaffoldBackgroundColor: Colours.scaffoldLight,
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colours.primaryColor,
+      backgroundColor: Colours.appBarLight,
       actionsIconTheme: IconThemeData(color: Colours.white),
       titleTextStyle: TextStyle(
         color: Colors.white,
         fontSize: 24,
         fontWeight: FontWeight.w600,
       ),
-      iconTheme: IconThemeData(color: Colors.white),
+      iconTheme: IconThemeData(color: Colours.white),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         surfaceTintColor: Colours.white,
-        foregroundColor: Colours.black,
+        foregroundColor: Colours.grey900,
       ),
     ),
     dialogTheme: const DialogTheme(
       insetPadding: EdgeInsets.zero,
-      backgroundColor: Colours.white,
+      backgroundColor: Colours.scaffoldLight,
     ),
     badgeTheme: const BadgeThemeData(
-      backgroundColor: Colours.primaryColor,
+      backgroundColor: Colours.primary,
       textStyle: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.bold,
@@ -50,19 +49,12 @@ class AppTheme {
       ),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.white,
+      backgroundColor: Colours.navBarLight,
       type: BottomNavigationBarType.fixed,
       elevation: 1,
-    ),
-    navigationBarTheme: const NavigationBarThemeData(
-      backgroundColor: Colours.white,
-      indicatorColor: Colours.primaryColor,
-      iconTheme: WidgetStatePropertyAll(IconThemeData(
-        color: Colours.white,
-      ),),
-    ),    
+    ),  
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Colours.primaryColor,
+      backgroundColor: Colours.primary,
       foregroundColor: Colours.white,
     ),
     popupMenuTheme: const PopupMenuThemeData(
@@ -71,19 +63,19 @@ class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colours.lightTextFieldColor,
-      hintStyle: const TextStyle(color: Colours.black),
+      fillColor: Colours.textFieldLight,
+      hintStyle: const TextStyle(color: Colours.grey900),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.lightTextFieldColor),
+        borderSide: const BorderSide(color: Colours.textFieldLight),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.lightTextFieldColor),
+        borderSide: const BorderSide(color: Colours.textFieldLight),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.lightTextFieldColor),
+        borderSide: const BorderSide(color: Colours.textFieldLight),
       ),
       suffixIconColor: Colours.black,
       prefixIconColor: Colours.black,
@@ -97,25 +89,25 @@ class AppTheme {
     brightness: Brightness.dark,
     shadowColor: Colors.transparent,
     splashColor: Colors.transparent,
-    primaryColor: Colours.primaryColor,
+    primaryColor: Colours.primary,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Colours.primaryColor,
-      secondary: Colours.lightBlack,
+      seedColor: Colours.primary,
+      surface: Colours.tileDark,
       brightness: Brightness.dark,
     ),
     applyElevationOverlayColor: false,
-    scaffoldBackgroundColor: Colours.black,
+    scaffoldBackgroundColor: Colours.scaffoldDark,
     splashFactory: NoSplash.splashFactory,
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        textStyle: const TextStyle(color: Colours.white),
-        surfaceTintColor: Colours.white,
-        foregroundColor: Colours.white,
+        // textStyle: const TextStyle(color: Colours.white),
+        surfaceTintColor: Colours.grey900,
+        foregroundColor: Colours.grey100,
       ),
     ),
     dialogTheme: const DialogTheme(
       insetPadding: EdgeInsets.zero,
-      backgroundColor: Colours.lightBlack,
+      backgroundColor: Colours.grey900,
     ),
     badgeTheme: const BadgeThemeData(
       backgroundColor: Colours.white,
@@ -126,7 +118,7 @@ class AppTheme {
       ),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colours.black,
+      backgroundColor: Colours.appBarDark,
       titleTextStyle: TextStyle(
         color: Colors.white,
         fontSize: 24,
@@ -136,35 +128,29 @@ class AppTheme {
       actionsIconTheme: IconThemeData(color: Colors.white),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Colours.primaryColor,
+      backgroundColor: Colours.primary,
       foregroundColor: Colours.white,
     ),
-    bottomAppBarTheme: const BottomAppBarTheme(color: Colors.amber),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colours.black,
+      backgroundColor: Colours.navBarDark,
       selectedIconTheme: IconThemeData(color: Colours.white),
       selectedItemColor: Colours.white,
     ),
-    navigationBarTheme: const NavigationBarThemeData(
-      backgroundColor: Colours.black,
-      iconTheme: WidgetStatePropertyAll(IconThemeData(color: Colours.white)),
-      indicatorColor: Colours.white,
-    ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colours.darkTextFieldColor,
-      hintStyle: const TextStyle(color: Colours.white),
+      fillColor: Colours.textFieldDark,
+      hintStyle: const TextStyle(color: Colours.grey100),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.darkTextFieldColor),
+        borderSide: const BorderSide(color: Colours.textFieldDark),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.darkTextFieldColor),
+        borderSide: const BorderSide(color: Colours.textFieldDark),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colours.darkTextFieldColor),
+        borderSide: const BorderSide(color: Colours.textFieldDark),
       ),
       suffixIconColor: Colours.white,
       prefixIconColor: Colours.white,
