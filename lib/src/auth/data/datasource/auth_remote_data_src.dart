@@ -175,7 +175,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       switch (action) {
         case UpdateUserAction.displayName:
           await user.updateDisplayName(userData as String);
-          return await _updateUserData({'fullName': userData});
+          return await _updateUserData({'name': userData});
 
         case UpdateUserAction.email:
           await user.verifyBeforeUpdateEmail(userData as String);
@@ -302,6 +302,9 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
 
   Future<void> _updateUserData(DataMap userData) async {
     final currentUser = _authClient.currentUser!;
+
+    debugPrint('User Data updating method : $userData');
+
 
     // 1. Update current user's own document
     await _firestore.collection('users').doc(currentUser.uid).update(userData);
