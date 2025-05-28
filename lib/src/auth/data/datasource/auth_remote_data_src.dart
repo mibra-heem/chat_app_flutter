@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -37,16 +38,22 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
     required FirebaseAuth authClient,
     required FirebaseFirestore firestore,
     required FirebaseStorage dbClient,
+    required FirebaseMessaging firebaseMessaging,
     required GoogleSignIn googleSignIn,
+    required String? fcmToken,
   }) : _authClient = authClient,
        _firestore = firestore,
        _dbClient = dbClient,
-       _googleSignIn = googleSignIn;
+       _firebaseMessaging = firebaseMessaging,
+       _googleSignIn = googleSignIn,
+       _fcmToken = fcmToken;
 
   final FirebaseAuth _authClient;
   final FirebaseFirestore _firestore;
   final FirebaseStorage _dbClient;
+  final FirebaseMessaging _firebaseMessaging;
   final GoogleSignIn _googleSignIn;
+  final String? _fcmToken;
 
   @override
   Future<void> forgotPassword(String email) async {
@@ -80,13 +87,6 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       );
 
       final userCredential = await _authClient.signInWithCredential(credential);
-
-      if (kDebugMode) {
-        print('........ User Object : ${userCredential.user} ......');
-        print('..... User Name : ${userCredential.user!.displayName} .......');
-        print('..... User Email : ${userCredential.user!.email} .......');
-        print('..... User PhotoURL : ${userCredential.user!.photoURL} .......');
-      }
 
       return await getLocalUserModel(userCredential);
     } on FirebaseAuthException catch (e) {
@@ -255,7 +255,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
         userData.data()!,
       ).copyWith(chats: chatsModel);
 
-      if (kDebugMode) print('..... CopyWith User :  $lastUser');
+      if (kDebugMode) print('..... User :  $lastUser');
 
       return lastUser;
     }
@@ -286,6 +286,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       email: user.email ?? fallbackEmail,
       name: user.displayName ?? '',
       image: user.photoURL ?? '',
+      fcmToken: _fcmToken,
     );
 
     final contact = ContactModel(

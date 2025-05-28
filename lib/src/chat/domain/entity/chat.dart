@@ -13,7 +13,6 @@ class Chat extends Equatable {
     this.isMsgSeen = true,
     this.lastSeen,
     this.isOnline = false,
-    this.fcmToken,
   });
 
   const Chat.empty() : this(uid: '', email: '', name: '', image: '');
@@ -29,7 +28,6 @@ class Chat extends Equatable {
   final bool isMsgSeen;
   final String? lastSeen;
   final bool isOnline;
-  final String? fcmToken;
 
   @override
   List<Object?> get props => [
