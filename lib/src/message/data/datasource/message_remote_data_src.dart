@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:mustye/core/errors/exception.dart';
@@ -24,13 +25,16 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
   const MessageRemoteDataSrcImpl({
     required FirebaseAuth auth,
     required FirebaseFirestore firestore,
+    required FirebaseMessaging firebaseMessaging,
     required Box<dynamic> chatBox,
   }) : _auth = auth,
        _firestore = firestore,
+       _firebaseMessaging = firebaseMessaging,
        _chatBox = chatBox;
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
+  final FirebaseMessaging _firebaseMessaging;
   final Box<dynamic> _chatBox;
 
   @override
@@ -40,8 +44,10 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
     required String message,
   }) async {
     try {
+      // Authorizing the user
       await DatasourceUtils.authorizeUser(_auth);
 
+      //Setting message data into the firestore
       final msgTime = Timestamp.now().toDate();
 
       final messageModel = MessageModel(
@@ -56,7 +62,6 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
         chatId: reciever.uid,
       );
 
-      // Add the message to the messages subcollection
       final messageDoc =
           _firestore
               .collection('chats')
@@ -65,14 +70,17 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
               .doc();
       await messageDoc.set(messageModel.toMap());
 
-      // === Sender Chat Logic ===
+      // Send Push Notification if reciever is not in the app
+
+      
+
+      // Updating the chats subcollection of sender and reciever
       final senderChatRef = _firestore
           .collection('users')
           .doc(sender.uid)
           .collection('chats')
           .doc(reciever.uid);
 
-      // === Receiver Chat Logic ===
       final receiverChatRef = _firestore
           .collection('users')
           .doc(reciever.uid)
@@ -82,9 +90,11 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       final receiverDoc =
           await _firestore.collection('users').doc(reciever.uid).get();
 
+      // Checking if reciever is on sender's message screen
       final receiverActiveChatId = receiverDoc.data()?['activeChatId'];
       final isReceiverViewingThisChat = receiverActiveChatId == sender.uid;
 
+      // If both users are chatting for the first time => true
       if (!_chatBox.containsKey(chatDocId)) {
         final senderChatModel = ChatModel(
           uid: sender.uid,
@@ -98,8 +108,6 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
         );
         await receiverChatRef.set(senderChatModel.toMap());
 
-        debugPrint('Step-1 Sender ChatModel set in reciever chat ...........');
-
         final recieverChatModel = ChatModel(
           uid: reciever.uid,
           email: reciever.email,
@@ -111,24 +119,16 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
         );
         await senderChatRef.set(recieverChatModel.toMap());
 
-        debugPrint('Step-2 Reciever ChatModel set in sender chat ............');
-
-
+        // Sett chatDocId of both users in the localStorage
         await _chatBox.put(chatDocId, chatDocId);
 
-        debugPrint('Step-3 Chat Doc Id set ........................');
-
-      } else {
-        debugPrint('Step-1 Sender data update in reciever chat ...........');
-
+      }else {
         await receiverChatRef.update({
           'lastMsg': message,
           'lastMsgTime': msgTime,
           'unSeenMsgCount':
               isReceiverViewingThisChat ? 0 : FieldValue.increment(1),
         });
-
-        debugPrint('Step-2 Reciever data update in sender chat ............');
 
         await senderChatRef.update({
           'lastMsg': message,
