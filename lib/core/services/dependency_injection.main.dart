@@ -17,8 +17,11 @@ Future<void> init() async {
 /// Feature --> Auth
 
 Future<void> _initAuth() async {
-  await Hive.initFlutter();
+  final firebaseMessaging = FirebaseMessaging.instance;
+  await firebaseMessaging.requestPermission(provisional: true);
+  final fcmToken = await firebaseMessaging.getToken();
 
+  await Hive.initFlutter();
   final userBox = await Hive.openBox<dynamic>(StorageConstant.userBox);
 
   sl
@@ -49,7 +52,9 @@ Future<void> _initAuth() async {
         authClient: sl(),
         firestore: sl(),
         dbClient: sl(),
+        firebaseMessaging: sl(),
         googleSignIn: sl(),
+        fcmToken: fcmToken,
       ),
     )
     ..registerLazySingleton<AuthLocalDataSource>(
@@ -60,6 +65,7 @@ Future<void> _initAuth() async {
     ..registerLazySingleton(() => FirebaseAuth.instance)
     ..registerLazySingleton(() => FirebaseFirestore.instance)
     ..registerLazySingleton(() => FirebaseStorage.instance)
+    ..registerLazySingleton(() => firebaseMessaging)
     ..registerLazySingleton(
       () => GoogleSignIn(
         scopes: AuthConstant.scopes,
@@ -71,7 +77,6 @@ Future<void> _initAuth() async {
       instanceName: StorageConstant.userBox,
     );
 }
-
 
 /// Feature --> Theme
 
@@ -138,6 +143,7 @@ Future<void> _initMessages() async {
       () => MessageRemoteDataSrcImpl(
         auth: sl(),
         firestore: sl(),
+        firebaseMessaging: sl(),
         chatBox: sl<Box<dynamic>>(instanceName: StorageConstant.chatBox),
       ),
     )

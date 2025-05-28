@@ -13,6 +13,7 @@ class LocalUserModel extends LocalUser{
     super.bio,
     super.chats,
     super.activeChatId,
+    super.fcmToken,
   });
 
   const LocalUserModel.empty() : super.empty();
@@ -35,6 +36,8 @@ class LocalUserModel extends LocalUser{
         )
       : const [],
     activeChatId: map['activeChatId']  as String?,
+    fcmToken: map['fcmToken']  as String?,
+
   );
 
   LocalUserModel copyWith({
@@ -45,6 +48,7 @@ class LocalUserModel extends LocalUser{
     String? bio,
     List<Chat>? chats,
     String? activeChatId,
+    String? fcmToken,
   }){
     return LocalUserModel(
       uid: uid ?? this.uid,
@@ -54,6 +58,7 @@ class LocalUserModel extends LocalUser{
       bio: bio ?? this.bio,
       chats: chats ?? this.chats,
       activeChatId: activeChatId ?? this.activeChatId,
+      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 
@@ -65,6 +70,7 @@ class LocalUserModel extends LocalUser{
       'image' : image,
       'bio' : bio,
       'activeChatId' : activeChatId,
+      'fcmToken' : fcmToken,
     };
   }
 
@@ -77,6 +83,7 @@ class LocalUserModel extends LocalUser{
       'bio' : bio,
       'chats' : chats.map((m)=> (m as ChatModel).toMapLocal()).toList(),
       'activeChatId' : activeChatId,
+      'fcmToken' : fcmToken,
     };
   }
 

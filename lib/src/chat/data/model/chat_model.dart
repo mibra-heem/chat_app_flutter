@@ -15,7 +15,6 @@ class ChatModel extends Chat {
     super.isMsgSeen,
     super.lastSeen,
     super.isOnline = false,
-    super.fcmToken,
   });
 
   const ChatModel.empty() : super.empty();
@@ -33,7 +32,6 @@ class ChatModel extends Chat {
         isMsgSeen: map['isMsgSeen'] as bool,
         lastSeen: map['lastSeen'] as String?,
         isOnline: map['isOnline'] as bool,
-        fcmToken: map['fcmToken'] as String?,
       );
 
   ChatModel copyWith({
@@ -48,7 +46,6 @@ class ChatModel extends Chat {
     bool? isMsgSeen,
     String? lastSeen,
     bool? isOnline,
-    String? fcmToken,
   }) {
     return ChatModel(
       uid: uid ?? this.uid,
@@ -62,7 +59,6 @@ class ChatModel extends Chat {
       isMsgSeen: isMsgSeen ?? this.isMsgSeen,
       lastSeen: lastSeen ?? this.lastSeen,
       isOnline: isOnline ?? this.isOnline,
-      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 
@@ -79,7 +75,6 @@ class ChatModel extends Chat {
       'isMsgSeen': isMsgSeen,
       'lastSeen': lastSeen,
       'isOnline': isOnline,
-      'fcmToken': fcmToken,
     };
   }
 
@@ -96,7 +91,6 @@ class ChatModel extends Chat {
       'isMsgSeen': isMsgSeen,
       'lastSeen': lastSeen,
       'isOnline': isOnline,
-      'fcmToken': fcmToken,
     };
   }
 
