@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mustye/core/common/widgets/gradient_background.dart';
-import 'package:mustye/core/common/widgets/rounded_button.dart';
+import 'package:mustye/core/app/widgets/gradient_background.dart';
+import 'package:mustye/core/app/widgets/rounded_button.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/res/colors.dart';
 import 'package:mustye/core/res/fonts.dart';

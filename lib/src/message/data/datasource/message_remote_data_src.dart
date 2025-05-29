@@ -3,8 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:mustye/core/constants/api_const.dart';
 import 'package:mustye/core/errors/exception.dart';
+import 'package:mustye/core/services/api_client.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
+import 'package:mustye/core/utils/notification_utils.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
@@ -27,15 +30,18 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
     required FirebaseFirestore firestore,
     required FirebaseMessaging firebaseMessaging,
     required Box<dynamic> chatBox,
+    required ApiClient apiClient,
   }) : _auth = auth,
        _firestore = firestore,
        _firebaseMessaging = firebaseMessaging,
-       _chatBox = chatBox;
+       _chatBox = chatBox,
+       _apiClient = apiClient;
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
   final FirebaseMessaging _firebaseMessaging;
   final Box<dynamic> _chatBox;
+  final ApiClient _apiClient;
 
   @override
   Future<void> sendMessage({
@@ -70,9 +76,23 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
               .doc();
       await messageDoc.set(messageModel.toMap());
 
+      final receiverDoc =
+          await _firestore.collection('users').doc(reciever.uid).get();
+
       // Send Push Notification if reciever is not in the app
 
-      
+      final fcmToken = receiverDoc.data()?['fcmToken'] as String?;
+
+      // if (fcmToken != null &&
+      //     _chatBox.containsKey(StorageConstant.fcmToken + reciever.uid)) {
+      //   await _chatBox.put(StorageConstant.fcmToken + reciever.uid, fcmToken)
+      // }
+
+      await sendNotification(
+        fcmToken: fcmToken,
+        body: message,
+        title: 'Mustye',
+      );
 
       // Updating the chats subcollection of sender and reciever
       final senderChatRef = _firestore
@@ -86,9 +106,6 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
           .doc(reciever.uid)
           .collection('chats')
           .doc(sender.uid);
-
-      final receiverDoc =
-          await _firestore.collection('users').doc(reciever.uid).get();
 
       // Checking if reciever is on sender's message screen
       final receiverActiveChatId = receiverDoc.data()?['activeChatId'];
@@ -121,8 +138,7 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
 
         // Sett chatDocId of both users in the localStorage
         await _chatBox.put(chatDocId, chatDocId);
-
-      }else {
+      } else {
         await receiverChatRef.update({
           'lastMsg': message,
           'lastMsgTime': msgTime,
@@ -135,7 +151,6 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
           'lastMsgTime': msgTime,
         });
       }
-
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
     } on ServerException {
@@ -191,5 +206,29 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       if (kDebugMode) print('.......... Exception $e.........');
       throw ServerException(message: e.toString(), statusCode: '505');
     }
+  }
+
+  Future<void> sendNotification({
+    required String? fcmToken,
+    required String? body,
+    required String? title,
+  }) async {
+    final serverAccessToken = await NotificationUtils.getServerAccessToken();
+
+    final message = {
+      'message': {
+        'token': fcmToken,
+        'notification': {'title': title, 'body': body},
+        'data': {'message': 'Sending message through push notification.'},
+      },
+    };
+
+    final res = await _apiClient.post(
+      url: ApiConst.fcmSendUrl,
+      body: message,
+      serverAccessToken: serverAccessToken,
+    );
+
+    debugPrint('response from send notification : $res');
   }
 }

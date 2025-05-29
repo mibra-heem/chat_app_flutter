@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/common/widgets/gradient_background.dart';
+import 'package:mustye/core/app/widgets/gradient_background.dart';
 import 'package:mustye/src/profile/presentation/views/parts/profile_app_bar.dart';
 import 'package:mustye/src/profile/presentation/views/parts/profile_body.dart';
 import 'package:mustye/src/profile/presentation/views/parts/profile_header.dart';
