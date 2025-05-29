@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
-import 'package:mustye/core/common/widgets/my_dialog_box.dart';
+import 'package:mustye/core/app/widgets/my_dialog_box.dart';
 import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/enums/themes.dart';
 import 'package:mustye/core/extensions/context_extension.dart';

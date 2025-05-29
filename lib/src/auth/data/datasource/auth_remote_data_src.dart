@@ -40,20 +40,17 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
     required FirebaseStorage dbClient,
     required FirebaseMessaging firebaseMessaging,
     required GoogleSignIn googleSignIn,
-    required String? fcmToken,
   }) : _authClient = authClient,
        _firestore = firestore,
        _dbClient = dbClient,
        _firebaseMessaging = firebaseMessaging,
-       _googleSignIn = googleSignIn,
-       _fcmToken = fcmToken;
+       _googleSignIn = googleSignIn;
 
   final FirebaseAuth _authClient;
   final FirebaseFirestore _firestore;
   final FirebaseStorage _dbClient;
   final FirebaseMessaging _firebaseMessaging;
   final GoogleSignIn _googleSignIn;
-  final String? _fcmToken;
 
   @override
   Future<void> forgotPassword(String email) async {
@@ -110,7 +107,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
         email: email,
         password: password,
       );
-
+      
       return await getLocalUserModel(credentials);
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
@@ -286,7 +283,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       email: user.email ?? fallbackEmail,
       name: user.displayName ?? '',
       image: user.photoURL ?? '',
-      fcmToken: _fcmToken,
+      fcmToken: await _firebaseMessaging.getToken(),
     );
 
     final contact = ContactModel(

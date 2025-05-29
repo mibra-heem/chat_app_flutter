@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mustye/core/common/views/loading_view.dart';
-import 'package:mustye/core/common/widgets/message_tile.dart';
+import 'package:mustye/core/app/views/loading_view.dart';
+import 'package:mustye/core/app/widgets/message_tile.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/extensions/datetime_extension.dart';
 import 'package:mustye/core/services/dependency_injection.dart';

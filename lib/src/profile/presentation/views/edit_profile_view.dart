@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mustye/core/common/widgets/gradient_background.dart';
+import 'package:mustye/core/app/widgets/gradient_background.dart';
 import 'package:mustye/core/enums/update_user_action.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/res/colors.dart';
