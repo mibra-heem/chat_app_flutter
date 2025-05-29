@@ -27,16 +27,4 @@ class ApiConst {
     'universe_domain': dotenv.env['UNIVERSE_DOMAIN'],
   };
 
-  // static final type = dotenv.env['TYPE'] ?? '';
-  // static final projectId = dotenv.env['PROJECT_ID'] ?? '';
-  // static final privateKeyId = dotenv.env['PRIVATE_KEY_ID'] ?? '';
-  // static final privateKey = dotenv.env['PRIVATE_KEY'] ?? '';
-  // static final clientEmail = dotenv.env['CLIENT_EMAIL'] ?? '';
-  // static final clientId = dotenv.env['CLIENT_ID'] ?? '';
-  // static final authUri = dotenv.env['AUTH_URI'] ?? '';
-  // static final tokenUri = dotenv.env['TOKEN_URI'] ?? '';
-  // static final authProviderX509CertUrl =
-  //     dotenv.env['AUTH_PROVIDER_X509_CERT_URL'] ?? '';
-  // static final clientX509CertUrl = dotenv.env['CLIENT_X509_CERT_URL'] ?? '';
-  // static final universeDomain = dotenv.env['UNIVERSE_DOMAIN'] ?? '';
 }

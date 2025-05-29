@@ -79,21 +79,6 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       final receiverDoc =
           await _firestore.collection('users').doc(reciever.uid).get();
 
-      // Send Push Notification if reciever is not in the app
-
-      final fcmToken = receiverDoc.data()?['fcmToken'] as String?;
-
-      // if (fcmToken != null &&
-      //     _chatBox.containsKey(StorageConstant.fcmToken + reciever.uid)) {
-      //   await _chatBox.put(StorageConstant.fcmToken + reciever.uid, fcmToken)
-      // }
-
-      await sendNotification(
-        fcmToken: fcmToken,
-        body: message,
-        title: 'Mustye',
-      );
-
       // Updating the chats subcollection of sender and reciever
       final senderChatRef = _firestore
           .collection('users')
@@ -136,7 +121,7 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
         );
         await senderChatRef.set(recieverChatModel.toMap());
 
-        // Sett chatDocId of both users in the localStorage
+        // Set chatDocId of both users in the localStorage
         await _chatBox.put(chatDocId, chatDocId);
       } else {
         await receiverChatRef.update({
@@ -151,6 +136,16 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
           'lastMsgTime': msgTime,
         });
       }
+
+      // Send Push Notification if reciever is not in the app
+
+      final fcmToken = receiverDoc.data()?['fcmToken'] as String?;
+
+      await sendNotification(
+        fcmToken: fcmToken,
+        body: message,
+        title: 'Mustye',
+      );
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
     } on ServerException {
@@ -191,8 +186,6 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       // Mark messages as seen
       final batch = _firestore.batch();
       for (final doc in docs.docs) {
-        debugPrint('............ Updating messages seen flag ...........');
-
         batch.update(doc.reference, {'isSeen': true});
       }
       await batch.commit();

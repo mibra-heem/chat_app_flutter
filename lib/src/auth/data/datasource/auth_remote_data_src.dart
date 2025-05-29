@@ -107,7 +107,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
         email: email,
         password: password,
       );
-      
+
       return await getLocalUserModel(credentials);
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
@@ -244,9 +244,8 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       final userData = await _getUserData(user.uid);
       final chats = await _getChatsData(user.uid);
 
-      final chatsModel = chats.docs
-                  .map((doc) => ChatModel.fromMap(doc.data()))
-                  .toList();      
+      final chatsModel =
+          chats.docs.map((doc) => ChatModel.fromMap(doc.data())).toList();
 
       final lastUser = LocalUserModel.fromMap(
         userData.data()!,
@@ -301,33 +300,23 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
   Future<void> _updateUserData(DataMap userData) async {
     final currentUser = _authClient.currentUser!;
 
-    debugPrint('User Data updating method : $userData');
-
-
-    // 1. Update current user's own document
+    // Update current user's data in users collection
     await _firestore.collection('users').doc(currentUser.uid).update(userData);
 
-    // 2. Optionally update the 'contacts' collection if you're using it
+    // Update current user's data in contacts collection
     await _firestore
         .collection('contacts')
         .doc(currentUser.uid)
         .update(userData);
 
-    // 3. Fetch all users to find contacts referencing the current user
+    // Fetch all users to find contacts referencing the current user
     final users = await _firestore.collection('users').get();
 
     for (final doc in users.docs) {
-      debugPrint('Entered Into Loop .......');
-
       final chatsCollection = doc.reference.collection('chats');
       final chatDoc = chatsCollection.doc(currentUser.uid);
       final snapshot = await chatDoc.get();
-
-      debugPrint('Snapshot exists : ${snapshot.exists} .......');
-      debugPrint('Chat Collection Id : ${chatsCollection.doc()} .......');
-
       if (snapshot.exists) {
-        debugPrint('Snapshot exists ........ updating chats .......');
         await chatDoc.update(userData);
       }
     }

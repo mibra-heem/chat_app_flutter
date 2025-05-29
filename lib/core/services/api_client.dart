@@ -5,11 +5,11 @@ import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/utils/typedef.dart';
 
 abstract class BaseApiService {
-  Future<void> get({required String url, SSMap? headers});
-  Future<void> post({
+  Future<void> get({required String url, String? serverAccessToken});
+  Future<DataMap> post({
     required String url,
     required DataMap? body,
-    required String? serverAccessToken,
+    String? serverAccessToken,
     bool needBaseUrl = false,
   });
 }
@@ -20,15 +20,31 @@ class ApiClient implements BaseApiService {
   final String _baseUrl;
 
   @override
-  Future<void> get({required String url, SSMap? headers}) {
-    throw UnimplementedError();
+  Future<void> get({required String url, String? serverAccessToken}) async {
+    final uri = Uri.parse(_baseUrl + url);
+
+    final res = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $serverAccessToken',
+      },
+    );
+
+    try {
+      if (res.statusCode == 200) {
+        debugPrint('Request was successfull.');
+      }
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
   }
 
   @override
   Future<DataMap> post({
     required String url,
     required DataMap? body,
-    required String? serverAccessToken,
+    String? serverAccessToken,
     bool needBaseUrl = false,
   }) async {
     final uri = Uri.parse(needBaseUrl ? _baseUrl + url : url);
