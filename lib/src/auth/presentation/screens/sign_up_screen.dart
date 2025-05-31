@@ -7,7 +7,7 @@ import 'package:mustye/core/app/widgets/gradient_background.dart';
 import 'package:mustye/core/app/widgets/rounded_button.dart';
 import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/res/fonts.dart';
+import 'package:mustye/core/resources/fonts.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/auth/presentation/screens/forms/sign_up_form.dart';

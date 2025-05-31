@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/res/media_res.dart';
+import 'package:mustye/core/resources/media_res.dart';
 import 'package:provider/provider.dart';
 
 class ProfileHeader extends StatelessWidget {

@@ -5,7 +5,6 @@ import 'package:mustye/core/app/widgets/chat_tile.dart';
 import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/extensions/datetime_extension.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
-import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
 import 'package:provider/provider.dart';
 
 class ChatBody extends StatefulWidget {
@@ -44,7 +43,6 @@ class _ChatBodyState extends State<ChatBody> {
               isLabelVisible: chat.unSeenMsgCount != 0,
               unSeenMsgCount: chat.unSeenMsgCount,
               onTap: () {
-                context.read<ChatProvider>().messageSeen(senderUid: chat.uid);
                 context.pushNamed(
                   RouteName.message,
                   extra: ChatModel(

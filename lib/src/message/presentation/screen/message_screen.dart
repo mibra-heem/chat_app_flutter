@@ -13,7 +13,6 @@ class MessageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final chat = ModalRoute.of(context)!.settings.arguments! as Chat;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
