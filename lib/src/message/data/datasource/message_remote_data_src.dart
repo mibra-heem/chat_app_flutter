@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:mustye/core/constants/api_const.dart';
+import 'package:mustye/core/constants/constants.dart';
+import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/services/api_client.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
@@ -96,9 +100,7 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       final receiverActiveChatId = receiverDoc.data()?['activeChatId'];
       final isReceiverViewingThisChat = receiverActiveChatId == sender.uid;
 
-      // If both users are chatting for the first time => true
-      if (!_chatBox.containsKey(chatDocId)) {
-        final senderChatModel = ChatModel(
+      final senderChatModel = ChatModel(
           uid: sender.uid,
           email: sender.email,
           name: sender.name,
@@ -108,7 +110,6 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
           lastMsgTime: msgTime,
           unSeenMsgCount: isReceiverViewingThisChat ? 0 : 1,
         );
-        await receiverChatRef.set(senderChatModel.toMap());
 
         final recieverChatModel = ChatModel(
           uid: reciever.uid,
@@ -119,6 +120,12 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
           lastMsg: message,
           lastMsgTime: msgTime,
         );
+
+      // If both users are chatting for the first time => true
+      if (!_chatBox.containsKey(chatDocId)) {
+
+        await receiverChatRef.set(senderChatModel.toMap());
+
         await senderChatRef.set(recieverChatModel.toMap());
 
         // Set chatDocId of both users in the localStorage
@@ -139,12 +146,13 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
 
       // Send Push Notification if reciever is not in the app
 
-      final fcmToken = receiverDoc.data()?['fcmToken'] as String?;
+      final fcmToken = receiverDoc.data()?['fcmToken'] as String;
 
       await sendNotification(
         fcmToken: fcmToken,
-        body: message,
-        title: 'Mustye',
+        message: message,
+        title: appName,
+        chat: senderChatModel as Chat,
       );
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
@@ -202,23 +210,31 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
   }
 
   Future<void> sendNotification({
-    required String? fcmToken,
-    required String? body,
-    required String? title,
+    required String fcmToken,
+    required String message,
+    required String title,
+    required Chat chat,
   }) async {
+    debugPrint('sendNotification Method triggered');
     final serverAccessToken = await NotificationUtils.getServerAccessToken();
 
-    final message = {
+    debugPrint('chat from sendNotification : $chat');
+
+    final body = {
       'message': {
         'token': fcmToken,
-        'notification': {'title': title, 'body': body},
-        'data': {'message': 'Sending message through push notification.'},
+        'notification': {'title': title, 'body': message},
+        'data': {
+          'message': 'Sending message through push notification.',
+          'route': RouteName.message,
+          'chat': jsonEncode((chat as ChatModel).toMapLocal()),
+        },
       },
     };
 
     final res = await _apiClient.post(
       url: ApiConst.fcmSendUrl,
-      body: message,
+      body: body,
       serverAccessToken: serverAccessToken,
     );
 

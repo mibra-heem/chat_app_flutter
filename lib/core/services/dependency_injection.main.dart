@@ -133,6 +133,9 @@ Future<void> _initChats() async {
 Future<void> _initMessages() async {
   final chatBox = await Hive.openBox<dynamic>(StorageConstant.chatBox);
 
+
+
+
   sl
     ..registerFactory(
       () => MessageProvider(sendMessage: sl(), activateChat: sl()),

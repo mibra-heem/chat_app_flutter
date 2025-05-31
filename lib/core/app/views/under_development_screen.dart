@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mustye/core/app/widgets/gradient_background.dart';
-import 'package:mustye/core/res/media_res.dart';
+import 'package:mustye/core/resources/media_res.dart';
 
 class UnderDevelopmentScreen extends StatelessWidget {
   const UnderDevelopmentScreen({super.key});

@@ -7,9 +7,11 @@ import 'package:mustye/core/extensions/datetime_extension.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
+import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
 import 'package:mustye/src/message/domain/entity/message.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/parts/message_foot.dart';
+import 'package:provider/provider.dart';
 
 class MessageBody extends StatefulWidget {
   const MessageBody({required this.chat, super.key});
@@ -21,6 +23,7 @@ class MessageBody extends StatefulWidget {
 }
 
 class _MessageBodyState extends State<MessageBody> {
+
   List<dynamic> mergedMsgAndLabelList(List<Message> messages) {
     final mergedList = <dynamic>[];
     String? existedLabel;
@@ -43,6 +46,8 @@ class _MessageBodyState extends State<MessageBody> {
   void initState() {
     super.initState();
     debugPrint('........ Activating the chat .......');
+    context.read<ChatProvider>().messageSeen(senderUid: widget.chat.uid);
+
     _messageProvider.setActiveChatId(activeChatId: widget.chat.uid);
     debugPrint('........ Chat Activated .......');
   }
@@ -68,7 +73,6 @@ class _MessageBodyState extends State<MessageBody> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const LoadingView();
             } else if (snapshot.hasError) {
-              if (kDebugMode) print('Error: ${snapshot.error}');
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text('No messages yet.'));

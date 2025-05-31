@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/res/colors.dart';
+import 'package:mustye/core/resources/colors.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:mustye/core/res/media_res.dart';
+import 'package:mustye/core/resources/media_res.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/profile/presentation/provider/profile_provider.dart';
 import 'package:provider/provider.dart';

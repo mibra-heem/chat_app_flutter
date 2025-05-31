@@ -1,8 +1,15 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
+import 'package:mustye/core/constants/constants.dart';
+import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/resources/themes.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/services/router.dart';
+import 'package:mustye/core/utils/typedef.dart';
+import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
 import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +17,32 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
+
+  // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  //   debugPrint('onMessageOpenedApp listened ....................');
+  //   final route = message.data['route'];
+  //   final chatJson = jsonDecode(message.data['chat'] as String) as DataMap;
+  //   final chat = ChatModel.fromMap(chatJson);
+
+  //   if (route == RouteName.message) {
+      
+  //     router.pushNamed(RouteName.message, extra: chat);
+  //   }
+  // });
+
+  FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async{
+    final route = message.data['route'];
+    final chatJson = jsonDecode(message.data['chat'] as String) as DataMap;
+    final chat = ChatModel.fromMap(chatJson);
+
+    if (route == RouteName.message) {
+      await router.pushNamed(RouteName.message, extra: chat);
+    }
+  });
+
   runApp(const AppRoot());
 }
+
 
 class AppRoot extends StatelessWidget {
   const AppRoot({super.key});
@@ -36,7 +67,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
-      title: 'Chat App',
+      title: appName,
       darkTheme: AppTheme.dark,
       theme: AppTheme.light,
       themeMode: Provider.of<ThemeProvider>(context).themeMode,

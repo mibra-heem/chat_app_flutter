@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mustye/core/app/widgets/gradient_background.dart';
 import 'package:mustye/core/enums/update_user_action.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/res/colors.dart';
+import 'package:mustye/core/resources/colors.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/profile/presentation/provider/profile_provider.dart';
