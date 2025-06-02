@@ -13,6 +13,7 @@ class ApiConst {
     'https://www.googleapis.com/auth/firebase.database',
     'https://www.googleapis.com/auth/firebase.messaging',
   ];
+  static const fcmToken = 'fcmToken';
   static final serviceAccountJson = {
     'type': dotenv.env['TYPE'],
     'project_id': dotenv.env['PROJECT_ID'],
