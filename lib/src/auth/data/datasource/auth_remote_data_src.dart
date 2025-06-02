@@ -231,6 +231,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
 
   Future<LocalUser> getLocalUserModel(UserCredential credentials) async {
     final user = credentials.user;
+    // final fcmToken = await _firebaseMessaging.getToken();
 
     if (user == null) {
       throw const ServerException(
@@ -247,9 +248,15 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
       final chatsModel =
           chats.docs.map((doc) => ChatModel.fromMap(doc.data())).toList();
 
+      // print('FcmToken : $fcmToken');
+
       final lastUser = LocalUserModel.fromMap(
         userData.data()!,
       ).copyWith(chats: chatsModel);
+
+      // await _firestore.collection('users').doc(lastUser.uid).update({
+      //   'fcmToken': fcmToken,
+      // });
 
       if (kDebugMode) print('..... User :  $lastUser');
 
@@ -276,13 +283,15 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
     return _firestore.collection('users').doc(uid).collection('chats').get();
   }
 
-  Future<void> _setUserData(User user, String fallbackEmail) async {
+  Future<void> _setUserData(
+    User user,
+    String fallbackEmail,
+  ) async {
     final localUser = LocalUserModel(
       uid: user.uid,
       email: user.email ?? fallbackEmail,
       name: user.displayName ?? '',
       image: user.photoURL ?? '',
-      fcmToken: await _firebaseMessaging.getToken(),
     );
 
     final contact = ContactModel(

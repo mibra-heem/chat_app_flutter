@@ -38,7 +38,7 @@ final GoRouter router = GoRouter(
       redirect: (context, state) {
         final currentUser = sl<FirebaseAuth>().currentUser;
         if (currentUser != null) {
-          context.userProvider.getUserCachedData();
+          // context.userProvider.getUserCachedData();
           return RoutePath.chat;
         }
         return RoutePath.signIn;
