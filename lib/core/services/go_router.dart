@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mustye/core/constants/route_const.dart';
-import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/auth/presentation/screens/forgot_password_screen.dart';
@@ -36,9 +35,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.initial,
       redirect: (context, state) {
-        final currentUser = sl<FirebaseAuth>().currentUser;
-        if (currentUser != null) {
-          // context.userProvider.getUserCachedData();
+        if (sl<FirebaseAuth>().currentUser != null) {
           return RoutePath.chat;
         }
         return RoutePath.signIn;

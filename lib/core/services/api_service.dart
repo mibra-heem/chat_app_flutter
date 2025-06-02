@@ -10,12 +10,12 @@ abstract class BaseApiService {
     required String url,
     required DataMap? body,
     String? serverAccessToken,
-    bool needBaseUrl = false,
+    bool needBaseUrl = true,
   });
 }
 
-class ApiClient implements BaseApiService {
-  const ApiClient({required String baseUrl}) : _baseUrl = baseUrl;
+class ApiService implements BaseApiService {
+  const ApiService({required String baseUrl}) : _baseUrl = baseUrl;
 
   final String _baseUrl;
 
@@ -45,7 +45,7 @@ class ApiClient implements BaseApiService {
     required String url,
     required DataMap? body,
     String? serverAccessToken,
-    bool needBaseUrl = false,
+    bool needBaseUrl = true,
   }) async {
     final uri = Uri.parse(needBaseUrl ? _baseUrl + url : url);
 

@@ -2,16 +2,14 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:mustye/core/constants/api_const.dart';
-import 'package:mustye/core/constants/constants.dart';
 import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/errors/exception.dart';
-import 'package:mustye/core/services/api_client.dart';
+import 'package:mustye/core/services/api_service.dart';
+import 'package:mustye/core/services/notification_service.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
-import 'package:mustye/core/utils/notification_utils.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
@@ -32,20 +30,17 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
   const MessageRemoteDataSrcImpl({
     required FirebaseAuth auth,
     required FirebaseFirestore firestore,
-    required FirebaseMessaging firebaseMessaging,
     required Box<dynamic> chatBox,
-    required ApiClient apiClient,
+    required ApiService apiClient,
   }) : _auth = auth,
        _firestore = firestore,
-       _firebaseMessaging = firebaseMessaging,
        _chatBox = chatBox,
        _apiClient = apiClient;
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
-  final FirebaseMessaging _firebaseMessaging;
   final Box<dynamic> _chatBox;
-  final ApiClient _apiClient;
+  final ApiService _apiClient;
 
   @override
   Future<void> sendMessage({
@@ -55,7 +50,7 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
   }) async {
     try {
       // Authorizing the user
-      await DatasourceUtils.authorizeUser(_auth);
+      DatasourceUtils.authorizeUser(_auth);
 
       //Setting message data into the firestore
       final msgTime = Timestamp.now().toDate();
@@ -167,7 +162,7 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
   @override
   Future<void> setActiveChatId({required String? activeChatId}) async {
     try {
-      await DatasourceUtils.authorizeUser(_auth);
+      DatasourceUtils.authorizeUser(_auth);
 
       final currentUserId = _auth.currentUser!.uid;
 
@@ -216,13 +211,11 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
     required Chat chat,
   }) async {
     debugPrint('sendNotification Method triggered');
-    final serverAccessToken = await NotificationUtils.getServerAccessToken();
+    final serverAccessToken = await NotificationService.getServerAccessToken();
 
     debugPrint('chat from sendNotification : $chat');
     debugPrint('serverAccessToken : $serverAccessToken');
     debugPrint('fcmToken : $fcmToken');
-
-
 
     final body = {
       'message': {
@@ -240,6 +233,7 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       url: ApiConst.fcmSendUrl,
       body: body,
       serverAccessToken: serverAccessToken,
+      needBaseUrl: false,
     );
 
     debugPrint('response from send notification : $res');

@@ -26,7 +26,7 @@ class ContactRemoteDataSrcImpl implements ContactRemoteDataSrc {
   @override
   Future<List<Contact>> getContacts() async {
     try {
-      await DatasourceUtils.authorizeUser(_auth);
+      DatasourceUtils.authorizeUser(_auth);
       return _firestore
           .collection('contacts')
           .where('uid', isNotEqualTo: _auth.currentUser!.uid)
@@ -51,7 +51,7 @@ class ContactRemoteDataSrcImpl implements ContactRemoteDataSrc {
   @override
   Future<void> addContact(Contact contact) async {
     try {
-      await DatasourceUtils.authorizeUser(_auth);
+      DatasourceUtils.authorizeUser(_auth);
 
       final user = _auth.currentUser!;
       final contactModel = contact as ContactModel;

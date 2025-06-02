@@ -3,7 +3,7 @@ import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/constants/constants.dart';
 import 'package:mustye/core/resources/themes.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
-import 'package:mustye/core/services/router.dart';
+import 'package:mustye/core/services/go_router.dart';
 import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
 import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 import 'package:provider/provider.dart';

@@ -4,12 +4,11 @@ import 'package:mustye/core/errors/exception.dart';
 class DatasourceUtils {
   DatasourceUtils._();
 
-  static Future<void> authorizeUser(FirebaseAuth auth) async {
+  static void authorizeUser(FirebaseAuth auth) {
     final user = auth.currentUser;
     if (user == null) {
-      throw const ServerException(
+      throw const UserNotFoundException(
         message: 'User is not authenticated.',
-        statusCode: '401',
       );
     }
   }
