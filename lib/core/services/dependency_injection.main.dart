@@ -13,9 +13,13 @@ Future<void> init() async {
   await _initContacts();
   await _initChats();
   await _initMessages();
+  await sl<UserProvider>().getUserCachedData();
+  await NotificationUtils.requestPermission(sl<FirebaseMessaging>());
+  await NotificationUtils.initFcmToken();
+  await NotificationUtils.initFirebaseNotificationListerners();
 }
 
-// Setup ApiClient 
+// Setup ApiClient
 Future<void> _initApiClient() async {
   sl.registerLazySingleton(() => const ApiClient(baseUrl: ApiConst.baseUrl));
 }
@@ -133,9 +137,6 @@ Future<void> _initChats() async {
 Future<void> _initMessages() async {
   final chatBox = await Hive.openBox<dynamic>(StorageConstant.chatBox);
 
-
-
-
   sl
     ..registerFactory(
       () => MessageProvider(sendMessage: sl(), activateChat: sl()),
@@ -148,7 +149,7 @@ Future<void> _initMessages() async {
         auth: sl(),
         firestore: sl(),
         firebaseMessaging: sl(),
-        chatBox: sl<Box<dynamic>>(instanceName: StorageConstant.chatBox), 
+        chatBox: sl<Box<dynamic>>(instanceName: StorageConstant.chatBox),
         apiClient: sl(),
       ),
     )

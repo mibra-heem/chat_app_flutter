@@ -151,7 +151,7 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       await sendNotification(
         fcmToken: fcmToken,
         message: message,
-        title: appName,
+        title: sender.name,
         chat: senderChatModel as Chat,
       );
     } on FirebaseAuthException catch (e) {
@@ -219,6 +219,10 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
     final serverAccessToken = await NotificationUtils.getServerAccessToken();
 
     debugPrint('chat from sendNotification : $chat');
+    debugPrint('serverAccessToken : $serverAccessToken');
+    debugPrint('fcmToken : $fcmToken');
+
+
 
     final body = {
       'message': {
