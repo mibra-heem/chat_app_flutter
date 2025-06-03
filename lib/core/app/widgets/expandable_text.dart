@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/res/colors.dart';
+import 'package:mustye/core/resources/colors.dart';
 
 class ExpandableText extends StatefulWidget {
   const ExpandableText({

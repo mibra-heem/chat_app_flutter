@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:mustye/core/common/widgets/arrow_back_button.dart';
+import 'package:mustye/core/app/widgets/arrow_back_button.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 
 class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {

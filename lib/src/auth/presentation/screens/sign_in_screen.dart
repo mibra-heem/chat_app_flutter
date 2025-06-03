@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mustye/core/common/widgets/gradient_background.dart';
-import 'package:mustye/core/common/widgets/rounded_button.dart';
+import 'package:mustye/core/app/widgets/gradient_background.dart';
+import 'package:mustye/core/app/widgets/rounded_button.dart';
 import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/res/colors.dart';
-import 'package:mustye/core/res/fonts.dart';
+import 'package:mustye/core/resources/colors.dart';
+import 'package:mustye/core/resources/fonts.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
@@ -44,7 +44,7 @@ class _SignInScreenState extends State<SignInScreen> {
             CoreUtils.showSnackbar(context, state.message);
           } else if (state is SignedIn) {
             context.userProvider.cacheUserData(state.user);
-            sl<ThemeProvider>().loadTheme();
+            sl<ThemeProvider>().loadTheme(); 
             context.goNamed(RouteName.chat);
             if (kDebugMode) print('........ Signed In successfully ........');
           }

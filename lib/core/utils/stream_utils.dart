@@ -76,7 +76,6 @@ class StreamUtils {
                 return message;
               }).toList();
 
-          // Commit seen updates (if any)
           batch.commit();
 
           return msgList;

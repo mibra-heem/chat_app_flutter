@@ -25,7 +25,7 @@ class ChatRemoteDataSrcImpl implements ChatRemoteDataSrc {
   @override
   Future<void> deleteChat(Chat chat) async {
     try {
-      await DatasourceUtils.authorizeUser(_auth);
+      DatasourceUtils.authorizeUser(_auth);
 
       if (kDebugMode) {
         print('..... Current User while add Chat ${_auth.currentUser}');
@@ -44,7 +44,7 @@ class ChatRemoteDataSrcImpl implements ChatRemoteDataSrc {
   @override
   Future<void> messageSeen({required String senderUid}) async {
     try {
-      await DatasourceUtils.authorizeUser(_auth);
+      DatasourceUtils.authorizeUser(_auth);
 
       await _firestore
           .collection('users')

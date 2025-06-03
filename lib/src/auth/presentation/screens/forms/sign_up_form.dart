@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:mustye/core/common/widgets/my_field.dart';
+import 'package:mustye/core/app/widgets/my_field.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 
 class SignUpForm extends StatefulWidget {

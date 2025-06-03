@@ -7,20 +7,42 @@ final sl = GetIt.instance;
 Future<void> init() async {
   await dotenv.load();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await _initApiClient();
   await _initAuth();
   await _initTheme();
   await _initContacts();
   await _initChats();
   await _initMessages();
+  await _initFcmToken();
+  await _initUser();
+  await NotificationService.requestPermission(FirebaseMessaging.instance);
+  await NotificationService.initFirebaseNotificationListerners();
+  await NotificationService.initFcmToken();
+}
+
+// Setup ApiClient
+Future<void> _initApiClient() async {
+  sl.registerLazySingleton(() => const ApiService(baseUrl: ApiConst.baseUrl));
+}
+
+// Initialize the LocalUserModel from cachedUserData
+Future<void> _initUser() async {
+  if (sl<FirebaseAuth>().currentUser != null) {
+    await sl<UserProvider>().getUserCachedData();
+  }
+}
+
+// Set fcmToken in service locator fro global access
+Future<void> _initFcmToken() async {
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  sl.registerLazySingleton<String>(
+    () => fcmToken!,
+    instanceName: ApiConst.fcmToken,
+  );
 }
 
 /// Feature --> Auth
-
 Future<void> _initAuth() async {
-  final firebaseMessaging = FirebaseMessaging.instance;
-  await firebaseMessaging.requestPermission(provisional: true);
-  final fcmToken = await firebaseMessaging.getToken();
-
   await Hive.initFlutter();
   final userBox = await Hive.openBox<dynamic>(StorageConstant.userBox);
 
@@ -52,9 +74,7 @@ Future<void> _initAuth() async {
         authClient: sl(),
         firestore: sl(),
         dbClient: sl(),
-        firebaseMessaging: sl(),
         googleSignIn: sl(),
-        fcmToken: fcmToken,
       ),
     )
     ..registerLazySingleton<AuthLocalDataSource>(
@@ -65,11 +85,10 @@ Future<void> _initAuth() async {
     ..registerLazySingleton(() => FirebaseAuth.instance)
     ..registerLazySingleton(() => FirebaseFirestore.instance)
     ..registerLazySingleton(() => FirebaseStorage.instance)
-    ..registerLazySingleton(() => firebaseMessaging)
     ..registerLazySingleton(
       () => GoogleSignIn(
         scopes: AuthConstant.scopes,
-        clientId: AuthConstant.clientId,
+        clientId: AuthConstant.googleWebOAuthClientId,
       ),
     )
     ..registerLazySingleton(
@@ -79,7 +98,6 @@ Future<void> _initAuth() async {
 }
 
 /// Feature --> Theme
-
 Future<void> _initTheme() async {
   final themeBox = await Hive.openBox<dynamic>(StorageConstant.themeBox);
 
@@ -102,7 +120,6 @@ Future<void> _initTheme() async {
 }
 
 /// Feature --> Contacts
-
 Future<void> _initContacts() async {
   sl
     ..registerFactory(() => ContactProvider(addContact: sl()))
@@ -115,7 +132,6 @@ Future<void> _initContacts() async {
 }
 
 /// Feature --> Chats
-
 Future<void> _initChats() async {
   sl
     ..registerFactory(() => ChatProvider(messageSeen: sl(), deleteChat: sl()))
@@ -128,7 +144,6 @@ Future<void> _initChats() async {
 }
 
 /// Feature --> Messages
-
 Future<void> _initMessages() async {
   final chatBox = await Hive.openBox<dynamic>(StorageConstant.chatBox);
 
@@ -143,8 +158,8 @@ Future<void> _initMessages() async {
       () => MessageRemoteDataSrcImpl(
         auth: sl(),
         firestore: sl(),
-        firebaseMessaging: sl(),
         chatBox: sl<Box<dynamic>>(instanceName: StorageConstant.chatBox),
+        apiClient: sl(),
       ),
     )
     ..registerLazySingleton(

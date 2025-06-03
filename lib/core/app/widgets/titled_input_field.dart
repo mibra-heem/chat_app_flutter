@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/common/widgets/my_field.dart';
-import 'package:mustye/core/res/fonts.dart';
+import 'package:mustye/core/app/widgets/my_field.dart';
+import 'package:mustye/core/resources/fonts.dart';
 
 class TitledInputField extends StatelessWidget {
   const TitledInputField({
