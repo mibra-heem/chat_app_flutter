@@ -21,7 +21,6 @@ class MessageTile extends StatelessWidget {
   final bool isCurrentUser;
   final bool? isSeen;
 
-
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -31,11 +30,10 @@ class MessageTile extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width * 0.75,
         ),
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: const EdgeInsets.only(top: 8, right: 10, left: 10, bottom: 6),
         decoration: BoxDecoration(
-          color:
-              boxColor ??
-              (isCurrentUser ? Colours.primary : Colors.grey.shade300),
+          color: boxColor ??
+              (isCurrentUser ? Colours.primaryDark : Colours.grey300),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(12),
             topRight: const Radius.circular(12),
@@ -43,50 +41,41 @@ class MessageTile extends StatelessWidget {
             bottomRight: Radius.circular(isCurrentUser ? 0 : 12),
           ),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Flexible(
-              child: Text(
-                message,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color:
-                      messageColor ??
-                      (isCurrentUser ? Colors.white : Colors.black),
-                ),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: messageColor ??
+                    (isCurrentUser ? Colours.grey300 : Colors.black),
               ),
             ),
-            const SizedBox(width: 5),
-            Column(
+            const SizedBox(width: 8),
+            Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      time,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500,
-                        color:
-                            timeColor ??
-                            (isCurrentUser
-                                ? Colors.grey.shade200
-                                : Colors.grey.shade800),
-                      ),
-                    ),
-                    const SizedBox(width: 3),
-                    if(isCurrentUser)
-                    Icon(
-                      Icons.done_all_outlined, 
-                      size: 15,
-                      color: isSeen! ? Colors.green : Colors.white,
-                    ),
-                  ],
+                Text(
+                  time,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    color: timeColor ??
+                        (isCurrentUser
+                            ? Colours.grey400
+                            : Colours.grey800),
+                  ),
                 ),
+                const SizedBox(width: 3),
+                if (isCurrentUser)
+                  Icon(
+                    Icons.done_all_outlined,
+                    size: 12,
+                    color: isSeen! ? Colours.success : Colours.grey400,
+                  ),
               ],
             ),
           ],
