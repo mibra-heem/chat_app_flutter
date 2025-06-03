@@ -8,11 +8,9 @@ import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
 import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
-
   runApp(const AppRoot());
 }
 

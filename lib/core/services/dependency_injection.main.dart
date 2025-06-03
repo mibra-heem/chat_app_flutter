@@ -16,7 +16,7 @@ Future<void> init() async {
   await _initFcmToken();
   await _initUser();
   await NotificationService.requestPermission(FirebaseMessaging.instance);
-  await NotificationService.initFirebaseNotificationListerners();
+  await NotificationService.initFirebaseNotificationListeners();
   await NotificationService.initFcmToken();
 }
 

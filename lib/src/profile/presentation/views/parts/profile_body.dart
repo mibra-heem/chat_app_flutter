@@ -31,11 +31,11 @@ class ProfileBody extends StatelessWidget {
               iconColor: Colors.cyan,
               onTap: () => context.pushNamed(RouteName.editProfile),
             ),
-            UserProfileTile(
+            const UserProfileTile(
               title: 'Favourites',
               icon: IconlyLight.heart,
               iconColor: Colors.amber,
-              onTap: () => context.pushNamed(RouteName.favourite),
+              // onTap: () => context.pushNamed(RouteName.favourite),
             ),
             UserProfileTile(
               title: 'Theme',
@@ -84,11 +84,11 @@ class ProfileBody extends StatelessWidget {
                 );
               },
             ),
-            UserProfileTile(
+            const UserProfileTile(
               title: 'Privacy',
               icon: IconlyLight.shield_done,
               iconColor: Colors.lightGreen,
-              onTap: () => context.pushNamed(RouteName.privacy),
+              // onTap: () => context.pushNamed(RouteName.privacy),
             ),
             UserProfileTile(
               title: 'Logout',

@@ -21,8 +21,11 @@ import 'package:mustye/src/profile/presentation/views/profile_view.dart';
 import 'package:mustye/src/splash/presentation/views/splash_screen.dart';
 import 'package:provider/provider.dart';
 
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final GoRouter router = GoRouter(
   initialLocation: RoutePath.splash,
+  navigatorKey: rootNavigatorKey,
   debugLogDiagnostics: true,
   routes: [
     GoRoute(

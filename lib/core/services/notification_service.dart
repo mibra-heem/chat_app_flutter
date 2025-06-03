@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,10 +10,10 @@ import 'package:mustye/core/constants/api_const.dart';
 import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/services/go_router.dart';
-import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 
+@pragma('vm:entry-point')
 class NotificationService {
   const NotificationService._();
 
@@ -33,35 +32,69 @@ class NotificationService {
   }
 
   /// Initialize FCM message listeners
-  static Future<void> initFirebaseNotificationListerners() async {
+  static Future<void> initFirebaseNotificationListeners() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      debugPrint('From message listen: ${message.notification?.title}');
+      debugPrint('From onMessage listen: ${message.notification?.title}');
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       debugPrint('From onMessageOpenedApp listen: $message');
-      final route = message.data['route'];
-      final chatJson = jsonDecode(message.data['chat'] as String) as DataMap;
-      final chat = ChatModel.fromMap(chatJson);
-
-      if (route == RouteName.message) {
-        await router.pushNamed(RouteName.message, extra: chat);
-      }
+      await _handleMessageNavigation(message);
     });
 
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       debugPrint('initialMessage is not null.');
-      await handleMessage(initialMessage);
+      await _handleMessageNavigation(initialMessage);
     }
 
-    FirebaseMessaging.onBackgroundMessage(handleMessage);
+    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
   }
 
-  /// Handle background messages
   @pragma('vm:entry-point')
-  static Future<void> handleMessage(RemoteMessage message) async {
-    debugPrint('From handle message: ${message.messageId}');
+  static Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+    debugPrint('From handle background message: ${message.messageId}');
+    await _handleMessageNavigation(message);
+  }
+
+  static Future<void> _handleMessageNavigation(RemoteMessage message) async {
+    debugPrint('From handle message navigation: ${message.messageId}');
+
+    try {
+      if (message.data.isEmpty ||
+          !message.data.containsKey('route') ||
+          !message.data.containsKey('chat')) {
+        debugPrint('Invalid message data: $message');
+        return;
+      }
+
+      final route = message.data['route'] as String?;
+      final chatJson = message.data['chat'] as String?;
+
+      if (route == null || chatJson == null) {
+        debugPrint(
+          'Route or chat data is null: route=$route, chatJson=$chatJson',
+        );
+        return;
+      }
+
+      final chatMap = jsonDecode(chatJson) as Map<String, dynamic>;
+      final chat = ChatModel.fromMap(chatMap);
+
+      if (route == RouteName.message) {
+        final context = router.routerDelegate.navigatorKey.currentContext;
+        if (context != null) {
+          await router.pushNamed(RouteName.message, extra: chat);
+        } else {
+          debugPrint(
+            'Navigation context is null. Storing chat for later navigation.',
+          );
+        }
+      }
+    } catch (e, stackTrace) {
+      debugPrint('Error in handleMessageNavigation: $e');
+      debugPrint('Stack trace: $stackTrace');
+    }
   }
 
   /// Initializes and syncs the FCM token
@@ -71,11 +104,9 @@ class NotificationService {
     final user = sl<UserProvider>().user;
 
     if (auth.currentUser != null && user != null) {
-      // Sync token with Firestore
       await updateFcmToken(auth: auth, user: user);
     }
 
-    // Listen for token refresh
     messaging.onTokenRefresh.listen((newToken) async {
       if (auth.currentUser != null) {
         await sl<FirebaseFirestore>()
