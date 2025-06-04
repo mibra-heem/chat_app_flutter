@@ -11,7 +11,7 @@ import 'package:mustye/src/auth/presentation/screens/sign_in_screen.dart';
 import 'package:mustye/src/auth/presentation/screens/sign_up_screen.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
-import 'package:mustye/src/contact/presentation/screen/contact_screen.dart';
+import 'package:mustye/src/contact/presentation/screens/contact_screen.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
 import 'package:mustye/src/splash/presentation/views/splash_screen.dart';

@@ -10,6 +10,9 @@ class RoutePath{
   static const dashboard = '/dashboard';
   static const contact = '/contact';
   static const message = '/message';
+  static const audioCall = '/audio-call';
+  static const videoCall = '/video-call';
+
 
   // Tab view routes section
   static const chat = '/chat';
@@ -37,6 +40,8 @@ class RouteName{
   static const dashboard = 'dashboard';
   static const contact = 'contact';
   static const message = 'message';
+  static const audioCall = 'audio-call';
+  static const videoCall = 'video-call';
 
   // Tab view routes section
   static const chat = 'chat';
