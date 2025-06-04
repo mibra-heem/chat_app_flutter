@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mustye/core/app/widgets/arrow_back_button.dart';
+import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 
 class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -24,11 +26,17 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: 0,
       actions: [
         IconButton(
-          onPressed: (){}, 
+          onPressed: (){
+            debugPrint('Click on videoCall');
+            context.pushNamed(RouteName.videoCall, extra: chat);
+          }, 
           icon: const Icon(IconlyBold.video, size: 26),
         ),
         IconButton(
-          onPressed: (){}, 
+          onPressed: (){
+            debugPrint('Click on audioCall');
+            context.pushNamed(RouteName.audioCall, extra: chat);
+          }, 
           icon: const Icon(IconlyBold.call),
         ),
         IconButton(
