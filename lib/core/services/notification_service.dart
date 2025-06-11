@@ -14,6 +14,12 @@ import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 
 @pragma('vm:entry-point')
+Future<void> handleBackgroundMessage(RemoteMessage message) async {
+  debugPrint('From handle background message: ${message.messageId}');
+  // await NotificationService._handleMessageNavigation(message);
+}
+
+// @pragma('vm:entry-point')
 class NotificationService {
   const NotificationService._();
 
@@ -42,19 +48,26 @@ class NotificationService {
       await _handleMessageNavigation(message);
     });
 
-    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      debugPrint('initialMessage is not null.');
-      await _handleMessageNavigation(initialMessage);
-    }
-
-    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
   }
 
-  @pragma('vm:entry-point')
-  static Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    debugPrint('From handle background message: ${message.messageId}');
-    await _handleMessageNavigation(message);
+  static void handleInitialMessage() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final initialMessage =
+          await FirebaseMessaging.instance.getInitialMessage();
+
+      if (initialMessage != null) {
+        debugPrint('initialMessage is not null.');
+        debugPrint('And initialMessage is ${initialMessage.data}');
+
+        final route = initialMessage.data['route'] as String?;
+        if (route == RouteName.message) {
+          debugPrint('Go to the message screen ......');
+
+          await router.pushNamed(RouteName.message);
+        }
+      }
+    });
   }
 
   static Future<void> _handleMessageNavigation(RemoteMessage message) async {

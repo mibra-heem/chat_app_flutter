@@ -11,8 +11,10 @@ import 'package:mustye/src/auth/presentation/screens/sign_up_screen.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/chat/presentation/views/chat_view.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
-import 'package:mustye/src/contact/presentation/screen/contact_screen.dart';
+import 'package:mustye/src/contact/presentation/screens/contact_screen.dart';
 import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
+import 'package:mustye/src/message/features/audio_call/presentation/screens/audio_call_screen.dart';
+import 'package:mustye/src/message/features/video_call/presentation/screens/video_call_screen.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
 import 'package:mustye/src/profile/presentation/provider/profile_provider.dart';
@@ -80,6 +82,22 @@ final GoRouter router = GoRouter(
           create: (context) => sl<MessageProvider>(),
           child: MessageScreen(chat: chat),
         );
+      },
+    ),
+    GoRoute(
+      path: RoutePath.audioCall,
+      name: RouteName.audioCall,
+      builder: (context, state) {
+        final chat = state.extra! as Chat;
+        return AudioCallScreen(chat: chat);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.videoCall,
+      name: RouteName.videoCall,
+      builder: (context, state) {
+        final chat = state.extra! as Chat;
+        return VideoCallScreen(chat: chat);
       },
     ),
     GoRoute(
