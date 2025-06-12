@@ -3,7 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mustye/core/app/widgets/arrow_back_button.dart';
 import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/extensions/context_extension.dart';
+import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
+import 'package:mustye/src/message/features/audio_call/data/models/incoming_audio_call_model.dart';
+import 'package:mustye/src/message/features/audio_call/presentation/provider/audio_call_provider.dart';
 
 class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MessageAppBar({
@@ -33,9 +37,19 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: const Icon(IconlyBold.video, size: 26),
         ),
         IconButton(
-          onPressed: (){
+          onPressed: () async{
             debugPrint('Click on audioCall');
-            context.pushNamed(RouteName.audioCall, extra: chat);
+            await sl<AudioCallProvider>().activateIncomingAudioCall(
+              IncomingAudioCallModel(
+                callerId: context.currentUser!.uid, 
+                receiverId: chat.uid, 
+                channelName: 'testing', 
+                isCalling: true, 
+              ),
+            );
+            await context.pushNamed(RouteName.audioCall, extra: chat);
+            // context.pushNamed(RouteName.incomingAudioCall, extra: chat);
+
           }, 
           icon: const Icon(IconlyBold.call),
         ),

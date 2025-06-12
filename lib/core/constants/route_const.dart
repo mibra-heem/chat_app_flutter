@@ -11,7 +11,10 @@ class RoutePath{
   static const contact = '/contact';
   static const message = '/message';
   static const audioCall = '/audio-call';
+  static const incomingAudioCall = '/incoming-audio-call';
   static const videoCall = '/video-call';
+  static const incomingVideoCall = '/incoming-video-call';
+
 
 
   // Tab view routes section
@@ -41,7 +44,10 @@ class RouteName{
   static const contact = 'contact';
   static const message = 'message';
   static const audioCall = 'audio-call';
+  static const incomingAudioCall = 'incoming-audio-call';
   static const videoCall = 'video-call';
+  static const incomingVideoCall = 'incoming-video-call';
+
 
   // Tab view routes section
   static const chat = 'chat';
