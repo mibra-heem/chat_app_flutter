@@ -110,8 +110,8 @@ class NotificationService {
     }
   }
 
-  /// Initializes and syncs the FCM token
-  static Future<void> initFcmToken() async {
+  /// Set and syncs the FCM token in firestore
+  static Future<void> setFcmToken() async {
     final messaging = FirebaseMessaging.instance;
     final auth = sl<FirebaseAuth>();
     final user = sl<UserProvider>().user;

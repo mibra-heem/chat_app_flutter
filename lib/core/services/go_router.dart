@@ -13,7 +13,9 @@ import 'package:mustye/src/chat/presentation/views/chat_view.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
 import 'package:mustye/src/contact/presentation/screens/contact_screen.dart';
 import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
+import 'package:mustye/src/message/features/audio_call/presentation/provider/audio_call_provider.dart';
 import 'package:mustye/src/message/features/audio_call/presentation/screens/audio_call_screen.dart';
+import 'package:mustye/src/message/features/audio_call/presentation/screens/incoming_audio_call_screen.dart';
 import 'package:mustye/src/message/features/video_call/presentation/screens/video_call_screen.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
@@ -41,6 +43,9 @@ final GoRouter router = GoRouter(
       path: RoutePath.initial,
       redirect: (context, state) {
         if (sl<FirebaseAuth>().currentUser != null) {
+          debugPrint('Before startListening method................');
+
+          sl<AudioCallProvider>().startListening(context);
           return RoutePath.chat;
         }
         return RoutePath.signIn;
@@ -90,6 +95,14 @@ final GoRouter router = GoRouter(
       builder: (context, state) {
         final chat = state.extra! as Chat;
         return AudioCallScreen(chat: chat);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.incomingAudioCall,
+      name: RouteName.incomingAudioCall,
+      builder: (context, state) {
+        final chat = state.extra! as Chat;
+        return IncomingAudioCallScreen(chat: chat);
       },
     ),
     GoRoute(
