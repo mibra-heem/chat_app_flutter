@@ -11,9 +11,9 @@ import 'package:mustye/core/resources/media_res.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
-import 'package:mustye/src/message/features/audio_call/presentation/provider/audio_call_provider.dart';
-import 'package:mustye/src/message/features/audio_call/presentation/screens/parts/audio_call_app_bar.dart';
-import 'package:mustye/src/message/features/audio_call/presentation/screens/parts/audio_call_bottom_bar.dart';
+import 'package:mustye/src/message/features/call/audio/presentation/provider/audio_call_provider.dart';
+import 'package:mustye/src/message/features/call/audio/presentation/screens/parts/audio_call_app_bar.dart';
+import 'package:mustye/src/message/features/call/audio/presentation/screens/parts/audio_call_bottom_bar.dart';
 
 class AudioCallScreen extends StatefulWidget {
   const AudioCallScreen({required this.chat, super.key});
@@ -74,11 +74,13 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
           RtcConnection connection,
           int remoteUid,
           UserOfflineReasonType reason,
-        ) {
+        ) async{
           debugPrint('Remote user $remoteUid left');
           setState(() {
             _remoteUid = null; // Remove remote user ID
           });
+          await leaveChannel();
+
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
           _fetchToken(userIdInt, channelName, false);
@@ -90,6 +92,16 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     );
 
     await _fetchToken(userIdInt, channelName, true);
+  }
+
+  Future<void> leaveChannel() async{
+    await _engine.leaveChannel();
+    pop();
+  }
+
+  void pop(){
+    if (!mounted) return;
+    context.pop();
   }
 
   Future<void> _fetchToken(
@@ -174,9 +186,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
             bottom: context.width * 0.10,
             child: AudioCallBottomBar(
               onEndCall: () async {
-                await _engine.leaveChannel();
-                if (!mounted) return;
-                context.pop();
+                await leaveChannel();
               },
             ),
           ),

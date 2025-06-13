@@ -36,6 +36,7 @@ class RouteName{
   const RouteName._();
 
   // Full screen routes section
+  static const initial = 'initial';
   static const splash = 'splash';
   static const signIn = 'sign-in';
   static const signUp = 'sign-up';
