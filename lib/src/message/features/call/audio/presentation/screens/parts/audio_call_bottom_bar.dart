@@ -3,8 +3,12 @@ import 'package:iconly/iconly.dart';
 import 'package:mustye/core/resources/colors.dart';
 
 class AudioCallBottomBar extends StatelessWidget {
-  const AudioCallBottomBar({super.key});
+  const AudioCallBottomBar({
+    super.key,
+    this.onEndCall,
+  });
 
+  final VoidCallback? onEndCall;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +32,7 @@ class AudioCallBottomBar extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: onEndCall,
               icon: const Icon(IconlyBold.call),
             ),
           ),
