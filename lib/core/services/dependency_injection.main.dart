@@ -174,8 +174,14 @@ Future<void> _initAudioCall() async {
   // final chatBox = await Hive.openBox<dynamic>(StorageConstant.chatBox);
 
   sl
-    ..registerFactory(() => AudioCallProvider(sl()))
+    ..registerFactory(
+      () => AudioCallProvider(
+        activateIncomingAudioCall: sl(),
+        deactivateIncomingAudioCall: sl(),
+      ),
+    )
     ..registerLazySingleton(() => ActivateIncomingAudioCall(sl()))
+    ..registerLazySingleton(() => DeactivateIncomingAudioCall(sl()))
     ..registerLazySingleton<AudioCallRepo>(() => AudioCallRepoImpl(sl()))
     ..registerLazySingleton<AudioCallRemoteDataSrc>(
       () => AudioCallRemoteDataSrcImpl(auth: sl(), firestore: sl()),

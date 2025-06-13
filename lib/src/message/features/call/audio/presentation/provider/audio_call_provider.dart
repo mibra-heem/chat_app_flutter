@@ -7,16 +7,21 @@ import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/services/go_router.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
-import 'package:mustye/src/message/features/audio_call/data/models/incoming_audio_call_model.dart';
-import 'package:mustye/src/message/features/audio_call/domain/entities/incoming_audio_call.dart';
-import 'package:mustye/src/message/features/audio_call/domain/usecases/activate_incoming_audio_call.dart';
+import 'package:mustye/src/message/features/call/audio/data/models/incoming_audio_call_model.dart';
+import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
+import 'package:mustye/src/message/features/call/audio/domain/usecases/activate_incoming_audio_call.dart';
+import 'package:mustye/src/message/features/call/audio/domain/usecases/deactivate_incoming_audio_call.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AudioCallProvider extends ChangeNotifier {
-  AudioCallProvider(ActivateIncomingAudioCall activateIncomingAudioCall)
-    : _activateIncomingAudioCall = activateIncomingAudioCall;
+  AudioCallProvider({
+    required ActivateIncomingAudioCall activateIncomingAudioCall,
+    required DeactivateIncomingAudioCall deactivateIncomingAudioCall,
+  }) : _activateIncomingAudioCall = activateIncomingAudioCall,
+       _deactivateIncomingAudioCall = deactivateIncomingAudioCall;
 
   final ActivateIncomingAudioCall _activateIncomingAudioCall;
+  final DeactivateIncomingAudioCall _deactivateIncomingAudioCall;
 
   StreamSubscription<DocumentSnapshot>? _subscription;
 
@@ -33,7 +38,22 @@ class AudioCallProvider extends ChangeNotifier {
         debugPrint(failure.errorMessage);
       },
       (_) {
-        debugPrint('.................. success ............................');
+        debugPrint('........... activateIncomingAudioCall success ...........');
+      },
+    );
+  }
+
+  Future<void> deactivateIncomingAudioCall() async {
+    debugPrint('...... calling deactivateIncomingAudioCall in provider ......');
+
+    final result = await _deactivateIncomingAudioCall();
+
+    result.fold(
+      (failure) {
+        debugPrint(failure.errorMessage);
+      },
+      (_) {
+        debugPrint('......... deactivateIncomingAudioCall success ..........');
       },
     );
   }
@@ -50,17 +70,12 @@ class AudioCallProvider extends ChangeNotifier {
           if (data != null) {
             final call = IncomingAudioCallModel.fromMap(data);
             if (snapshot.exists && call.isCalling == true) {
-              // final channelName = data['channelName'];
               debugPrint(
                 'Listening the change isCalling is true ................',
               );
-
-              final chat = Chat(uid: call.callerId, email: '', name: '');
-              // context.pushNamed(RouteName.audioCall, extra: chat);
-
               rootNavigatorKey.currentContext?.pushNamed(
-                RouteName.audioCall,
-                extra: chat,
+                RouteName.incomingAudioCall,
+                extra: call,
               );
             }
           }

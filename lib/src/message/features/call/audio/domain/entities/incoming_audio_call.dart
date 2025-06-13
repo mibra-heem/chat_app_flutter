@@ -4,8 +4,10 @@ class IncomingAudioCall extends Equatable {
   const IncomingAudioCall({
     required this.callerId,
     required this.receiverId,
-    required this.channelName,
+    required this.callerName,
+    required this.callerEmail,
     required this.isCalling,
+    this.callerImage,
     this.timestamp,
   });
 
@@ -13,13 +15,16 @@ class IncomingAudioCall extends Equatable {
     : this(
         callerId: 'empty.callerId',
         receiverId: 'empty.receiverId',
-        channelName: 'empty.channelName',
+        callerName: 'empty.callerName',
+        callerEmail: 'empty.callerEmail',
         isCalling: false,
       );
 
   final String callerId;
   final String receiverId;
-  final String channelName;
+  final String callerName;
+  final String callerEmail;
+  final String? callerImage;
   final bool isCalling;
   final DateTime? timestamp;
 
@@ -27,7 +32,9 @@ class IncomingAudioCall extends Equatable {
   List<Object?> get props => [
     callerId,
     receiverId,
-    channelName,
+    callerName,
+    callerEmail,
+    callerImage,
     isCalling,
     timestamp,
   ];
@@ -35,7 +42,7 @@ class IncomingAudioCall extends Equatable {
   @override
   String toString() {
     return 'IncomingAudioCall{callerId : $callerId, receiverId : $receiverId, '
-        'channelName : $channelName, isCalling: $isCalling, '
-        'timestamp: $timestamp}';
+        'callerName : $callerName, callerEmail : $callerEmail, callerImage : '
+        '$callerImage, isCalling : $isCalling, timestamp: $timestamp}';
   }
 }

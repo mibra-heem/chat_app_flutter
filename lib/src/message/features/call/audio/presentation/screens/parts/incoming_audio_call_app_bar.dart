@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/resources/colors.dart';
-import 'package:mustye/src/chat/domain/entity/chat.dart';
+import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
 
 class IncomingAudioCallAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const IncomingAudioCallAppBar({required this.chat, super.key});
+  const IncomingAudioCallAppBar({required this.call, super.key});
 
-  final Chat chat;
+  final IncomingAudioCall call;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,9 @@ class IncomingAudioCallAppBar extends StatelessWidget
       automaticallyImplyLeading: false,
       title: Column(
         children: [
-          Text(chat.name, style: const TextStyle(fontSize: 20)),
+          Text(call.callerName, style: const TextStyle(fontSize: 20)),
           Text(
-            chat.email,
+            call.callerEmail,
             style: const TextStyle(fontSize: 16, color: Colours.grey600),
           ),
         ],

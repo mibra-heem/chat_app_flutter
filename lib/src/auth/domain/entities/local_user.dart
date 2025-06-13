@@ -18,7 +18,6 @@ class LocalUser extends Equatable{
     email: '',
     name: '',
     uid: '',
-    image: '',
     bio: '',
   );
 
