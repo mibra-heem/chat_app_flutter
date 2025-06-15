@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/enums/call.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/resources/media_res.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
-import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/message/features/call/audio/data/models/incoming_audio_call_model.dart';
 import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
 import 'package:mustye/src/message/features/call/audio/presentation/provider/audio_call_provider.dart';
@@ -13,7 +14,7 @@ import 'package:mustye/src/message/features/call/audio/presentation/screens/part
 
 class IncomingAudioCallScreen extends StatelessWidget {
   const IncomingAudioCallScreen({required this.call, super.key});
-  final IncomingAudioCall call;
+  final AudioCall call;
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +39,22 @@ class IncomingAudioCallScreen extends StatelessWidget {
             bottom: context.width * 0.12,
             child: IncomingAudioCallBottomBar(
               onAcceptCall: () {
-                sl<AudioCallProvider>().deactivateIncomingAudioCall();
-                final chat = Chat(
-                  uid: call.callerId,
-                  email: call.callerEmail,
-                  name: call.callerName,
-                  image: call.callerImage,
+                sl<AudioCallProvider>().acceptAudioCall(
+                  (call as AudioCallModel).copyWith(
+                    isCallOn: true,
+                    status: CallStatus.accepted,
+                  ),
                 );
-                context.pushReplacementNamed(RouteName.audioCall, extra: chat);
+                context.pushReplacementNamed(RouteName.audioCall, extra: call);
               },
               onRejectCall: () {
-                sl<AudioCallProvider>().deactivateIncomingAudioCall();
+                sl<AudioCallProvider>().rejectAudioCall(
+                  (call as AudioCallModel).copyWith(
+                    isCallOn: true,
+                    status: CallStatus.rejected,
+                    endedAt: Timestamp.now().toDate(),
+                  ),
+                );
                 context.pop();
               },
             ),

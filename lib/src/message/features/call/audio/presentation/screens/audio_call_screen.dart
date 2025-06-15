@@ -1,23 +1,27 @@
 import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:mustye/core/constants/constants.dart';
+import 'package:mustye/core/enums/call.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/resources/media_res.dart';
+import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
-import 'package:mustye/core/utils/typedef.dart';
-import 'package:mustye/src/chat/domain/entity/chat.dart';
+import 'package:mustye/core/utils/stream_utils.dart';
+import 'package:mustye/src/message/features/call/audio/data/models/incoming_audio_call_model.dart';
 import 'package:mustye/src/message/features/call/audio/presentation/provider/audio_call_provider.dart';
 import 'package:mustye/src/message/features/call/audio/presentation/screens/parts/audio_call_app_bar.dart';
 import 'package:mustye/src/message/features/call/audio/presentation/screens/parts/audio_call_bottom_bar.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AudioCallScreen extends StatefulWidget {
-  const AudioCallScreen({required this.chat, super.key});
-  final Chat chat;
+  const AudioCallScreen({required this.call, super.key});
+  final AudioCallModel call;
 
   @override
   State<AudioCallScreen> createState() => _AudioCallScreenState();
@@ -26,22 +30,31 @@ class AudioCallScreen extends StatefulWidget {
 class _AudioCallScreenState extends State<AudioCallScreen> {
   late RtcEngine _engine;
   int? _remoteUid;
+  late ValueNotifier<AudioCallModel> callNotifier;
 
   @override
   void initState() {
     super.initState();
+    callNotifier = ValueNotifier(widget.call);
     _startVoiceCalling();
+    _listenToCallUpdates();
   }
 
-  // Initializes Agora SDK
+  void _listenToCallUpdates() {
+    StreamUtils.getCallsData.listen((event) {
+      if (event is AudioCallModel && event.uid == widget.call.uid) {
+        callNotifier.value = event;
+      }
+    });
+  }
+
   Future<void> _startVoiceCalling() async {
-    await AudioCallProvider.requestPermissions();
+    await [Permission.microphone].request();
     await _initializeAgoraVoiceSDK();
     await _setupEventHandlers();
     await _engine.enableAudio();
   }
 
-  // Set up the Agora RTC engine instance
   Future<void> _initializeAgoraVoiceSDK() async {
     _engine = createAgoraRtcEngine();
     await _engine.initialize(
@@ -52,35 +65,30 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     );
   }
 
-  // Register an event handler for Agora RTC
   Future<void> _setupEventHandlers() async {
-    final userId = context.currentUser!.uid;
-    final userIdInt = userId.hashCode & 0x7fffffff;
+    final userIdInt = context.currentUser!.uid.hashCode & 0x7fffffff;
+    final channelName = DatasourceUtils.joinIds(
+      userId: widget.call.callerId,
+      chatId: widget.call.receiverId,
+    );
 
-    final chatId = widget.chat.uid;
-    final channelName = DatasourceUtils.joinIds(userId: userId, chatId: chatId);
     _engine.registerEventHandler(
       RtcEngineEventHandler(
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-          debugPrint('Local user ${connection.localUid} joined ..............');
+          debugPrint('✅ Local user joined channel ${connection.channelId}');
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
-          debugPrint('Remote user $remoteUid joined');
-          setState(() {
-            _remoteUid = remoteUid; // Store remote user ID
-          });
+          debugPrint('👤 Remote user $remoteUid joined');
+          _remoteUid = remoteUid;
         },
         onUserOffline: (
           RtcConnection connection,
           int remoteUid,
           UserOfflineReasonType reason,
-        ) async{
-          debugPrint('Remote user $remoteUid left');
-          setState(() {
-            _remoteUid = null; // Remove remote user ID
-          });
+        ) async {
+          debugPrint('👋 Remote user $remoteUid left');
+          _remoteUid = null;
           await leaveChannel();
-
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
           _fetchToken(userIdInt, channelName, false);
@@ -94,16 +102,6 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     await _fetchToken(userIdInt, channelName, true);
   }
 
-  Future<void> leaveChannel() async{
-    await _engine.leaveChannel();
-    pop();
-  }
-
-  void pop(){
-    if (!mounted) return;
-    context.pop();
-  }
-
   Future<void> _fetchToken(
     int uid,
     String channelName,
@@ -111,23 +109,17 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   ) async {
     final client = http.Client();
     try {
-      debugPrint('Starting Fetching the temp Token ...........');
-      const headers = {'Content-type': 'application/json'};
-
       final response = await client.post(
         Uri.parse(
           'https://chat-app-laravel-backend-local.up.railway.app/api/agora/token',
         ),
-        headers: headers,
+        headers: {'Content-type': 'application/json'},
         body: jsonEncode({'uid': uid, 'channelName': channelName}),
       );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as DataMap;
-        final token = data['token'] as String;
-        debugPrint('The Temp Token Is : $token...........');
 
+      if (response.statusCode == 200) {
+        final token = jsonDecode(response.body)['token'] as String;
         if (needJoinChannel) {
-          // Join a channel
           await _engine.joinChannel(
             uid: uid,
             token: token,
@@ -143,16 +135,19 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         }
       } else {
         throw ServerException(
-          message:
-              'Failed to fetch token and statuscode is: ${response.statusCode}',
+          message: 'Failed to fetch token (${response.statusCode})',
         );
       }
     } on ServerException catch (e) {
-      debugPrint('Error fetching token: $e');
-      // Handle failure (e.g., show a snackbar or alert)
+      debugPrint('❌ Error fetching token: $e');
     } finally {
       client.close();
     }
+  }
+
+  Future<void> leaveChannel() async {
+    await _engine.leaveChannel();
+    if (mounted) context.pop();
   }
 
   @override
@@ -160,38 +155,70 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     _engine
       ..leaveChannel()
       ..release();
+    callNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AudioCallAppBar(chat: widget.chat),
-      body: Stack(
-        children: [
-          Center(
-            child: CircleAvatar(
-              radius: 75,
-              backgroundImage:
-                  widget.chat.image != null
-                      ? NetworkImage(widget.chat.image!)
-                      : const AssetImage(MediaRes.cartoonTeenageBoyCharacter)
-                          as ImageProvider,
-            ),
+    final currentUser = context.currentUser!;
+    return ValueListenableBuilder<AudioCallModel>(
+      valueListenable: callNotifier,
+      builder: (_, call, __) {
+        final image =
+            currentUser.uid == call.receiverId
+                ? call.callerImage
+                : call.receiverImage;
+
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AudioCallAppBar(call: call),
+          body: Stack(
+            children: [
+              Center(
+                child: CircleAvatar(
+                  radius: 75,
+                  backgroundImage:
+                      image != null
+                          ? NetworkImage(image)
+                          : const AssetImage(
+                                MediaRes.cartoonTeenageBoyCharacter,
+                              )
+                              as ImageProvider,
+                ),
+              ),
+              Positioned(
+                left: context.width * 0.10,
+                right: context.width * 0.10,
+                bottom: context.width * 0.10,
+                child: AudioCallBottomBar(
+                  onEndCall: () async {
+                    await leaveChannel();
+                    final provider = sl<AudioCallProvider>();
+
+                    if (call.status == CallStatus.accepted) {
+                      await provider.endAudioCall(
+                        call.copyWith(
+                          isCallOn: false,
+                          status: CallStatus.ended,
+                          endedAt: Timestamp.now().toDate(),
+                        ),
+                      );
+                    } else {
+                      await provider.cancelAudioCall(
+                        call.copyWith(
+                          status: CallStatus.cancelled,
+                          endedAt: Timestamp.now().toDate(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
-          Positioned(
-            right: context.width * 0.10,
-            left: context.width * 0.10,
-            bottom: context.width * 0.10,
-            child: AudioCallBottomBar(
-              onEndCall: () async {
-                await leaveChannel();
-              },
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
