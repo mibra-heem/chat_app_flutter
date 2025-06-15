@@ -1,48 +1,73 @@
 import 'package:equatable/equatable.dart';
+import 'package:mustye/core/enums/call.dart';
 
-class IncomingAudioCall extends Equatable {
-  const IncomingAudioCall({
+class AudioCall extends Equatable {
+  const AudioCall({
+    required this.uid,
     required this.callerId,
-    required this.receiverId,
     required this.callerName,
     required this.callerEmail,
-    required this.isCalling,
+    required this.receiverId,
+    required this.receiverName,
+    required this.receiverEmail,
     this.callerImage,
-    this.timestamp,
+    this.receiverImage,
+    this.status = CallStatus.ringing,
+    this.type = CallType.audio,
+    this.isCallOn = false,
+    this.createdAt,
+    this.endedAt,
   });
 
-  const IncomingAudioCall.empty()
-    : this(
-        callerId: 'empty.callerId',
-        receiverId: 'empty.receiverId',
-        callerName: 'empty.callerName',
-        callerEmail: 'empty.callerEmail',
-        isCalling: false,
-      );
+  const AudioCall.empty()
+      : this(
+          uid: 'empty.uid',
+          callerId: 'empty.callerId',
+          callerName: 'empty.callerName',
+          callerEmail: 'empty.callerEmail',
+          receiverId: 'empty.receiverId',
+          receiverName: 'empty.receiverName',
+          receiverEmail: 'empty.receiverEmail',
+        );
 
+  final String uid;
   final String callerId;
-  final String receiverId;
   final String callerName;
   final String callerEmail;
+  final String receiverId;
+  final String receiverName;
+  final String receiverEmail;
   final String? callerImage;
-  final bool isCalling;
-  final DateTime? timestamp;
+  final String? receiverImage;
+  final CallStatus status;
+  final CallType type;
+  final bool isCallOn;
+  final DateTime? createdAt;
+  final DateTime? endedAt;
 
   @override
   List<Object?> get props => [
-    callerId,
-    receiverId,
-    callerName,
-    callerEmail,
-    callerImage,
-    isCalling,
-    timestamp,
-  ];
+        uid,
+        callerId,
+        callerName,
+        callerEmail,
+        callerImage,
+        receiverId,
+        receiverName,
+        receiverEmail,
+        receiverImage,
+        status,
+        type,
+        isCallOn,
+        createdAt,
+        endedAt,
+      ];
 
   @override
   String toString() {
-    return 'IncomingAudioCall{callerId : $callerId, receiverId : $receiverId, '
-        'callerName : $callerName, callerEmail : $callerEmail, callerImage : '
-        '$callerImage, isCalling : $isCalling, timestamp: $timestamp}';
+    return 'AudioCall{uid: $uid, callerId: $callerId, callerName: $callerName, '
+        'receiverId: $receiverId, receiverName: $receiverName, '
+        'status: $status, type: $type, isCallOn: $isCallOn, '
+        'createdAt: $createdAt, endedAt: $endedAt}';
   }
 }
