@@ -12,7 +12,7 @@ class AudioCallRepoImpl implements AudioCallRepo {
   final AudioCallRemoteDataSrc _remoteDataSrc;
 
   @override
-  RFuture<void> activateIncomingCall(IncomingAudioCall call) async {
+  RFuture<void> activateIncomingCall(AudioCall call) async {
     try {
       await _remoteDataSrc.activateIncomingAudioCall(call);
 
@@ -23,9 +23,42 @@ class AudioCallRepoImpl implements AudioCallRepo {
   }
 
   @override
-  RFuture<void> deactivateIncomingCall() async {
+  RFuture<void> acceptAudioCall(AudioCall call) async {
     try {
-      await _remoteDataSrc.deactivateIncomingAudioCall();
+      await _remoteDataSrc.acceptAudioCall(call);
+
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  RFuture<void> rejectAudioCall(AudioCall call) async {
+    try {
+      await _remoteDataSrc.rejectAudioCall(call);
+
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
+  @override
+  RFuture<void> endAudioCall(AudioCall call) async {
+    try {
+      await _remoteDataSrc.endAudioCall(call);
+
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+  
+  @override
+  RFuture<void> cancelAudioCall(AudioCall call) async {
+    try {
+      await _remoteDataSrc.cancelAudioCall(call);
 
       return const Right(null);
     } on ServerException catch (e) {

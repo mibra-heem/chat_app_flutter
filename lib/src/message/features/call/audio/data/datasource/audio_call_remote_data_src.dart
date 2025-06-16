@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mustye/core/enums/call.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
 import 'package:mustye/src/message/features/call/audio/data/models/incoming_audio_call_model.dart';
@@ -8,9 +9,11 @@ import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_
 
 abstract class AudioCallRemoteDataSrc {
   const AudioCallRemoteDataSrc();
-  Future<void> activateIncomingAudioCall(IncomingAudioCall call);
-  Future<void> deactivateIncomingAudioCall();
-
+  Future<void> activateIncomingAudioCall(AudioCall call);
+  Future<void> acceptAudioCall(AudioCall call);
+  Future<void> rejectAudioCall(AudioCall call);
+  Future<void> cancelAudioCall(AudioCall call);
+  Future<void> endAudioCall(AudioCall call);
 }
 
 class AudioCallRemoteDataSrcImpl implements AudioCallRemoteDataSrc {
@@ -24,16 +27,16 @@ class AudioCallRemoteDataSrcImpl implements AudioCallRemoteDataSrc {
   final FirebaseFirestore _firestore;
 
   @override
-  Future<void> activateIncomingAudioCall(IncomingAudioCall call) async {
+  Future<void> activateIncomingAudioCall(AudioCall call) async {
     try {
       // Authorizing the user
       DatasourceUtils.authorizeUser(_auth);
 
       // Set incomingAudioCall document in firestore
       await _firestore
-          .collection('incoming_audio_calls')
-          .doc(call.receiverId)
-          .set((call as IncomingAudioCallModel).toMap());
+          .collection('calls')
+          .doc(call.uid)
+          .set((call as AudioCallModel).toMap());
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
     } on ServerException {
@@ -47,18 +50,17 @@ class AudioCallRemoteDataSrcImpl implements AudioCallRemoteDataSrc {
     }
   }
 
-    @override
-  Future<void> deactivateIncomingAudioCall() async {
+  @override
+  Future<void> acceptAudioCall(AudioCall call) async {
     try {
       // Authorizing the user
       DatasourceUtils.authorizeUser(_auth);
 
-      debugPrint('Going to delete the document..............');
-      // Delete incomingAudioCall document in firestore
-      await _firestore
-          .collection('incoming_audio_calls')
-          .doc(_auth.currentUser!.uid)
-          .delete();
+      // Accept the call
+      await FirebaseFirestore.instance
+          .collection('calls')
+          .doc(call.uid)
+          .update((call as AudioCallModel).toMap());
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
     } on ServerException {
@@ -67,7 +69,79 @@ class AudioCallRemoteDataSrcImpl implements AudioCallRemoteDataSrc {
       debugPrintStack(stackTrace: s);
       throw ServerException(
         message: e.toString(),
-        statusCode: 'deactivate-incoming-audio-call',
+        statusCode: 'accept-audio-call',
+      );
+    }
+  }
+
+  @override
+  Future<void> rejectAudioCall(AudioCall call) async {
+    try {
+      // Authorizing the user
+      DatasourceUtils.authorizeUser(_auth);
+
+      // Reject the call
+      await FirebaseFirestore.instance
+          .collection('calls')
+          .doc(call.uid)
+          .update((call as AudioCallModel).toMap());
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      throw ServerException(
+        message: e.toString(),
+        statusCode: 'reject-audio-call',
+      );
+    }
+  }
+
+  @override
+  Future<void> endAudioCall(AudioCall call) async {
+    try {
+      // Authorizing the user
+      DatasourceUtils.authorizeUser(_auth);
+
+      // End the call
+      await FirebaseFirestore.instance
+          .collection('calls')
+          .doc(call.uid)
+          .update((call as AudioCallModel).toMap());
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      throw ServerException(
+        message: e.toString(),
+        statusCode: 'end-audio-call',
+      );
+    }
+  }
+
+  @override
+  Future<void> cancelAudioCall(AudioCall call) async {
+    try {
+      // Authorizing the user
+      DatasourceUtils.authorizeUser(_auth);
+
+      // End the call
+      await FirebaseFirestore.instance
+          .collection('calls')
+          .doc(call.uid)
+          .update((call as AudioCallModel).toMap());
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      throw ServerException(
+        message: e.toString(),
+        statusCode: 'cacnel-audio-call',
       );
     }
   }

@@ -6,7 +6,7 @@ class IncomingAudioCallAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   const IncomingAudioCallAppBar({required this.call, super.key});
 
-  final IncomingAudioCall call;
+  final AudioCall call;
 
   @override
   Widget build(BuildContext context) {

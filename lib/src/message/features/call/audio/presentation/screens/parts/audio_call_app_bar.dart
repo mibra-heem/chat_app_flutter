@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mustye/core/app/widgets/arrow_back_button.dart';
+import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/resources/colors.dart';
-import 'package:mustye/src/chat/domain/entity/chat.dart';
+import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
 
 class AudioCallAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const AudioCallAppBar({required this.chat, super.key});
+  const AudioCallAppBar({required this.call, super.key});
 
-  final Chat chat;
+  final AudioCall call;
 
   @override
   Widget build(BuildContext context) {
+    final user = context.currentUser!;
+    final name =
+        user.uid == call.receiverId ? call.callerName : call.receiverName;
     return AppBar(
       backgroundColor: Colors.transparent,
       title: Column(
         children: [
-          Text(chat.name, style: const TextStyle(fontSize: 14)),
+          Text(name, style: const TextStyle(fontSize: 14)),
           const Text(
             'Ringing...',
             style: TextStyle(fontSize: 14, color: Colours.grey600),

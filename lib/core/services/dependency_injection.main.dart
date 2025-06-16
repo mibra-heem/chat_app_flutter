@@ -23,7 +23,7 @@ Future<void> init() async {
 
 // Setup ApiClient
 Future<void> _initApiClient() async {
-  sl.registerLazySingleton(() => const ApiService(baseUrl: ApiConst.baseUrl));
+  sl.registerLazySingleton(() => ApiService(baseUrl: ApiConst.baseUrl));
 }
 
 // Initialize the LocalUserModel from cachedUserData
@@ -177,11 +177,15 @@ Future<void> _initAudioCall() async {
     ..registerFactory(
       () => AudioCallProvider(
         activateIncomingAudioCall: sl(),
-        deactivateIncomingAudioCall: sl(),
+        acceptAudioCall: sl(),
+        rejectAudioCall: sl(),
+        endAudioCall: sl(),
       ),
     )
     ..registerLazySingleton(() => ActivateIncomingAudioCall(sl()))
-    ..registerLazySingleton(() => DeactivateIncomingAudioCall(sl()))
+    ..registerLazySingleton(() => AcceptAudioCall(sl()))
+    ..registerLazySingleton(() => RejectAudioCall(sl()))
+    ..registerLazySingleton(() => EndAudioCall(sl()))
     ..registerLazySingleton<AudioCallRepo>(() => AudioCallRepoImpl(sl()))
     ..registerLazySingleton<AudioCallRemoteDataSrc>(
       () => AudioCallRemoteDataSrcImpl(auth: sl(), firestore: sl()),

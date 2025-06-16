@@ -3,13 +3,11 @@ import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
 import 'package:mustye/src/message/features/call/audio/domain/repos/audio_call_repo.dart';
 
-class ActivateIncomingAudioCall
-    extends UseCaseWithParams<void, AudioCall> {
-  ActivateIncomingAudioCall(this._repo);
+class RejectAudioCall extends UseCaseWithParams<void, AudioCall> {
+  RejectAudioCall(this._repo);
 
   final AudioCallRepo _repo;
 
   @override
-  RFuture<void> call(AudioCall call) =>
-      _repo.activateIncomingCall(call);
+  RFuture<void> call(AudioCall call) => _repo.rejectAudioCall(call);
 }
