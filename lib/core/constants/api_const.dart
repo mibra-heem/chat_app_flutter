@@ -3,7 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ApiConst {
   const ApiConst._();
 
-  static const baseUrl = '';
+  static final baseUrl = dotenv.env['BASE_URL'] ?? '';
+  static const generateAgoraTokenUrl = 'api/agora/token';
 
   static const fcmSendUrl =
       'https://fcm.googleapis.com/v1/projects/chat-app-187f5/messages:send';

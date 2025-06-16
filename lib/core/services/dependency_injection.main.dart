@@ -23,7 +23,7 @@ Future<void> init() async {
 
 // Setup ApiClient
 Future<void> _initApiClient() async {
-  sl.registerLazySingleton(() => const ApiService(baseUrl: ApiConst.baseUrl));
+  sl.registerLazySingleton(() => ApiService(baseUrl: ApiConst.baseUrl));
 }
 
 // Initialize the LocalUserModel from cachedUserData
