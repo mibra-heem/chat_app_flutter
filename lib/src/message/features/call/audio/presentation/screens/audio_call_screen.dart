@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:mustye/core/constants/api_const.dart';
 import 'package:mustye/core/constants/constants.dart';
 import 'package:mustye/core/enums/call.dart';
 import 'package:mustye/core/errors/exception.dart';
@@ -13,6 +14,7 @@ import 'package:mustye/core/resources/media_res.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
+import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/message/features/call/audio/data/models/incoming_audio_call_model.dart';
 import 'package:mustye/src/message/features/call/audio/presentation/provider/audio_call_provider.dart';
 import 'package:mustye/src/message/features/call/audio/presentation/screens/parts/audio_call_app_bar.dart';
@@ -110,15 +112,14 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     final client = http.Client();
     try {
       final response = await client.post(
-        Uri.parse(
-          'https://chat-app-laravel-backend-local.up.railway.app/api/agora/token',
-        ),
+        Uri.parse(ApiConst.baseUrl + ApiConst.generateAgoraTokenUrl),
         headers: {'Content-type': 'application/json'},
         body: jsonEncode({'uid': uid, 'channelName': channelName}),
       );
 
       if (response.statusCode == 200) {
-        final token = jsonDecode(response.body)['token'] as String;
+        final data = jsonDecode(response.body) as DataMap;
+        final token = data['token'] as String;
         if (needJoinChannel) {
           await _engine.joinChannel(
             uid: uid,
