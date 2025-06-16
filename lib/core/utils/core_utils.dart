@@ -6,7 +6,6 @@ import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/resources/colors.dart';
 
 class CoreUtils {
-
   CoreUtils._();
 
   static void showSnackbar(BuildContext context, String message) {
@@ -32,15 +31,14 @@ class CoreUtils {
       );
   }
 
-  static void showLoading(BuildContext context){
+  static void showLoading(BuildContext context) {
     showDialog<void>(
-      context: context, 
+      context: context,
       barrierColor: Colors.transparent,
       barrierDismissible: false,
-      builder: (_){
-        return const Center(child: CircularProgressIndicator(
-          color: Colours.primary,
-          ),
+      builder: (_) {
+        return const Center(
+          child: CircularProgressIndicator(color: Colours.primary),
         );
       },
     );
@@ -52,5 +50,14 @@ class CoreUtils {
       return File(image.path);
     }
     return null;
+  }
+
+  static String joinIdsWithTimeStamp({
+    required String userId,
+    required String chatId,
+  }) {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final ids = [userId, chatId]..sort();
+    return '${ids.join('_')}_$timestamp';
   }
 }

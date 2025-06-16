@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mustye/core/app/views/under_development_screen.dart';
 import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
@@ -14,10 +13,15 @@ import 'package:mustye/src/chat/presentation/views/chat_view.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
 import 'package:mustye/src/contact/presentation/screens/contact_screen.dart';
 import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
-import 'package:mustye/src/message/features/video_call/presentation/screens/video_call_screen.dart';
-import 'package:mustye/src/message/features/audio_call/presentation/screens/audio_call_screen.dart';
+import 'package:mustye/src/message/features/call/audio/data/models/incoming_audio_call_model.dart';
+import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
+import 'package:mustye/src/message/features/call/audio/presentation/provider/audio_call_provider.dart';
+import 'package:mustye/src/message/features/call/audio/presentation/screens/audio_call_screen.dart';
+import 'package:mustye/src/message/features/call/audio/presentation/screens/incoming_audio_call_screen.dart';
+import 'package:mustye/src/message/features/call/video/presentation/screens/video_call_screen.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
+import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 import 'package:mustye/src/profile/presentation/provider/profile_provider.dart';
 import 'package:mustye/src/profile/presentation/views/edit_profile_view.dart';
 import 'package:mustye/src/profile/presentation/views/profile_view.dart';
@@ -40,8 +44,15 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: RoutePath.initial,
+      name: RouteName.initial,
       redirect: (context, state) {
         if (sl<FirebaseAuth>().currentUser != null) {
+          debugPrint('Before startListening method................');
+          sl<ThemeProvider>().loadTheme();
+          sl<AudioCallProvider>().listeningForCall(context);
+          sl<AudioCallProvider>().listeningToCallReject(context);
+          sl<AudioCallProvider>().listenToCallerHangupBeforeAnswer(context);
+
           return RoutePath.chat;
         }
         return RoutePath.signIn;
@@ -89,8 +100,16 @@ final GoRouter router = GoRouter(
       path: RoutePath.audioCall,
       name: RouteName.audioCall,
       builder: (context, state) {
-        final chat = state.extra! as Chat;
-        return AudioCallScreen(chat: chat);
+        final call = state.extra! as AudioCallModel;
+        return AudioCallScreen(call: call);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.incomingAudioCall,
+      name: RouteName.incomingAudioCall,
+      builder: (context, state) {
+        final call = state.extra! as AudioCall;
+        return IncomingAudioCallScreen(call: call);
       },
     ),
     GoRoute(

@@ -13,16 +13,17 @@ Future<void> init() async {
   await _initContacts();
   await _initChats();
   await _initMessages();
+  await _initAudioCall();
   await _initFcmToken();
   await _initUser();
   await NotificationService.requestPermission(FirebaseMessaging.instance);
   await NotificationService.initFirebaseNotificationListeners();
-  await NotificationService.initFcmToken();
+  await NotificationService.setFcmToken();
 }
 
 // Setup ApiClient
 Future<void> _initApiClient() async {
-  sl.registerLazySingleton(() => const ApiService(baseUrl: ApiConst.baseUrl));
+  sl.registerLazySingleton(() => ApiService(baseUrl: ApiConst.baseUrl));
 }
 
 // Initialize the LocalUserModel from cachedUserData
@@ -32,7 +33,7 @@ Future<void> _initUser() async {
   }
 }
 
-// Set fcmToken in service locator fro global access
+// Initialize fcmToken in service locator for global access
 Future<void> _initFcmToken() async {
   final fcmToken = await FirebaseMessaging.instance.getToken();
   sl.registerLazySingleton<String>(
@@ -165,5 +166,28 @@ Future<void> _initMessages() async {
     ..registerLazySingleton(
       () => chatBox,
       instanceName: StorageConstant.chatBox,
+    );
+}
+
+/// Feature --> Audio Call
+Future<void> _initAudioCall() async {
+  // final chatBox = await Hive.openBox<dynamic>(StorageConstant.chatBox);
+
+  sl
+    ..registerFactory(
+      () => AudioCallProvider(
+        activateIncomingAudioCall: sl(),
+        acceptAudioCall: sl(),
+        rejectAudioCall: sl(),
+        endAudioCall: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => ActivateIncomingAudioCall(sl()))
+    ..registerLazySingleton(() => AcceptAudioCall(sl()))
+    ..registerLazySingleton(() => RejectAudioCall(sl()))
+    ..registerLazySingleton(() => EndAudioCall(sl()))
+    ..registerLazySingleton<AudioCallRepo>(() => AudioCallRepoImpl(sl()))
+    ..registerLazySingleton<AudioCallRemoteDataSrc>(
+      () => AudioCallRemoteDataSrcImpl(auth: sl(), firestore: sl()),
     );
 }

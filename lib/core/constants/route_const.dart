@@ -11,7 +11,10 @@ class RoutePath{
   static const contact = '/contact';
   static const message = '/message';
   static const audioCall = '/audio-call';
+  static const incomingAudioCall = '/incoming-audio-call';
   static const videoCall = '/video-call';
+  static const incomingVideoCall = '/incoming-video-call';
+
 
 
   // Tab view routes section
@@ -33,6 +36,7 @@ class RouteName{
   const RouteName._();
 
   // Full screen routes section
+  static const initial = 'initial';
   static const splash = 'splash';
   static const signIn = 'sign-in';
   static const signUp = 'sign-up';
@@ -41,7 +45,10 @@ class RouteName{
   static const contact = 'contact';
   static const message = 'message';
   static const audioCall = 'audio-call';
+  static const incomingAudioCall = 'incoming-audio-call';
   static const videoCall = 'video-call';
+  static const incomingVideoCall = 'incoming-video-call';
+
 
   // Tab view routes section
   static const chat = 'chat';

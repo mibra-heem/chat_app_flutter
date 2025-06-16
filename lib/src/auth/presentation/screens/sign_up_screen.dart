@@ -3,11 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/app/widgets/gradient_background.dart';
 import 'package:mustye/core/app/widgets/rounded_button.dart';
 import 'package:mustye/core/constants/route_const.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/resources/fonts.dart';
+import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/auth/presentation/screens/forms/sign_up_form.dart';
@@ -52,8 +54,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             );
           } else if (state is SignedIn) {
             if (kDebugMode) print('SignedIn state and User is : ${state.user}');
-            
-            context.pushReplacementNamed(RouteName.dashboard);
+            sl<UserProvider>().cacheUserData(state.user);
+            context.goNamed(RouteName.initial, extra: state.user);
           }
         },
         builder: (_, state) {
