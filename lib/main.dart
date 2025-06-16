@@ -6,7 +6,6 @@ import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/services/go_router.dart';
 import 'package:mustye/core/services/notification_service.dart';
 import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
-import 'package:mustye/src/message/features/call/audio/presentation/provider/audio_call_provider.dart';
 import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +24,6 @@ class AppRoot extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => sl<UserProvider>()),
         ChangeNotifierProvider(create: (_) => sl<ChatProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<AudioCallProvider>()),
         ChangeNotifierProvider(create: (_) => sl<ThemeProvider>()),
       ],
       child: const MainApp(),

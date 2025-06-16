@@ -13,7 +13,6 @@ Future<void> init() async {
   await _initContacts();
   await _initChats();
   await _initMessages();
-  await _initAudioCall();
   await _initFcmToken();
   await _initUser();
   await NotificationService.requestPermission(FirebaseMessaging.instance);
@@ -166,28 +165,5 @@ Future<void> _initMessages() async {
     ..registerLazySingleton(
       () => chatBox,
       instanceName: StorageConstant.chatBox,
-    );
-}
-
-/// Feature --> Audio Call
-Future<void> _initAudioCall() async {
-  // final chatBox = await Hive.openBox<dynamic>(StorageConstant.chatBox);
-
-  sl
-    ..registerFactory(
-      () => AudioCallProvider(
-        activateIncomingAudioCall: sl(),
-        acceptAudioCall: sl(),
-        rejectAudioCall: sl(),
-        endAudioCall: sl(),
-      ),
-    )
-    ..registerLazySingleton(() => ActivateIncomingAudioCall(sl()))
-    ..registerLazySingleton(() => AcceptAudioCall(sl()))
-    ..registerLazySingleton(() => RejectAudioCall(sl()))
-    ..registerLazySingleton(() => EndAudioCall(sl()))
-    ..registerLazySingleton<AudioCallRepo>(() => AudioCallRepoImpl(sl()))
-    ..registerLazySingleton<AudioCallRemoteDataSrc>(
-      () => AudioCallRemoteDataSrcImpl(auth: sl(), firestore: sl()),
     );
 }

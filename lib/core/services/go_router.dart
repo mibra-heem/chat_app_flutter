@@ -13,12 +13,6 @@ import 'package:mustye/src/chat/presentation/views/chat_view.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
 import 'package:mustye/src/contact/presentation/screens/contact_screen.dart';
 import 'package:mustye/src/dashboard/presentation/view/dashboard.dart';
-import 'package:mustye/src/message/features/call/audio/data/models/incoming_audio_call_model.dart';
-import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
-import 'package:mustye/src/message/features/call/audio/presentation/provider/audio_call_provider.dart';
-import 'package:mustye/src/message/features/call/audio/presentation/screens/audio_call_screen.dart';
-import 'package:mustye/src/message/features/call/audio/presentation/screens/incoming_audio_call_screen.dart';
-import 'package:mustye/src/message/features/call/video/presentation/screens/video_call_screen.dart';
 import 'package:mustye/src/message/presentation/provider/message_provider.dart';
 import 'package:mustye/src/message/presentation/screen/message_screen.dart';
 import 'package:mustye/src/profile/features/theme/presentation/provider/theme_provider.dart';
@@ -47,11 +41,7 @@ final GoRouter router = GoRouter(
       name: RouteName.initial,
       redirect: (context, state) {
         if (sl<FirebaseAuth>().currentUser != null) {
-          debugPrint('Before startListening method................');
           sl<ThemeProvider>().loadTheme();
-          sl<AudioCallProvider>().listeningForCall(context);
-          sl<AudioCallProvider>().listeningToCallReject(context);
-          sl<AudioCallProvider>().listenToCallerHangupBeforeAnswer(context);
 
           return RoutePath.chat;
         }
@@ -94,30 +84,6 @@ final GoRouter router = GoRouter(
           create: (context) => sl<MessageProvider>(),
           child: MessageScreen(chat: chat),
         );
-      },
-    ),
-    GoRoute(
-      path: RoutePath.audioCall,
-      name: RouteName.audioCall,
-      builder: (context, state) {
-        final call = state.extra! as AudioCallModel;
-        return AudioCallScreen(call: call);
-      },
-    ),
-    GoRoute(
-      path: RoutePath.incomingAudioCall,
-      name: RouteName.incomingAudioCall,
-      builder: (context, state) {
-        final call = state.extra! as AudioCall;
-        return IncomingAudioCallScreen(call: call);
-      },
-    ),
-    GoRoute(
-      path: RoutePath.videoCall,
-      name: RouteName.videoCall,
-      builder: (context, state) {
-        final chat = state.extra! as Chat;
-        return VideoCallScreen(chat: chat);
       },
     ),
     GoRoute(

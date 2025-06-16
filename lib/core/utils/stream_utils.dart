@@ -6,8 +6,6 @@ import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/contact/data/model/contact_model.dart';
 import 'package:mustye/src/contact/domain/entity/contact.dart';
 import 'package:mustye/src/message/data/model/message_model.dart';
-import 'package:mustye/src/message/features/call/audio/data/models/incoming_audio_call_model.dart';
-import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StreamUtils {
@@ -86,23 +84,4 @@ class StreamUtils {
     return messages;
   }
 
-  static Stream<AudioCall?> get getCallsData {
-    final user = sl<FirebaseAuth>().currentUser;
-    if (user == null) return const Stream.empty();
-
-    final currentUserId = user.uid;
-    final firestore = sl<FirebaseFirestore>();
-
-    return firestore
-        .collection('calls')
-        .where('callerId', isEqualTo: currentUserId)
-        .where('isCallOn', isEqualTo: true)
-        .limit(1)
-        .snapshots()
-        .map((snapshot) {
-          if (snapshot.docs.isEmpty) return null; // No call found
-          final data = snapshot.docs.first.data();
-          return AudioCallModel.fromMap(data);
-        });
-  }
 }
