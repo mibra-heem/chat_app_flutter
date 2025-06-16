@@ -45,6 +45,6 @@ app.*.map.json
 /android/app/release
 
 # Environment files
-.env
-.env.*
 !.env.example
+config.bat
+node_modules
