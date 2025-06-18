@@ -7,8 +7,8 @@ import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/app/widgets/gradient_background.dart';
 import 'package:mustye/core/app/widgets/rounded_button.dart';
 import 'package:mustye/core/constants/route_const.dart';
-import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/resources/fonts.dart';
+import 'package:mustye/core/resources/media_res.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
@@ -53,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             );
           } else if (state is SignedIn) {
-            if (kDebugMode) print('SignedIn state and User is : ${state.user}');
+            debugPrint('SignedIn state and User is : ${state.user}');
             sl<UserProvider>().cacheUserData(state.user);
             context.goNamed(RouteName.initial, extra: state.user);
           }
@@ -65,15 +65,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
+                  const Image(
+                    height: 150,
+                    width: 150,
+                    image: AssetImage(MediaRes.appPurpleIcon),
+                  ),
+                  const SizedBox(height: 30),
                   const Text(
-                    'Sign Up ',
+                    'Create a new account',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w700,
                       fontFamily: Fonts.aeonik,
                     ),
                   ),
-                  SizedBox(height: context.height * 0.04),
+                  const SizedBox(height: 40),
                   SignUpForm(
                     formKey: formKey,
                     nameController: nameController,
@@ -81,24 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     passwordController: passwordController,
                     confirmPasswordController: confirmPasswordController,
                   ),
-                  SizedBox(height: context.height * 0.02),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Already have an account?'),
-                      TextButton(
-                        style: const ButtonStyle(
-                          padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                          minimumSize: WidgetStatePropertyAll(Size.zero),
-                        ),
-                        onPressed: () {
-                          context.pushReplacementNamed(RouteName.signIn);
-                        },
-                        child: const Text('Log In'),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: context.height * 0.02),
+                  const SizedBox(height: 40),
                   if (state is AuthLoading)
                     const Center(child: CircularProgressIndicator())
                   else
@@ -118,6 +107,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                     ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Already have an account?'),
+                      TextButton(
+                        style: const ButtonStyle(
+                          padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                          minimumSize: WidgetStatePropertyAll(Size.zero),
+                        ),
+                        onPressed: () {
+                          context.pushReplacementNamed(RouteName.signIn);
+                        },
+                        child: const Text('Log In'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

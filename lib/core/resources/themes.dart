@@ -36,6 +36,9 @@ class AppTheme {
         foregroundColor: Colours.grey900,
       ),
     ),
+    dividerTheme: const DividerThemeData(
+      color: Colours.grey600
+    ),
     dialogTheme: const DialogTheme(
       insetPadding: EdgeInsets.zero,
       backgroundColor: Colours.scaffoldLight,
@@ -100,10 +103,12 @@ class AppTheme {
     splashFactory: NoSplash.splashFactory,
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        // textStyle: const TextStyle(color: Colours.white),
         surfaceTintColor: Colours.grey900,
         foregroundColor: Colours.grey100,
       ),
+    ),
+    dividerTheme: const DividerThemeData(
+      color: Colours.grey300
     ),
     dialogTheme: const DialogTheme(
       insetPadding: EdgeInsets.zero,
@@ -135,6 +140,9 @@ class AppTheme {
       backgroundColor: Colours.navBarDark,
       selectedIconTheme: IconThemeData(color: Colours.white),
       selectedItemColor: Colours.white,
+    ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: Colours.grey100
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

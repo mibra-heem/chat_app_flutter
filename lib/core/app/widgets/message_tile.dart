@@ -41,7 +41,8 @@ class MessageTile extends StatelessWidget {
             bottomRight: Radius.circular(isCurrentUser ? 0 : 12),
           ),
         ),
-        child: Column(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(

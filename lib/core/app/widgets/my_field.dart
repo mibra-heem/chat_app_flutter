@@ -5,7 +5,7 @@ class MyField extends StatelessWidget {
     required this.controller,
     this.matchField = '',
     this.validator,
-    this.filled = false,
+    this.filled = true,
     this.fillColor,
     this.obscureText = false,
     this.validatePassword = false,
