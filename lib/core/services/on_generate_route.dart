@@ -25,7 +25,7 @@ class RouteGenerator {
       case RoutePath.splash:
         return _buildPageRoute((context) {
           return const SplashScreen();
-        }, settings: settings);
+        }, settings: settings,);
       case RoutePath.initial:
         final authClient = sl<FirebaseAuth>();
         return _buildPageRoute((context) {
@@ -37,7 +37,7 @@ class RouteGenerator {
             create: (context) => sl<AuthBloc>(),
             child: const SignInScreen(),
           );
-        }, settings: settings);
+        }, settings: settings,);
 
       case RoutePath.signIn:
         return _buildPageRoute(
@@ -68,7 +68,7 @@ class RouteGenerator {
       case RoutePath.dashboard:
         return _buildPageRoute((_) {
           return const SizedBox();
-        }, settings: settings);
+        }, settings: settings,);
 
       case RoutePath.contact:
         return _buildPageRoute(

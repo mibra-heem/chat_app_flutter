@@ -33,7 +33,6 @@ class MessageFoot extends StatelessWidget {
                 child: MyField(
                   controller: messageController,
                   hintText: 'message',
-                  filled: true,
                   prefixIcon: const Icon(IconlyBold.image),
                   suffixIcon: const Icon(Icons.attach_file),
                   maxLines: 100,

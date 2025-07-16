@@ -37,7 +37,7 @@ class AppTheme {
       ),
     ),
     dividerTheme: const DividerThemeData(
-      color: Colours.grey600
+      color: Colours.grey600,
     ),
     dialogTheme: const DialogTheme(
       insetPadding: EdgeInsets.zero,
@@ -108,7 +108,7 @@ class AppTheme {
       ),
     ),
     dividerTheme: const DividerThemeData(
-      color: Colours.grey300
+      color: Colours.grey300,
     ),
     dialogTheme: const DialogTheme(
       insetPadding: EdgeInsets.zero,
@@ -142,7 +142,7 @@ class AppTheme {
       selectedItemColor: Colours.white,
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: Colours.grey100
+      color: Colours.grey100,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
