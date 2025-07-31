@@ -60,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
           if (snapshot.hasData && snapshot.data is LocalUser) {
             debugPrint('....... snapshot.hasData ........');
             final userProvider = context.read<UserProvider>();
+            debugPrint('${userProvider.user}');
             if (userProvider.user != snapshot.data) {
               debugPrint('..... cacheUserData starting from Dashboard .......');
               userProvider.cacheUserData(snapshot.data!);

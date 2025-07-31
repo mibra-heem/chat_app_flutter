@@ -14,12 +14,6 @@ class GradientBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         constraints: const BoxConstraints.expand(),
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //       colors: colors ?? Colours.primaryGradient,
-        //       begin: Alignment.topRight,
-        //       end: Alignment.bottomLeft,),
-        // ),
         child: SafeArea(
           child: child,
         ),

@@ -1,5 +1,5 @@
-class StorageConstant {
-  const StorageConstant._();
+class StorageConfig {
+  const StorageConfig._();
   static const String user = 'user_';
   static const String chat = 'chat_';
   static const String fcmToken = 'fcmToken_';

@@ -6,9 +6,9 @@ import 'package:mustye/core/utils/typedef.dart';
 
 abstract class BaseApiService {
   Future<void> get({required String url, String? serverAccessToken});
-  Future<DataMap> post({
+  Future<SDMap> post({
     required String url,
-    required DataMap? body,
+    required SDMap? body,
     String? serverAccessToken,
     bool needBaseUrl = true,
   });
@@ -41,9 +41,9 @@ class ApiService implements BaseApiService {
   }
 
   @override
-  Future<DataMap> post({
+  Future<SDMap> post({
     required String url,
-    required DataMap? body,
+    required SDMap? body,
     String? serverAccessToken,
     bool needBaseUrl = true,
   }) async {
@@ -61,7 +61,7 @@ class ApiService implements BaseApiService {
     try {
       if (res.statusCode == 200) {
         debugPrint('Notification Sent Successfully.');
-        return jsonDecode(res.body) as DataMap;
+        return jsonDecode(res.body) as SDMap;
       }
 
       return {'message': 'No Data found.', 'statusCode': res.statusCode};

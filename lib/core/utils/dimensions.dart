@@ -16,6 +16,7 @@ class Dimensions {
   }
 
   static double width(double w) {
+    debugPrint('${screenWidth * (w / baseWidth)}');
     return screenWidth * (w / baseWidth);
   }
 

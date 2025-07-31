@@ -12,7 +12,7 @@ class AuthRepoImpl implements AuthRepo{
 
   AuthRepoImpl({
     required AuthRemoteDataSource remoteDataSource,
-    required AuthLocalDataSource localDataSource
+    required AuthLocalDataSource localDataSource,
   }) : _localDataSource = localDataSource, _remoteDataSource = remoteDataSource;
 
   final AuthRemoteDataSource _remoteDataSource;

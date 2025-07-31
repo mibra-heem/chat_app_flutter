@@ -10,7 +10,7 @@ class Chat extends Equatable {
     this.lastMsg,
     this.lastMsgTime,
     this.unSeenMsgCount = 0,
-    this.isMsgSeen = true,
+    this.isMsgSeen = false,
     this.lastSeen,
     this.isOnline = false,
   });
@@ -18,10 +18,10 @@ class Chat extends Equatable {
   const Chat.empty() : this(uid: '', email: '', name: '', image: '');
 
   final String uid;
+  final String name;
   final String email;
   final String? image;
   final String? bio;
-  final String name;
   final String? lastMsg;
   final DateTime? lastMsgTime;
   final int unSeenMsgCount;

@@ -45,7 +45,6 @@ class EditProfileFormField extends StatelessWidget {
           readOnly: readOnly,
           maxLength: maxLength,
           isTextArea: isTextArea,
-          filled: true,
         ),
       ],
     );

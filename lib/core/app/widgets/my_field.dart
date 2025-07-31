@@ -5,7 +5,7 @@ class MyField extends StatelessWidget {
     required this.controller,
     this.matchField = '',
     this.validator,
-    this.filled = false,
+    this.filled = true,
     this.fillColor,
     this.obscureText = false,
     this.validatePassword = false,
@@ -52,20 +52,21 @@ class MyField extends StatelessWidget {
   final Color? focusColor;
   final bool enabled;
 
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      validator: overrideValidator ? validator : (value){
-        if(value == null || value == ''){
-          return 'This field is required.';
-        }
-        return validator?.call(value);
-      },
-      onTapOutside: isFocusOnTapOutside 
-        ? (_) => FocusScope.of(context).unfocus() 
-        : null,
+      validator:
+          overrideValidator
+              ? validator
+              : (value) {
+                if (value == null || value == '') {
+                  return 'This field is required.';
+                }
+                return validator?.call(value);
+              },
+      onTapOutside:
+          isFocusOnTapOutside ? (_) => FocusScope.of(context).unfocus() : null,
       obscureText: obscureText,
       readOnly: readOnly,
       keyboardType: keyboardType,
@@ -79,13 +80,21 @@ class MyField extends StatelessWidget {
         filled: filled,
         fillColor: fillColor,
         counterText: isTextArea ? counterText : null,
-        // enabledBorder: !enabled ? OutlineInputBorder(
-        //   borderRadius:  BorderRadius.circular(30),
-        //   // borderSide: const BorderSide(
-        //   //   color: Colours.white,),
-        // ) : null,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 20, vertical: 12,
+          horizontal: 20,
+          vertical: 12,
         ),
       ),
     );

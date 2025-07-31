@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mustye/core/app/views/under_development_screen.dart';
-import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
@@ -25,7 +25,7 @@ class RouteGenerator {
       case RoutePath.splash:
         return _buildPageRoute((context) {
           return const SplashScreen();
-        }, settings: settings);
+        }, settings: settings,);
       case RoutePath.initial:
         final authClient = sl<FirebaseAuth>();
         return _buildPageRoute((context) {
@@ -37,7 +37,7 @@ class RouteGenerator {
             create: (context) => sl<AuthBloc>(),
             child: const SignInScreen(),
           );
-        }, settings: settings);
+        }, settings: settings,);
 
       case RoutePath.signIn:
         return _buildPageRoute(
@@ -68,7 +68,7 @@ class RouteGenerator {
       case RoutePath.dashboard:
         return _buildPageRoute((_) {
           return const SizedBox();
-        }, settings: settings);
+        }, settings: settings,);
 
       case RoutePath.contact:
         return _buildPageRoute(

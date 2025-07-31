@@ -4,9 +4,13 @@ class MediaRes {
   static const _baseIcon = 'assets/icons';
   static const _baseImage = 'assets/images';
   static const _baseLottie = 'assets/lotties';
-  // static const _baseVector = 'assets/vectors';
 
   static const appIcon = '$_baseIcon/mustye_splash_app_icon.png'; 
+  static const appPurpleIcon = '$_baseIcon/mustye_logo.png'; 
+  static const googleIcon = '$_baseIcon/google.png'; 
+  static const facebookIcon = '$_baseIcon/facebook.png'; 
+  static const xIcon = '$_baseIcon/x.png'; 
+
 
   static const microscope = '$_baseImage/white-microscope.png'; 
   static const happyYoungManIconIsolated = '$_baseImage/happy-young-man-icon-isolated.png'; 
@@ -16,6 +20,5 @@ class MediaRes {
 
   static const underDevelopmentScreen = '$_baseLottie/under_development.json';
 
-  
 
 }

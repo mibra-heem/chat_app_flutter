@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/resources/media_res.dart';
+import 'package:mustye/core/app/resources/media_res.dart';
 
 class ContactTile extends StatelessWidget {
   const ContactTile({

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
+import 'package:mustye/core/app/resources/colors.dart';
+import 'package:mustye/core/app/resources/fonts.dart';
+import 'package:mustye/core/app/resources/media_res.dart';
 import 'package:mustye/core/app/widgets/gradient_background.dart';
 import 'package:mustye/core/app/widgets/rounded_button.dart';
-import 'package:mustye/core/constants/route_const.dart';
-import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/resources/colors.dart';
-import 'package:mustye/core/resources/fonts.dart';
+import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/core_utils.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
           } else if (state is SignedIn) {
             sl<UserProvider>().cacheUserData(state.user);
             context.goNamed(RouteName.initial);
-
+      
             if (kDebugMode) print('........ Signed In successfully ........');
           }
         },
@@ -56,6 +56,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
+                  const Image(
+                    height: 150,
+                    width: 150,
+                    image: AssetImage(
+                      MediaRes.appPurpleIcon,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
                   const Text(
                     'Sign In ',
                     style: TextStyle(
@@ -64,7 +72,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       fontFamily: Fonts.aeonik,
                     ),
                   ),
-                  SizedBox(height: context.height * 0.04),
+                  const SizedBox(height: 40),
                   SignInForm(
                     formKey: formKey,
                     emailController: emailController,
@@ -86,7 +94,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: context.height * 0.02),
+                  const SizedBox(height: 10),
                   if (state is AuthLoading)
                     const Center(child: CircularProgressIndicator())
                   else
@@ -105,38 +113,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         }
                       },
                     ),
-                  SizedBox(height: context.height * 0.02),
-                  const Row(
-                    spacing: 10,
-                    children: <Widget>[
-                      Expanded(
-                        child: Divider(thickness: 1, color: Colors.black),
-                      ),
-                      Text('OR'),
-                      Expanded(
-                        child: Divider(thickness: 1, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: context.height * 0.02),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 5,
-                    children: [
-                      AuthButton(
-                        title: 'G',
-                        color: Colors.orange,
-                        onTap: () {
-                          context.read<AuthBloc>().add(
-                            const GoogleSignInEvent(),
-                          );
-                        },
-                      ),
-                      const AuthButton(title: 'f', color: Colors.blueAccent),
-                      const AuthButton(title: 'X', color: Colors.black),
-                    ],
-                  ),
-                  SizedBox(height: context.height * 0.02),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -154,6 +131,44 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 20),
+                  const Row(
+                    spacing: 12,
+                    children: <Widget>[
+                      Expanded(
+                        child: Divider(thickness: 1),
+                      ),
+                      Text('OR'),
+                      Expanded(
+                        child: Divider(thickness: 1),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 12,
+                    children: [
+                      AuthButton(
+                        image: const AssetImage(MediaRes.googleIcon),
+                        color: Colors.orange,
+                        onTap: () {
+                          context.read<AuthBloc>().add(
+                            const GoogleSignInEvent(),
+                          );
+                        },
+                      ),
+                      const AuthButton(
+                        image: AssetImage(MediaRes.facebookIcon),
+                        color: Colors.blueAccent,
+                      ),
+                      const AuthButton(
+                        image: AssetImage(MediaRes.xIcon),
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                  
                 ],
               ),
             ),

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
 import 'package:mustye/src/auth/presentation/screens/forgot_password_screen.dart';
@@ -80,8 +80,8 @@ final GoRouter router = GoRouter(
       name: RouteName.message,
       builder: (context, state) {
         final chat = state.extra! as Chat;
-        return ChangeNotifierProvider(
-          create: (context) => sl<MessageProvider>(),
+        return ChangeNotifierProvider.value(
+          value: sl<MessageProvider>(),
           child: MessageScreen(chat: chat),
         );
       },
@@ -90,8 +90,8 @@ final GoRouter router = GoRouter(
       path: RoutePath.contact,
       name: RouteName.contact,
       builder:
-          (context, state) => ChangeNotifierProvider(
-            create: (context) => sl<ContactProvider>(),
+          (context, state) => ChangeNotifierProvider.value(
+            value: sl<ContactProvider>(),
             child: const ContactScreen(),
           ),
     ),
