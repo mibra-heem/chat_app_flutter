@@ -58,13 +58,13 @@ class ForgotPasswordEvent extends AuthEvent{
 
 class UpdateUserEvent extends AuthEvent{
 
-  UpdateUserEvent(
+  const UpdateUserEvent(
     {
       required this.action, 
       required this.userData,
     }) : assert(
       userData is String || userData is File,
-      'userData can only be a String or File, but was ${userData.runtimeType}.',
+      'userData can only be a String or File',
     );
 
   final UpdateUserAction action;

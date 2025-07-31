@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 extension DatetimeExtension on DateTime {
@@ -52,11 +51,6 @@ extension DatetimeExtension on DateTime {
     final nowDate = DateTime(now.year, now.month, now.day);
 
     final difference = nowDate.difference(messageDate).inDays;
-
-    debugPrint('Difference is: ${nowDate.difference(messageDate).inDays}');
-
-    debugPrint('MessageDate is: $messageDate');
-    debugPrint('NowDate is: $nowDate');
 
     if (difference == 0) {
       return timePeriodFormat;

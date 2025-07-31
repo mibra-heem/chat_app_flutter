@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   bloc: ^9.0.0
+  chat_message_timestamp: ^0.0.1
   cloud_firestore: ^5.6.5
   dartz: ^0.10.1
   dio: ^5.8.0+1
@@ -65,11 +66,6 @@ flutter:
   fonts:
     - family: Aeonik
       fonts:
-        - asset: assets/fonts/aeonik/AeonikTRIAL-Bold.otf
-          weight: 700
-        - asset: assets/fonts/aeonik/AeonikTRIAL-BoldItalic.otf
-          style: italic
-          weight: 700
         - asset: assets/fonts/aeonik/AeonikTRIAL-Light.otf
           weight: 300
         - asset: assets/fonts/aeonik/AeonikTRIAL-LightItalic.otf
@@ -80,6 +76,11 @@ flutter:
         - asset: assets/fonts/aeonik/AeonikTRIAL-RegularItalic.otf
           style: italic
           weight: 400
+        - asset: assets/fonts/aeonik/AeonikTRIAL-Bold.otf
+          weight: 700
+        - asset: assets/fonts/aeonik/AeonikTRIAL-BoldItalic.otf
+          style: italic
+          weight: 700
     - family: Poppins
       fonts:
         - asset: assets/fonts/poppins/Poppins-Thin.ttf

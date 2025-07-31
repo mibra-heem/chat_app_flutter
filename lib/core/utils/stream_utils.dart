@@ -10,7 +10,7 @@ import 'package:rxdart/rxdart.dart';
 
 class StreamUtils {
   const StreamUtils._();
-
+   
   static Stream<LocalUserModel> get getUserData {
     final firestore = sl<FirebaseFirestore>();
     final auth = sl<FirebaseAuth>();

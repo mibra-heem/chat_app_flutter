@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mustye/core/app/resources/fonts.dart';
 import 'package:mustye/core/app/views/loading_view.dart';
 import 'package:mustye/core/app/widgets/contact_tile.dart';
-import 'package:mustye/core/constants/route_const.dart';
-import 'package:mustye/core/resources/fonts.dart';
+import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/contact/domain/entity/contact.dart';

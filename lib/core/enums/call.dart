@@ -4,6 +4,7 @@ enum CallStatus {
   accepted,
   rejected,
   cancelled,
+  reconnecting,
   ended,
   missed,
 }

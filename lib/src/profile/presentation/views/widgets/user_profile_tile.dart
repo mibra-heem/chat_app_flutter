@@ -23,7 +23,7 @@ class UserProfileTile extends StatelessWidget {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: context.theme.colorScheme.surface,
+          color: context.color.surfaceContainer,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(

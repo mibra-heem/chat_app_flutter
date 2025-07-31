@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:mustye/core/constants/storage_const.dart';
+import 'package:mustye/core/config/storage_config.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 
@@ -22,7 +22,7 @@ class ThemeLocalDataSrcImpl implements ThemeLocalDataSrc {
   Future<void> cacheThemeMode(int index) async {
     try {
       final uid = sl<FirebaseAuth>().currentUser!.uid;
-      await _themeBox.put(StorageConstant.theme + uid, index);
+      await _themeBox.put(StorageConfig.theme + uid, index);
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw CacheException(
@@ -40,8 +40,8 @@ class ThemeLocalDataSrcImpl implements ThemeLocalDataSrc {
         return ThemeMode.system.index;
       }
 
-      if (_themeBox.containsKey(StorageConstant.theme + user.uid)) {
-        final index = _themeBox.get(StorageConstant.theme + user.uid) as int;
+      if (_themeBox.containsKey(StorageConfig.theme + user.uid)) {
+        final index = _themeBox.get(StorageConfig.theme + user.uid) as int;
         return index;
       }
       return ThemeMode.system.index;

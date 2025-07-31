@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mustye/core/app/resources/media_res.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/resources/media_res.dart';
 
 class ChatTile extends StatelessWidget {
   const ChatTile({
@@ -8,26 +8,34 @@ class ChatTile extends StatelessWidget {
     required this.subtitle,
     required this.time,
     required this.image,
+    this.tileColor,
     this.unSeenMsgCount = 0,
     this.isLabelVisible = false,
     this.onTap,
+    this.onLongPress,
     super.key,
   });
 
   final String title;
   final String subtitle;
-  final String time;
+  final String? time;
   final String? image;
+  final Color? tileColor;
   final bool isLabelVisible;
   final int unSeenMsgCount;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      child: Padding(
+      onLongPress: onLongPress,
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        decoration: BoxDecoration(
+          color: tileColor,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -66,7 +74,7 @@ class ChatTile extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          time,
+                          time!,
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
@@ -82,7 +90,7 @@ class ChatTile extends StatelessWidget {
                       width:
                           isLabelVisible ? context.width * 0.72 : context.width,
                       child: Text(
-                        subtitle,
+                        subtitle.trim(),
                         style: const TextStyle(
                           color: Colors.grey,
                           overflow: TextOverflow.ellipsis,

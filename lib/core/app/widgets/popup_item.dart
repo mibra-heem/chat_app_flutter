@@ -6,7 +6,7 @@ class PopupItem extends StatelessWidget {
     required this.icon,
     this.titleColor,
     this.iconColor,
-    super.key
+    super.key,
   });
 
   final String title;
@@ -24,7 +24,7 @@ class PopupItem extends StatelessWidget {
           style: TextStyle(
             color: titleColor,
             fontSize: 16,
-            fontWeight: FontWeight.w500
+            fontWeight: FontWeight.w500,
           ),
         ),
         Icon(

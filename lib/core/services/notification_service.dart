@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:mustye/core/app/providers/user_provider.dart';
-import 'package:mustye/core/constants/api_const.dart';
-import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/config/api_config.dart';
+import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/services/go_router.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
@@ -104,7 +104,7 @@ class NotificationService {
           );
         }
       }
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       debugPrint('Error in handleMessageNavigation: $e');
       debugPrint('Stack trace: $stackTrace');
     }
@@ -137,7 +137,7 @@ class NotificationService {
   }) async {
     final firestore = sl<FirebaseFirestore>();
     final existingToken = user!.fcmToken;
-    final fcmToken = sl<String>(instanceName: ApiConst.fcmToken) as String?;
+    final fcmToken = sl<String>(instanceName: ApiConfig.fcmToken) as String?;
 
     debugPrint('Existing Token: $existingToken');
     debugPrint('Current Token: $fcmToken');
@@ -154,13 +154,13 @@ class NotificationService {
   /// For server-to-device notification sending
   static Future<String> getServerAccessToken() async {
     final http.Client client = await auth.clientViaServiceAccount(
-      auth.ServiceAccountCredentials.fromJson(ApiConst.serviceAccountJson),
-      ApiConst.scopes,
+      auth.ServiceAccountCredentials.fromJson(ApiConfig.serviceAccountJson),
+      ApiConfig.scopes,
     );
 
     final credentials = await auth.obtainAccessCredentialsViaServiceAccount(
-      auth.ServiceAccountCredentials.fromJson(ApiConst.serviceAccountJson),
-      ApiConst.scopes,
+      auth.ServiceAccountCredentials.fromJson(ApiConfig.serviceAccountJson),
+      ApiConfig.scopes,
       client,
     );
 
