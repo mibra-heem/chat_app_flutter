@@ -12,7 +12,7 @@ class ChatRepoImpl implements ChatRepo {
   final ChatRemoteDataSrc _remoteDataSrc;
 
   @override
-  RFuture<void> deleteChat(Chat chat) async {
+  RFuture<void> deleteChat(List<Chat> chat) async {
     try {
       await _remoteDataSrc.deleteChat(chat);
       return const Right(null);

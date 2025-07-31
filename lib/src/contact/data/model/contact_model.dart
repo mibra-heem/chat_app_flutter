@@ -12,7 +12,7 @@ class ContactModel extends Contact {
 
   const ContactModel.empty() : super.empty();
 
-  ContactModel.fromMap(DataMap map)
+  ContactModel.fromMap(SDMap map)
     : super(
         uid: map['uid'] as String,
         email: map['email'] as String,
@@ -44,7 +44,7 @@ class ContactModel extends Contact {
     );
   }
 
-  DataMap toMap() {
+  SDMap toMap() {
     return {
       'uid': uid,
       'email': email,

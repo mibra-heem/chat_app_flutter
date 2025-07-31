@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/chat/domain/usecases/delete_chat.dart';
 import 'package:mustye/src/chat/domain/usecases/message_seen.dart';
 
@@ -20,6 +21,17 @@ class ChatProvider extends ChangeNotifier{
         senderUid: senderUid, 
       ),
     );
+
+    result.fold(
+      (f) => debugPrint(f.errorMessage), 
+      (_) => null,
+    );
+  }
+
+  Future<void> deleteChatHandler({
+    required List<Chat> chats,
+  }) async{
+    final result = await _deleteChat(chats);
 
     result.fold(
       (f) => debugPrint(f.errorMessage), 

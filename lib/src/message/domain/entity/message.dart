@@ -7,6 +7,7 @@ class Message extends Equatable{
     required this.msgTime,
     required this.senderId,
     required this.recieverId,
+    this.uid,
     this.isSeen = false,
     
   });
@@ -18,6 +19,7 @@ class Message extends Equatable{
     recieverId: '',
   );
 
+  final String? uid; 
   final String senderId;
   final String recieverId;
   final String msg;
@@ -26,12 +28,13 @@ class Message extends Equatable{
 
   @override
   List<Object?> get props => [
+    uid,
     senderId, recieverId,
     msg, msgTime, 
   ];
 
   @override
   String toString(){
-    return 'Message{msg : $msg, msgTime: $msgTime, isSeen: $isSeen}';
+    return 'Message{uid: $uid, msg: $msg, msgTime: $msgTime, isSeen: $isSeen}';
   }
 }

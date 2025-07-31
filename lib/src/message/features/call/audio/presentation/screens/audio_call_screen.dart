@@ -5,12 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
-import 'package:mustye/core/constants/api_const.dart';
-import 'package:mustye/core/constants/constants.dart';
+import 'package:mustye/core/app/resources/media_res.dart';
+import 'package:mustye/core/config/api_config.dart';
+import 'package:mustye/core/config/constants.dart';
 import 'package:mustye/core/enums/call.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/resources/media_res.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
@@ -112,13 +112,13 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     final client = http.Client();
     try {
       final response = await client.post(
-        Uri.parse(ApiConst.baseUrl + ApiConst.generateAgoraTokenUrl),
+        Uri.parse(ApiConfig.baseUrl + ApiConfig.generateAgoraTokenUrl),
         headers: {'Content-type': 'application/json'},
         body: jsonEncode({'uid': uid, 'channelName': channelName}),
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as DataMap;
+        final data = jsonDecode(response.body) as SDMap;
         final token = data['token'] as String;
         if (needJoinChannel) {
           await _engine.joinChannel(
@@ -136,7 +136,8 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         }
       } else {
         throw ServerException(
-          message: 'Failed to fetch token (${response.statusCode})',
+          message: 'Failed to fetch token',
+          statusCode: response.statusCode,
         );
       }
     } on ServerException catch (e) {
@@ -171,9 +172,13 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                 ? call.callerImage
                 : call.receiverImage;
 
+        final user = context.currentUser!;
+        final name =
+            user.uid == call.receiverId ? call.callerName : call.receiverName;
+
         return Scaffold(
           extendBodyBehindAppBar: true,
-          appBar: AudioCallAppBar(call: call),
+          appBar: AudioCallAppBar(name: name, status: call.status),
           body: Stack(
             children: [
               Center(

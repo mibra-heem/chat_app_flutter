@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/resources/colors.dart';
+import 'package:mustye/core/app/resources/colors.dart';
+import 'package:mustye/core/extensions/context_extension.dart';
 
 class MessageTile extends StatelessWidget {
   const MessageTile({
@@ -9,7 +10,9 @@ class MessageTile extends StatelessWidget {
     this.timeColor,
     this.boxColor,
     this.isCurrentUser = true,
-    this.isSeen,
+    this.isSeen = false,
+    this.onTap,
+    this.onLongPressStart,
     super.key,
   });
 
@@ -19,69 +22,107 @@ class MessageTile extends StatelessWidget {
   final Color? timeColor;
   final Color? boxColor;
   final bool isCurrentUser;
-  final bool? isSeen;
+  final bool isSeen;
+  final VoidCallback? onTap;
+  final void Function(LongPressStartDetails)? onLongPressStart;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.75,
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsets.only(top: 8, right: 10, left: 10, bottom: 6),
-        decoration: BoxDecoration(
-          color: boxColor ??
-              (isCurrentUser ? Colours.primaryDark : Colours.grey300),
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(12),
-            topRight: const Radius.circular(12),
-            bottomLeft: Radius.circular(isCurrentUser ? 12 : 0),
-            bottomRight: Radius.circular(isCurrentUser ? 0 : 12),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              message,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: messageColor ??
-                    (isCurrentUser ? Colours.grey300 : Colors.black),
+    final textStyle = TextStyle(
+      fontSize: 14,
+      color: context.color.onPrimaryContainer,
+    );
+    final tsStyle = TextStyle(
+      fontSize: 10,
+      fontWeight: FontWeight.w500,
+      color: timeColor ?? context.color.onTertiaryContainer,
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Use TextPainter to check line count
+        final tp = TextPainter(
+          text: TextSpan(text: message, style: textStyle),
+          textDirection: TextDirection.ltr,
+        )..layout(
+          maxWidth: (context.width * 0.75) - 100,
+        ); // padding for timestamp
+
+        final isSingleLine = tp.computeLineMetrics().length == 1;
+        return Align(
+          alignment:
+              isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
+          child: GestureDetector(
+            onTap: onTap,
+            onLongPressStart: onLongPressStart,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              constraints: BoxConstraints(maxWidth: context.width * 0.75),
+              decoration: BoxDecoration(
+                color:
+                    (isCurrentUser
+                        ? context.color.primaryContainer
+                        : context.color.tertiary),
+                borderRadius: BorderRadius.circular(12),
               ),
+              child:
+                  isSingleLine
+                      ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(message, style: textStyle),
+                          const SizedBox(width: 8),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(time, style: tsStyle),
+                              if (isCurrentUser) ...[
+                                const SizedBox(width: 2),
+                                Icon(
+                                  Icons.done_all,
+                                  size: 14,
+                                  color:
+                                      isSeen ? Colours.success : tsStyle.color,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ],
+                      )
+                      : Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 18),
+                            child: Text(message, style: textStyle),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Row(
+                              children: [
+                                Text(time, style: tsStyle),
+                                if (isCurrentUser) ...[
+                                  const SizedBox(width: 2),
+                                  Icon(
+                                    Icons.done_all,
+                                    size: 14,
+                                    color:
+                                        isSeen
+                                            ? Colours.success
+                                            : tsStyle.color,
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
             ),
-            const SizedBox(width: 8),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    color: timeColor ??
-                        (isCurrentUser
-                            ? Colours.grey400
-                            : Colours.grey800),
-                  ),
-                ),
-                const SizedBox(width: 3),
-                if (isCurrentUser)
-                  Icon(
-                    Icons.done_all_outlined,
-                    size: 12,
-                    color: isSeen! ? Colours.success : Colours.grey400,
-                  ),
-              ],
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

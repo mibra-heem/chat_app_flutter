@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
-import 'package:mustye/core/constants/constants.dart';
-import 'package:mustye/core/resources/themes.dart';
+import 'package:mustye/core/app/themes/app_theme.dart';
+import 'package:mustye/core/config/constants.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/services/go_router.dart';
 import 'package:mustye/core/services/notification_service.dart';

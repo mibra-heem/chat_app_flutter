@@ -7,7 +7,6 @@ extension StringExtention on String {
     final domain = substring(index + 1);
 
     // obscure the email show first and last digit of the username
-
     username = '${username[0]}*****${username[username.length - 1]}';
 
     return '$username@$domain';

@@ -19,7 +19,7 @@ class ChatModel extends Chat {
 
   const ChatModel.empty() : super.empty();
 
-  ChatModel.fromMap(DataMap map)
+  ChatModel.fromMap(SDMap map)
     : super(
         uid: map['uid'] as String,
         email: map['email'] as String,
@@ -62,7 +62,7 @@ class ChatModel extends Chat {
     );
   }
 
-  DataMap toMap() {
+  SDMap toMap() {
     return {
       'uid': uid,
       'email': email,
@@ -78,7 +78,7 @@ class ChatModel extends Chat {
     };
   }
 
-  DataMap toMapLocal() {
+  SDMap toMapLocal() {
     return {
       'uid': uid,
       'email': email,
