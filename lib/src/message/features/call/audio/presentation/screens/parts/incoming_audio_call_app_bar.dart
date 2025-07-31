@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/resources/colors.dart';
+import 'package:mustye/core/app/resources/colors.dart';
 import 'package:mustye/src/message/features/call/audio/domain/entities/incoming_audio_call.dart';
 
 class IncomingAudioCallAppBar extends StatelessWidget

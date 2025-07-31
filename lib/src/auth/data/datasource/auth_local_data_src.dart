@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:mustye/core/constants/storage_const.dart';
+import 'package:mustye/core/config/storage_config.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/core/utils/typedef.dart';
@@ -25,7 +25,7 @@ class AuthLocalDataSrcImpl implements AuthLocalDataSource {
   Future<void> cacheUserData(LocalUser user) async {
     try {
       await _userBox.put(
-        StorageConstant.user+user.uid,
+        StorageConfig.user+user.uid,
         (user as LocalUserModel).toMapLocal(),
       );
     } catch (e, s) {
@@ -41,8 +41,8 @@ class AuthLocalDataSrcImpl implements AuthLocalDataSource {
   Future<LocalUser> getUserCachedData() async {
     try {
       final currentUser = sl<FirebaseAuth>().currentUser!;
-      final userMap = _userBox.get(StorageConstant.user+currentUser.uid);
-      final user = DataMap.from(userMap as Map);
+      final userMap = _userBox.get(StorageConfig.user+currentUser.uid);
+      final user = SDMap.from(userMap as Map);
       return LocalUserModel.fromMap(user);
     } catch (e, s) {
       debugPrintStack(stackTrace: s);

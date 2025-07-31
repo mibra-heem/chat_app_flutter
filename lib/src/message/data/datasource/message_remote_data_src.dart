@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:mustye/core/constants/api_const.dart';
-import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/config/api_config.dart';
+import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/services/api_service.dart';
 import 'package:mustye/core/services/notification_service.dart';
@@ -14,6 +14,7 @@ import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/message/data/model/message_model.dart';
+import 'package:mustye/src/message/domain/entity/message.dart';
 
 abstract class MessageRemoteDataSrc {
   const MessageRemoteDataSrc();
@@ -22,7 +23,10 @@ abstract class MessageRemoteDataSrc {
     required Chat reciever,
     required String message,
   });
-
+  Future<void> deleteMessages({
+    required List<Message> messages,
+    required String chatId,
+  });
   Future<void> setActiveChatId({required String? activeChatId});
 }
 
@@ -55,25 +59,26 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       //Setting message data into the firestore
       final msgTime = Timestamp.now().toDate();
 
+      final chatDocId = DatasourceUtils.joinIds(
+        userId: sender.uid,
+        chatId: reciever.uid,
+      );
+      final messageDocRef =
+          _firestore
+              .collection('chats')
+              .doc(chatDocId)
+              .collection('messages')
+              .doc();
+
       final messageModel = MessageModel(
+        uid: messageDocRef.id,
         msg: message,
         msgTime: msgTime,
         senderId: sender.uid,
         recieverId: reciever.uid,
       );
 
-      final chatDocId = DatasourceUtils.joinIds(
-        userId: sender.uid,
-        chatId: reciever.uid,
-      );
-
-      final messageDoc =
-          _firestore
-              .collection('chats')
-              .doc(chatDocId)
-              .collection('messages')
-              .doc();
-      await messageDoc.set(messageModel.toMap());
+      await messageDocRef.set(messageModel.toMap());
 
       final receiverDoc =
           await _firestore.collection('users').doc(reciever.uid).get();
@@ -96,35 +101,40 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
       final isReceiverViewingThisChat = receiverActiveChatId == sender.uid;
 
       final senderChatModel = ChatModel(
-          uid: sender.uid,
-          email: sender.email,
-          name: sender.name,
-          image: sender.image,
-          bio: sender.bio,
-          lastMsg: message,
-          lastMsgTime: msgTime,
-          unSeenMsgCount: isReceiverViewingThisChat ? 0 : 1,
-        );
+        uid: sender.uid,
+        email: sender.email,
+        name: sender.name,
+        image: sender.image,
+        bio: sender.bio,
+        lastMsg: message,
+        lastMsgTime: msgTime,
+        unSeenMsgCount: isReceiverViewingThisChat ? 0 : 1,
+      );
 
-        final recieverChatModel = ChatModel(
-          uid: reciever.uid,
-          email: reciever.email,
-          name: reciever.name,
-          image: reciever.image,
-          bio: reciever.bio,
-          lastMsg: message,
-          lastMsgTime: msgTime,
-        );
+      final recieverChatModel = ChatModel(
+        uid: reciever.uid,
+        email: reciever.email,
+        name: reciever.name,
+        image: reciever.image,
+        bio: reciever.bio,
+        lastMsg: message,
+        lastMsgTime: msgTime,
+      );
+      debugPrint('Reciever Chat exist or not? ${senderChatRef.id.isNotEmpty}');
+
+      debugPrint('senderChatRef Id => ${senderChatRef.id}');
+
+      final senderChatDocRef = await senderChatRef.get();
+
+      debugPrint(
+        'senderChatDocRef exist in forestore => ${senderChatDocRef.exists}',
+      );
 
       // If both users are chatting for the first time => true
-      if (!_chatBox.containsKey(chatDocId)) {
-
+      if (!senderChatDocRef.exists) {
         await receiverChatRef.set(senderChatModel.toMap());
 
         await senderChatRef.set(recieverChatModel.toMap());
-
-        // Set chatDocId of both users in the localStorage
-        await _chatBox.put(chatDocId, chatDocId);
       } else {
         await receiverChatRef.update({
           'lastMsg': message,
@@ -204,6 +214,95 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
     }
   }
 
+  @override
+  Future<void> deleteMessages({
+    required List<Message> messages,
+    required String chatId,
+  }) async {
+    try {
+      DatasourceUtils.authorizeUser(_auth);
+
+      final currentUserId = _auth.currentUser!.uid;
+
+      final chatDocId = DatasourceUtils.joinIds(
+        userId: currentUserId,
+        chatId: chatId,
+      );
+
+      final batch = _firestore.batch();
+      final chatDocRef = _firestore.collection('chats').doc(chatDocId);
+      final messagesRef = chatDocRef.collection('messages');
+
+      if (messages.isEmpty) return;
+
+      var unseenCountDecrement = 0;
+      for (final msg in messages) {
+        final msgDocRef = messagesRef.doc(msg.uid);
+        batch.delete(msgDocRef);
+        if (!msg.isSeen) unseenCountDecrement++;
+
+        debugPrint('Queued for deletion => ${msg.uid}');
+      }
+
+      await batch.commit(); // ❗ Commit deletions first
+
+      // Now safely read the remaining latest message
+      final remainingSnapshot =
+          await messagesRef.orderBy('msgTime', descending: true).limit(1).get();
+
+      final userChatDocRef = _firestore
+          .collection('users')
+          .doc(currentUserId)
+          .collection('chats')
+          .doc(chatId);
+
+      final chatUserDocRef = _firestore
+          .collection('users')
+          .doc(chatId)
+          .collection('chats')
+          .doc(currentUserId);
+
+      final updateBatch = _firestore.batch();
+
+      if (remainingSnapshot.docs.isNotEmpty) {
+        final newLastMessage = MessageModel.fromMap(
+          remainingSnapshot.docs.first.data(),
+        );
+
+        updateBatch
+          ..update(userChatDocRef, {
+            'lastMsgTime': newLastMessage.msgTime,
+            'lastMsg': newLastMessage.msg,
+          })
+          ..update(chatUserDocRef, {
+            'lastMsgTime': newLastMessage.msgTime,
+            'lastMsg': newLastMessage.msg,
+            'unSeenMsgCount': FieldValue.increment(-unseenCountDecrement),
+          });
+      } else {
+        updateBatch
+          ..update(userChatDocRef, {'lastMsgTime': null, 'lastMsg': null})
+          ..update(chatUserDocRef, {
+            'lastMsgTime': null,
+            'lastMsg': null,
+            'unSeenMsgCount': FieldValue.increment(-unseenCountDecrement),
+          });
+      }
+
+      await updateBatch.commit(); // ✅ Commit updates
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(message: e.message ?? '');
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      if (kDebugMode) {
+        print('Exception: $e');
+      }
+      throw ServerException(message: e.toString(), statusCode: '505');
+    }
+  }
+
   Future<void> sendNotification({
     required String fcmToken,
     required String message,
@@ -230,7 +329,7 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
     };
 
     final res = await _apiClient.post(
-      url: ApiConst.fcmSendUrl,
+      url: ApiConfig.fcmSendUrl,
       body: body,
       serverAccessToken: serverAccessToken,
       needBaseUrl: false,

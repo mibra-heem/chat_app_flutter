@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mustye/core/constants/api_const.dart';
-import 'package:mustye/core/constants/constants.dart';
+import 'package:mustye/core/config/api_config.dart';
+import 'package:mustye/core/config/constants.dart';
 import 'package:mustye/core/enums/update_user_action.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
@@ -274,16 +274,16 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
     return localUser;
   }
 
-  Future<DocumentSnapshot<DataMap>> _getUserData(String uid) async {
+  Future<DocumentSnapshot<SDMap>> _getUserData(String uid) async {
     return _firestore.collection('users').doc(uid).get();
   }
 
-  Future<QuerySnapshot<DataMap>> _getChatsData(String uid) async {
+  Future<QuerySnapshot<SDMap>> _getChatsData(String uid) async {
     return _firestore.collection('users').doc(uid).collection('chats').get();
   }
 
   Future<void> _setUserData(User user, String fallbackEmail) async {
-    final fcmToken = sl<String>(instanceName: ApiConst.fcmToken) as String?;
+    final fcmToken = sl<String>(instanceName: ApiConfig.fcmToken) as String?;
 
     final localUser = LocalUserModel(
       uid: user.uid,
@@ -305,7 +305,7 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
     await _firestore.collection('contacts').doc(user.uid).set(contact.toMap());
   }
 
-  Future<void> _updateUserData(DataMap userData) async {
+  Future<void> _updateUserData(SDMap userData) async {
     final currentUser = _authClient.currentUser!;
 
     // Update current user's data in users collection

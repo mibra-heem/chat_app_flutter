@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/app/widgets/circular_button.dart';
-import 'package:mustye/core/resources/colors.dart';
+import 'package:mustye/core/app/resources/colors.dart';
 
 class IncomingAudioCallBottomBar extends StatelessWidget {
   const IncomingAudioCallBottomBar({

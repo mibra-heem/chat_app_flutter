@@ -24,7 +24,7 @@ class AudioCallModel extends AudioCall {
 
   const AudioCallModel.empty() : super.empty();
 
-  factory AudioCallModel.fromMap(DataMap map) {
+  factory AudioCallModel.fromMap(SDMap map) {
     return AudioCallModel(
       uid: map['uid'] as String,
       callerId: map['callerId'] as String,
@@ -77,7 +77,7 @@ class AudioCallModel extends AudioCall {
     );
   }
 
-  DataMap toMap() {
+  SDMap toMap() {
     return {
       'uid': uid,
       'callerId': callerId,

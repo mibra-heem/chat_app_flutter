@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mustye/core/constants/route_const.dart';
-import 'package:mustye/core/resources/colors.dart';
-import 'package:mustye/core/resources/media_res.dart';
+import 'package:mustye/core/app/resources/colors.dart';
+import 'package:mustye/core/app/resources/media_res.dart';
+import 'package:mustye/core/config/route_config.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

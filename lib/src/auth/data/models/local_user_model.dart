@@ -18,7 +18,7 @@ class LocalUserModel extends LocalUser{
 
   const LocalUserModel.empty() : super.empty();
 
-  LocalUserModel.fromMap(DataMap map) : super(
+  LocalUserModel.fromMap(SDMap map) : super(
     uid:  map['uid'] as String,
     email: map['email'] as String,
     name: map['name'] as String,
@@ -29,7 +29,7 @@ class LocalUserModel extends LocalUser{
           (map['chats'] as List).map(
             (m) {
               debugPrint('LocalUserModel.fromMap chats are not null .....');
-              final chat = DataMap.from(m as Map);
+              final chat = SDMap.from(m as Map);
               return ChatModel.fromMap(chat);
             },
           ),
@@ -62,7 +62,7 @@ class LocalUserModel extends LocalUser{
     );
   }
 
-  DataMap toMap(){
+  SDMap toMap(){
     return {
       'uid' : uid,
       'email' : email,
@@ -74,7 +74,7 @@ class LocalUserModel extends LocalUser{
     };
   }
 
-  DataMap toMapLocal(){
+  SDMap toMapLocal(){
     return {
       'uid' : uid,
       'email' : email,

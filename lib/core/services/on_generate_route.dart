@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mustye/core/app/views/under_development_screen.dart';
-import 'package:mustye/core/constants/route_const.dart';
+import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
