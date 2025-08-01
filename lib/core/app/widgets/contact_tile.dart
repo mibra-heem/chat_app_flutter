@@ -1,35 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:mustye/core/app/resources/media_res.dart';
+import 'package:mustye/core/extensions/context_extension.dart';
 
 class ContactTile extends StatelessWidget {
   const ContactTile({
     required this.title,
     required this.subtitle,
-    required this.image,
+    this.image,
+    this.trailing,
     this.onTap,
+    this.withSubtitle = true,
     super.key,
   });
 
+  const ContactTile.noSubtitle({
+    required this.title,
+    this.image,
+    this.trailing,
+    this.onTap,
+    this.withSubtitle = false,
+    super.key,
+  }) : subtitle = '';
+
   final String title;
-  final String subtitle;
+  final String? subtitle;
+  final String? trailing;
   final String? image;
   final VoidCallback? onTap;
+  final bool withSubtitle;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return ListTile(
       onTap: onTap,
-      child: ListTile(
-        title: Text(title),
-        subtitle: Text(subtitle),
-        leading: CircleAvatar(
-          radius: 25,
-          backgroundImage:
-              image != null
-                  ? NetworkImage(image!)
-                  : const AssetImage(MediaRes.youngManWorkingOnDesk)
-                      as ImageProvider,
+      title: Text(
+        title,
+        style: context.text.bodyMedium?.copyWith(
+          fontSize: 15,
+          overflow: TextOverflow.ellipsis,
         ),
+      ),
+      subtitle:
+          withSubtitle
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    subtitle!,
+                    style: context.text.labelSmall?.copyWith(fontSize: 12),
+                  ),
+                ],
+              )
+              : null,
+      trailing: Text(trailing ?? ''),
+      leading: CircleAvatar(
+        radius: 25,
+        backgroundImage: image != null ? NetworkImage(image!) : null,
+        child: image == null ? const Icon(Icons.person) : null,
       ),
     );
   }

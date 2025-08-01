@@ -16,12 +16,11 @@ import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
-import 'package:mustye/src/contact/data/model/contact_model.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
 
-  Future<void> forgotPassword(String email);
+  Future<void> forgotPassword(String phone);
   Future<LocalUser> googleSignIn();
   Future<LocalUser> signIn({required String email, required String password});
   Future<void> signUp({
@@ -248,8 +247,11 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
         '........ Data does not exits in firestore yet, so setting it and '
         're-fetching the user & chats data ........',
       );
-
-      await _setUserData(firebaseUser, firebaseUser.email!);
+      print('Phone Number => ${firebaseUser.phoneNumber}');
+      await _setUserData(
+        firebaseUser,
+        firebaseUser.phoneNumber ?? '03334382219',
+      );
       // Refetching user and chats after setting new data
       userDocSnapshot = await _getUserData(firebaseUser.uid);
       chatsQuerySnapshot = await _getChatsData(firebaseUser.uid);
@@ -269,7 +271,10 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
     debugPrint('..... User When sign In: $localUser');
 
     // Step 5: Update FCM token
-    await NotificationService.updateFcmToken(auth: _authClient, user: localUser);
+    await NotificationService.updateFcmToken(
+      auth: _authClient,
+      user: localUser,
+    );
 
     return localUser;
   }
@@ -282,27 +287,18 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
     return _firestore.collection('users').doc(uid).collection('chats').get();
   }
 
-  Future<void> _setUserData(User user, String fallbackEmail) async {
+  Future<void> _setUserData(User user, String fallbackPhone) async {
     final fcmToken = sl<String>(instanceName: ApiConfig.fcmToken) as String?;
 
     final localUser = LocalUserModel(
       uid: user.uid,
-      email: user.email ?? fallbackEmail,
+      phone: user.phoneNumber ?? fallbackPhone,
       name: user.displayName ?? '',
-      image: user.photoURL ?? '',
+      avatar: user.photoURL ?? '',
       fcmToken: fcmToken,
     );
 
-    final contact = ContactModel(
-      uid: user.uid,
-      email: user.email ?? fallbackEmail,
-      name: user.displayName ?? '',
-      image: user.photoURL ?? '',
-    );
-
     await _firestore.collection('users').doc(user.uid).set(localUser.toMap());
-
-    await _firestore.collection('contacts').doc(user.uid).set(contact.toMap());
   }
 
   Future<void> _updateUserData(SDMap userData) async {
@@ -310,12 +306,6 @@ class AuthRemoteDataSrcImpl extends AuthRemoteDataSource {
 
     // Update current user's data in users collection
     await _firestore.collection('users').doc(currentUser.uid).update(userData);
-
-    // Update current user's data in contacts collection
-    await _firestore
-        .collection('contacts')
-        .doc(currentUser.uid)
-        .update(userData);
 
     // Fetch all users to find contacts referencing the current user
     final users = await _firestore.collection('users').get();

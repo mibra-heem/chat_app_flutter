@@ -102,9 +102,9 @@ class MessageRemoteDataSrcImpl implements MessageRemoteDataSrc {
 
       final senderChatModel = ChatModel(
         uid: sender.uid,
-        email: sender.email,
+        email: sender.phone,
         name: sender.name,
-        image: sender.image,
+        image: sender.avatar,
         bio: sender.bio,
         lastMsg: message,
         lastMsgTime: msgTime,

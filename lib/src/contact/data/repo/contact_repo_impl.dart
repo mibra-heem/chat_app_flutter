@@ -3,7 +3,8 @@ import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/errors/failure.dart';
 import 'package:mustye/core/utils/typedef.dart';
 import 'package:mustye/src/contact/data/datasource/contact_remote_data_src.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
+import 'package:mustye/src/contact/domain/entities/local_contact.dart';
+import 'package:mustye/src/contact/domain/entities/remote_contact.dart';
 import 'package:mustye/src/contact/domain/repo/contact_repo.dart';
 
 class ContactRepoImpl implements ContactRepo{
@@ -13,7 +14,7 @@ class ContactRepoImpl implements ContactRepo{
   final ContactRemoteDataSrc _remoteDataSrc;
 
   @override
-  RFuture<List<Contact>> getContacts() async{
+  RFuture<List<RemoteContact>> getContacts() async{
     try{
       final result = await _remoteDataSrc.getContacts(); 
       return Right(result);
@@ -23,7 +24,7 @@ class ContactRepoImpl implements ContactRepo{
   }
   
   @override
-  RFuture<void> addContact(Contact contact) async{
+  RFuture<void> addContact(LocalContact contact) async{
     try{
       await _remoteDataSrc.addContact(contact); 
       return const Right(null);

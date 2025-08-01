@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
-import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:mustye/core/app/resources/media_res.dart';
+import 'package:mustye/core/extensions/context_extension.dart';
 import 'package:provider/provider.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -16,7 +16,7 @@ class ProfileHeader extends StatelessWidget {
     final image = context.select<UserProvider, String?>(
       (provider) {
         final user = provider.user;
-        return user?.image == null || user!.image!.isEmpty ? null : user.image;
+        return user?.avatar == null || user!.avatar!.isEmpty ? null : user.avatar;
       },
     );
     final bio = context.select<UserProvider, String?>(

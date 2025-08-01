@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mustye/core/app/resources/fonts.dart';
-import 'package:mustye/core/app/views/loading_view.dart';
+import 'package:mustye/core/app/resources/colors.dart';
 import 'package:mustye/core/app/widgets/contact_tile.dart';
 import 'package:mustye/core/config/route_config.dart';
-import 'package:mustye/core/utils/stream_utils.dart';
-import 'package:mustye/src/chat/data/model/chat_model.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
+import 'package:mustye/core/services/contacts_service.dart';
+import 'package:mustye/src/contact/data/models/local_contact_model.dart';
+import 'package:mustye/src/contact/domain/entities/local_contact.dart';
+import 'package:mustye/src/contact/domain/entities/remote_contact.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,76 +19,105 @@ class ContactScreen extends StatefulWidget {
 
 class _ContactScreenState extends State<ContactScreen> {
   @override
+  void initState() {
+    super.initState();
+    context.read<ContactProvider>().getContacts();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ContactProvider>();
+
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: StreamBuilder<List<Contact>>(
-        stream: StreamUtils.getContacts,
+      appBar: AppBar(title: const Text('Contacts')),
+      body: FutureBuilder<List<LocalContactModel>>(
+        future: ContactService.getFilteredContacts(),
         builder: (context, snapshot) {
-          if (kDebugMode) print('....... Getting Contacts .........');
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LoadingView();
+            return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                'Error loading contacts = ${snapshot.error}',
-                style: const TextStyle(color: Colors.red),
-              ),
-            );
+
+          final localContacts = snapshot.data ?? [];
+
+          final allItems = <dynamic>[];
+
+          final registeredContacts = <RemoteContact>[];
+          final nonRegisteredContacts = <LocalContact>[];
+
+          // Separate into registered and non-registered
+          for (final contact in localContacts) {
+            final user = provider.findRegisteredUserByPhone(contact.phone);
+            if (user.isNotEmpty) {
+              registeredContacts.add(user);
+            } else {
+              nonRegisteredContacts.add(contact);
+            }
           }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No contacts found.'));
+
+          // Build the final list
+          if (registeredContacts.isNotEmpty) {
+            allItems
+              ..add('Contacts on App')
+              ..addAll(registeredContacts);
           }
-          final contacts = snapshot.data!;
-          return CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Select Contacts',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: Fonts.aeonik,
-                      ),
-                    ),
-                    Text(
-                      'Total Contacts ${contacts.length}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
+
+          if (nonRegisteredContacts.isNotEmpty) {
+            allItems
+              ..add('Invite on App')
+              ..addAll(nonRegisteredContacts);
+          }
+
+          return SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                const SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ContactTile.noSubtitle(title: 'New Group'),
+                      ContactTile.noSubtitle(title: 'New Contact'),
+                    ],
+                  ),
                 ),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final contact = contacts[index];
-                  return Consumer<ContactProvider>(
-                    builder: (context, provider, child) {
+
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final item = allItems[index];
+
+                    if (item is String) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          item,
+                          style: const TextStyle(color: Colours.neutral),
+                        ),
+                      );
+                    } else if (item is RemoteContact) {
                       return ContactTile(
-                        title: contact.name,
-                        subtitle: contact.bio ?? '',
-                        image: contact.image,
+                        title: item.name,
+                        subtitle: item.bio ?? '',
+                        image: item.avatar,
                         onTap: () {
-                          context.pushReplacementNamed(
-                            RouteName.message, 
-                            extra: ChatModel(
-                              uid: contact.uid,
-                              name: contact.name,
-                              email: contact.email,
-                              image: contact.image,
-                              bio: contact.bio,
-                            ),
+                          context.pushNamed(
+                            RouteName.message,
+                            
                           );
                         },
                       );
-                    },
-                  );
-                }, childCount: contacts.length,),
-              ),
-            ],
+                    } else if (item is LocalContact) {
+                      return ContactTile(
+                        title: item.name,
+                        subtitle: item.phone,
+                        trailing: 'invite',
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  }, childCount: allItems.length),
+                ),
+              ],
+            ),
           );
         },
       ),

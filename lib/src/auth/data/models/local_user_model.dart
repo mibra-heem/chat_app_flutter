@@ -7,9 +7,9 @@ import 'package:mustye/src/chat/domain/entity/chat.dart';
 class LocalUserModel extends LocalUser{
   const LocalUserModel({
     required super.uid, 
-    required super.email, 
+    required super.phone,
     required super.name, 
-    super.image,
+    super.avatar,
     super.bio,
     super.chats,
     super.activeChatId,
@@ -20,9 +20,9 @@ class LocalUserModel extends LocalUser{
 
   LocalUserModel.fromMap(SDMap map) : super(
     uid:  map['uid'] as String,
-    email: map['email'] as String,
+    phone: map['phone'] as String,
     name: map['name'] as String,
-    image: map['image'] as String?,
+    avatar: map['avatar'] as String?,
     bio: map['bio'] as String?,
     chats: map['chats'] != null 
       ? List<Chat>.from(
@@ -42,9 +42,9 @@ class LocalUserModel extends LocalUser{
 
   LocalUserModel copyWith({
     String? uid, 
-    String? email,
+    String? phone,
     String? name, 
-    String? image,
+    String? avatar,
     String? bio,
     List<Chat>? chats,
     String? activeChatId,
@@ -52,9 +52,9 @@ class LocalUserModel extends LocalUser{
   }){
     return LocalUserModel(
       uid: uid ?? this.uid,
-      email: email ?? this.email, 
+      phone: phone ?? this.phone, 
       name: name ?? this.name,
-      image: image ?? this.image,
+      avatar: avatar ?? this.avatar,
       bio: bio ?? this.bio,
       chats: chats ?? this.chats,
       activeChatId: activeChatId ?? this.activeChatId,
@@ -65,9 +65,9 @@ class LocalUserModel extends LocalUser{
   SDMap toMap(){
     return {
       'uid' : uid,
-      'email' : email,
+      'phone' : phone,
       'name' : name,
-      'image' : image,
+      'avatar' : avatar,
       'bio' : bio,
       'activeChatId' : activeChatId,
       'fcmToken' : fcmToken,
@@ -77,9 +77,9 @@ class LocalUserModel extends LocalUser{
   SDMap toMapLocal(){
     return {
       'uid' : uid,
-      'email' : email,
+      'phone' : phone,
       'name' : name,
-      'image' : image,
+      'avatar' : avatar,
       'bio' : bio,
       'chats' : chats.map((m)=> (m as ChatModel).toMapLocal()).toList(),
       'activeChatId' : activeChatId,

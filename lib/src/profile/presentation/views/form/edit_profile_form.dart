@@ -35,7 +35,7 @@ class EditProfileForm extends StatelessWidget {
         EditProfileFormField(
           title: 'EMAIL ADDRESS',
           controller: emailController,
-          hintText: context.currentUser!.email.obscureEmail,
+          hintText: context.currentUser!.phone,
         ),
         SizedBox(height: context.height * 0.03,),
         EditProfileFormField(

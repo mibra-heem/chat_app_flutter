@@ -38,6 +38,7 @@ class Colours {
   static const warning = yellow;
   static const danger = red;
   static const disable = grey600;
+  static const neutral = grey;
 
   // Shades
   static const grey100 = Color(0xFFF5F5F5);
@@ -64,7 +65,7 @@ class Colours {
   static const surfaceDimLight = Color(0xFFDADADA);
   static const surfaceDimDark = Color(0xFF0A0A0A); // Old 0xFF1E1E1E
 
-  // Scaffold Foreground Colour i.e text colors 
+  // Scaffold Foreground Colour i.e text colors
   static const onSurfaceLight = grey900;
   static const onSurfaceDark = grey100;
 
@@ -74,13 +75,13 @@ class Colours {
 
   // AppBar Colours
   static const appBarLight = primary;
-  static const appBarDark = Color(0xFF1C1C1C); 
+  static const appBarDark = Color(0xFF1C1C1C);
 
   // Text Field Colours
   static const textFieldLight = surfaceBrightLight;
   static const textFieldDark = surfaceBrightDark;
 
-  // Navigation Bar Colours 
+  // Navigation Bar Colours
   static const navBarLight = Color(0xFFFAFAFA);
   static const navBarDark = Color(0xFF1A1A1A);
 
@@ -95,5 +96,4 @@ class Colours {
   // Badge Colours i.e on icons for showing counts
   static const badgeLight = primary;
   static const badgeDark = primary;
-
 }

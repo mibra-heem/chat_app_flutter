@@ -15,7 +15,7 @@ class EditProfileImage extends StatelessWidget {
     return Consumer<ProfileProvider>(
       builder: (_, provider, __) {
         final image =
-            user.image == null || user.image!.isEmpty ? null : user.image;
+            user.avatar == null || user.avatar!.isEmpty ? null : user.avatar;
         return Container(
           height: 100,
           width: 100,

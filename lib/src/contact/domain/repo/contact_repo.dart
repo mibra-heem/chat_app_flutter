@@ -1,8 +1,9 @@
 import 'package:mustye/core/utils/typedef.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
+import 'package:mustye/src/contact/domain/entities/local_contact.dart';
+import 'package:mustye/src/contact/domain/entities/remote_contact.dart';
 
 abstract class ContactRepo {
   const ContactRepo();
-  RFuture<List<Contact>> getContacts();
-  RFuture<void> addContact(Contact contact);
+  RFuture<List<RemoteContact>> getContacts();
+  RFuture<void> addContact(LocalContact contact);
 }

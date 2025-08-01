@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
-import 'package:mustye/src/contact/data/model/contact_model.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
+import 'package:mustye/src/contact/data/models/local_contact_model.dart';
+import 'package:mustye/src/contact/domain/entities/local_contact.dart';
 import 'package:mustye/src/message/data/model/message_model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -36,17 +36,6 @@ class StreamUtils {
       return user.copyWith(chats: chats);
     });
   }
-
-  static Stream<List<Contact>> get getContacts => sl<FirebaseFirestore>()
-      .collection('contacts')
-      .where('uid', isNotEqualTo: sl<FirebaseAuth>().currentUser!.uid)
-      .snapshots()
-      .map(
-        (snapshot) =>
-            snapshot.docs
-                .map((doc) => ContactModel.fromMap(doc.data()))
-                .toList(),
-      );
 
   static Stream<List<MessageModel>> getMessages(String chatId) {
     final user = sl<FirebaseAuth>().currentUser!;

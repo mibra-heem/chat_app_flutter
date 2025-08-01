@@ -119,7 +119,9 @@ Future<void> _initTheme() async {
 /// Feature --> Contacts
 Future<void> _initContacts() async {
   sl
-    ..registerLazySingleton(() => ContactProvider(addContact: sl()))
+    ..registerLazySingleton(
+      () => ContactProvider(addContact: sl(), getContacts: sl()),
+    )
     ..registerLazySingleton(() => GetContacts(sl()))
     ..registerLazySingleton(() => AddContact(sl()))
     ..registerLazySingleton<ContactRepo>(() => ContactRepoImpl(sl()))

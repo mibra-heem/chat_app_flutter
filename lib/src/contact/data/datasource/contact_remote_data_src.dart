@@ -3,14 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
-import 'package:mustye/src/contact/data/model/contact_model.dart';
-import 'package:mustye/src/contact/domain/entity/contact.dart';
+import 'package:mustye/src/contact/data/models/local_contact_model.dart';
+import 'package:mustye/src/contact/data/models/remote_contact_model.dart';
+import 'package:mustye/src/contact/domain/entities/local_contact.dart';
+import 'package:mustye/src/contact/domain/entities/remote_contact.dart';
 
 abstract class ContactRemoteDataSrc {
   const ContactRemoteDataSrc();
 
-  Future<List<Contact>> getContacts();
-  Future<void> addContact(Contact contact);
+  Future<List<RemoteContact>> getContacts();
+  Future<void> addContact(LocalContact contact);
 }
 
 class ContactRemoteDataSrcImpl implements ContactRemoteDataSrc {
@@ -24,19 +26,20 @@ class ContactRemoteDataSrcImpl implements ContactRemoteDataSrc {
   final FirebaseFirestore _firestore;
 
   @override
-  Future<List<Contact>> getContacts() async {
+  Future<List<RemoteContact>> getContacts() async {
     try {
       DatasourceUtils.authorizeUser(_auth);
-      return _firestore
-          .collection('contacts')
-          .where('uid', isNotEqualTo: _auth.currentUser!.uid)
-          .get()
-          .then(
-            (value) =>
-                value.docs
-                    .map((doc) => ContactModel.fromMap(doc.data()))
-                    .toList(),
-          );
+
+      final snapshot = await _firestore.collection('users').get();
+
+      final contacts = <RemoteContact>[];
+      if (snapshot.docs.isNotEmpty) {
+        for (final doc in snapshot.docs) {
+          contacts.add(RemoteContactModel.fromMap(doc.data()));
+        }
+      }
+
+      return contacts;
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
     } on ServerException {
@@ -49,22 +52,21 @@ class ContactRemoteDataSrcImpl implements ContactRemoteDataSrc {
   }
 
   @override
-  Future<void> addContact(Contact contact) async {
+  Future<void> addContact(LocalContact contact) async {
     try {
       DatasourceUtils.authorizeUser(_auth);
 
       final user = _auth.currentUser!;
-      final contactModel = contact as ContactModel;
+      final contactModel = contact as LocalContactModel;
       final userRef = _firestore.collection('users').doc(user.uid);
       final chatsRef = userRef.collection('chats');
-      final existingChat = await chatsRef.where('uid', isEqualTo: contact.uid)
-        .limit(1).get();
-      if(existingChat.docs.isEmpty){
-        await chatsRef.add(contactModel.toMap());
-      }else{
-        if(kDebugMode) print('Chat with ${contact.email} already exists.');
+      final existingChat =
+          await chatsRef.where('uid', isEqualTo: contact.uid).limit(1).get();
+      if (existingChat.docs.isEmpty) {
+        // await chatsRef.add(contactModel.toMap());
+      } else {
+        // if(kDebugMode) print('Chat with ${contact.email} already exists.');
       }
-
     } on FirebaseAuthException catch (e) {
       throw ServerException(message: e.message ?? '');
     } on ServerException {
