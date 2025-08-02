@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
-import 'package:mustye/src/contact/data/models/local_contact_model.dart';
-import 'package:mustye/src/contact/domain/entities/local_contact.dart';
 import 'package:mustye/src/message/data/model/message_model.dart';
 import 'package:rxdart/rxdart.dart';
 

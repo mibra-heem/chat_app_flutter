@@ -5,9 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/services/dependency_injection.dart';
 import 'package:mustye/src/auth/presentation/bloc/auth_bloc.dart';
-import 'package:mustye/src/auth/presentation/screens/forgot_password_screen.dart';
-import 'package:mustye/src/auth/presentation/screens/sign_in_screen.dart';
-import 'package:mustye/src/auth/presentation/screens/sign_up_screen.dart';
+import 'package:mustye/src/auth/presentation/screens/otp_verification.dart';
+import 'package:mustye/src/auth/presentation/screens/phone_auth_screen.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/chat/presentation/views/chat_view.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';
@@ -54,25 +53,16 @@ final GoRouter router = GoRouter(
       builder:
           (context, state) => BlocProvider(
             create: (context) => sl<AuthBloc>(),
-            child: const SignInScreen(),
+            child: const PhoneAuthScreen(),
           ),
     ),
     GoRoute(
-      path: RoutePath.signUp,
-      name: RouteName.signUp,
+      path: RoutePath.verifyOtp,
+      name: RouteName.verifyOtp,
       builder:
           (context, state) => BlocProvider(
             create: (context) => sl<AuthBloc>(),
-            child: const SignUpScreen(),
-          ),
-    ),
-    GoRoute(
-      path: RoutePath.forgetPassword,
-      name: RouteName.forgetPassword,
-      builder:
-          (context, state) => BlocProvider(
-            create: (context) => sl<AuthBloc>(),
-            child: const ForgotPasswordScreen(),
+            child: const OtpVerificationScreen(),
           ),
     ),
     GoRoute(

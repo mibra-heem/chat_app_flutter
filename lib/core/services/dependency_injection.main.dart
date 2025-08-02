@@ -49,20 +49,16 @@ Future<void> _initAuth() async {
   sl
     ..registerFactory<AuthBloc>(
       () => AuthBloc(
-        googleSignIn: sl(),
-        signIn: sl(),
-        signUp: sl(),
-        forgotPassword: sl(),
+        phoneAuthentication: sl(),
+        verifyOtp: sl(),
         updateUser: sl(),
       ),
     )
     ..registerLazySingleton<UserProvider>(
       () => UserProvider(getUserCachedData: sl(), cacheUserData: sl()),
     )
-    ..registerLazySingleton(() => SignIn(sl()))
-    ..registerLazySingleton(() => GoogleLoginIn(sl()))
-    ..registerLazySingleton(() => SignUp(sl()))
-    ..registerLazySingleton(() => ForgotPassword(sl()))
+    ..registerLazySingleton(() => PhoneAuthentication(sl()))
+    ..registerLazySingleton(() => VerifyOTP(sl()))
     ..registerLazySingleton(() => UpdateUser(sl()))
     ..registerLazySingleton(() => CacheUserData(sl()))
     ..registerLazySingleton(() => GetUserCachedData(sl()))
@@ -74,7 +70,6 @@ Future<void> _initAuth() async {
         authClient: sl(),
         firestore: sl(),
         dbClient: sl(),
-        googleSignIn: sl(),
       ),
     )
     ..registerLazySingleton<AuthLocalDataSource>(

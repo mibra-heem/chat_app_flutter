@@ -4,56 +4,26 @@ sealed class AuthEvent extends Equatable {
   const AuthEvent();
 }
 
-class GoogleSignInEvent extends AuthEvent{
+class PhoneAuthenticationEvent extends AuthEvent{
 
-  const GoogleSignInEvent();
+  const PhoneAuthenticationEvent(this.phone);
+
+  final String phone;
 
   @override
-  List<String> get props => [];
+  List<String> get props => [phone];
 
 }
 
-class SignInEvent extends AuthEvent{
+class VerifyOTPEvent extends AuthEvent{
 
-  SignInEvent({required this.email, required this.password}){
-    if(kDebugMode) print('SignIn Event Triggered...');
-  }
+  const VerifyOTPEvent(this.otp);
 
-  final String email;
-  final String password;
+  final String otp;
 
   @override
-  List<String> get props => [email, password];
+  List<String> get props => [otp];
 
-}
-
-class SignUpEvent extends AuthEvent{
-
-  const SignUpEvent(
-    {
-      required this.name,
-      required this.email, 
-      required this.password,
-    });
-
-  final String name;
-  final String email;
-  final String password;
-
-  @override
-  List<String> get props => [name, email, password];
-
-}
-
-class ForgotPasswordEvent extends AuthEvent{
-
-  const ForgotPasswordEvent({required this.email});
-
-  final String email;
-
-  @override
-  List<Object?> get props => [email];
-  
 }
 
 class UpdateUserEvent extends AuthEvent{

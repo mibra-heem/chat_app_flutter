@@ -1,5 +1,5 @@
 import 'package:contacts_service_plus/contacts_service_plus.dart';
-import 'package:mustye/src/contact/data/models/local_contact_model.dart';
+import 'package:mustye/src/contact/data/models/contact_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactService {

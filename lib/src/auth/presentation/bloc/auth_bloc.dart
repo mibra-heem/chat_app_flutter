@@ -2,105 +2,60 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:mustye/core/enums/update_user_action.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
-import 'package:mustye/src/auth/domain/usecases/forgot_password.dart';
-import 'package:mustye/src/auth/domain/usecases/google_sign_in.dart';
-import 'package:mustye/src/auth/domain/usecases/sign_in.dart';
-import 'package:mustye/src/auth/domain/usecases/sign_up.dart';
+import 'package:mustye/src/auth/domain/usecases/phone_authentication.dart';
 import 'package:mustye/src/auth/domain/usecases/update_profile.dart';
+import 'package:mustye/src/auth/domain/usecases/verify_otp.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
-    required GoogleLoginIn googleSignIn,
-    required SignIn signIn,
-    required SignUp signUp,
-    required ForgotPassword forgotPassword,
+    required PhoneAuthentication phoneAuthentication,
+    required VerifyOTP verifyOtp,
     required UpdateUser updateUser,
-  })  : _googleSignIn = googleSignIn,
-        _signUp = signUp,
-        _signIn = signIn,
-        _forgotPassword = forgotPassword,
-        _updateUser = updateUser,
-        super(AuthInitial()) {
+  }) : _phoneAuthentication = phoneAuthentication,
+       _verifyOtp = verifyOtp,
+       _updateUser = updateUser,
+       super(AuthInitial()) {
     on<AuthEvent>((event, emit) {
       emit(const AuthLoading());
     });
-    on<GoogleSignInEvent>(_googleSignInHandler);
-    on<SignInEvent>(_signInHandler);
-    on<SignUpEvent>(_signUpHandler);
-    on<ForgotPasswordEvent>(_forgotPasswordHandler);
+    on<PhoneAuthenticationEvent>(_phoneAuthenticationHandler);
+    on<VerifyOTPEvent>(_verifyOTPHandler);
     on<UpdateUserEvent>(_updateUserHandler);
   }
 
-  final GoogleLoginIn _googleSignIn;
-  final SignIn _signIn;
-  final SignUp _signUp;
-  final ForgotPassword _forgotPassword;
+  final PhoneAuthentication _phoneAuthentication;
+  final VerifyOTP _verifyOtp;
   final UpdateUser _updateUser;
 
-  Future<void> _googleSignInHandler(
-    GoogleSignInEvent event,
+  Future<void> _phoneAuthenticationHandler(
+    PhoneAuthenticationEvent event,
     Emitter<AuthState> emit,
   ) async {
-    final result = await _googleSignIn();
+    // final result = await _phoneAuthentication(event.phone);
 
-    result.fold(
-      (failure) => emit(AuthError(failure.errorMessage)),
-      (user) => emit(SignedIn(user)),
-    );
+    // result.fold(
+    //   (failure) => emit(AuthError(failure.errorMessage)),
+    //   (code) => emit(CheckVerificationCode(code)),
+    // );
+
+    await Future.delayed(const Duration(seconds: 3));
+    emit(const OTPSent('342569'));
   }
 
-  Future<void> _signInHandler(
-    SignInEvent event,
+  Future<void> _verifyOTPHandler(
+    VerifyOTPEvent event,
     Emitter<AuthState> emit,
   ) async {
-    final result = await _signIn(
-      SignInParams(
-        email: event.email,
-        password: event.password,
-      ),
-    );
+    final result = await _verifyOtp(event.otp);
 
     result.fold(
       (failure) => emit(AuthError(failure.errorMessage)),
-      (user) => emit(SignedIn(user)),
-    );
-  }
-
-  Future<void> _signUpHandler(
-    SignUpEvent event,
-    Emitter<AuthState> emit,
-  ) async {
-    final result = await _signUp(
-      SignUpParams(
-        name: event.name,
-        email: event.email,
-        password: event.password,
-      ),
-    );
-
-    result.fold(
-      (failure) => emit(AuthError(failure.errorMessage)),
-      (_) => emit(const SignedUp()),
-    );
-  }
-
-  Future<void> _forgotPasswordHandler(
-    ForgotPasswordEvent event,
-    Emitter<AuthState> emit,
-  ) async {
-    final result = await _forgotPassword(
-      ForgotPasswordParams(email: event.email),
-    );
-
-    result.fold(
-      (failure) => emit(AuthError(failure.errorMessage)),
-      (_) => emit(const ForgotPasswordSent()),
+      (_) => emit(PhoneAuthSuccess()),
     );
   }
 
@@ -109,10 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     final result = await _updateUser(
-      UpdateUserParams(
-        action: event.action,
-        userData: event.userData,
-      ),
+      UpdateUserParams(action: event.action, userData: event.userData),
     );
 
     result.fold(
@@ -120,5 +72,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (_) => emit(const UserUpdated()),
     );
   }
-
 }
