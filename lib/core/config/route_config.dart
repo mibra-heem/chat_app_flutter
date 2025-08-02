@@ -4,6 +4,7 @@ class RoutePath{
   // Full screen routes section
   static const initial = '/';
   static const splash = '/splash';
+  static const verifyOtp = '/verify-otp/:phone';
   static const signIn = '/sign-in';
   static const signUp = '/sign-up';
   static const forgetPassword = '/forget-password';
@@ -39,6 +40,7 @@ class RouteName{
   static const initial = 'initial';
   static const splash = 'splash';
   static const signIn = 'sign-in';
+  static const verifyOtp = 'verify-otp';
   static const signUp = 'sign-up';
   static const forgetPassword = 'forget-password';
   static const dashboard = 'dashboard';

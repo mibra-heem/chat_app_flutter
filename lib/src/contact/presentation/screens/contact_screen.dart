@@ -4,7 +4,7 @@ import 'package:mustye/core/app/resources/colors.dart';
 import 'package:mustye/core/app/widgets/contact_tile.dart';
 import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/services/contacts_service.dart';
-import 'package:mustye/src/contact/data/models/local_contact_model.dart';
+import 'package:mustye/src/contact/data/models/contact_model.dart';
 import 'package:mustye/src/contact/domain/entities/local_contact.dart';
 import 'package:mustye/src/contact/domain/entities/remote_contact.dart';
 import 'package:mustye/src/contact/presentation/provider/contact_provider.dart';

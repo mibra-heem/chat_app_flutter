@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mustye/core/errors/exception.dart';
 import 'package:mustye/core/utils/datasource_utils.dart';
-import 'package:mustye/src/contact/data/models/local_contact_model.dart';
+import 'package:mustye/src/contact/data/models/contact_model.dart';
 import 'package:mustye/src/contact/data/models/remote_contact_model.dart';
 import 'package:mustye/src/contact/domain/entities/local_contact.dart';
 import 'package:mustye/src/contact/domain/entities/remote_contact.dart';

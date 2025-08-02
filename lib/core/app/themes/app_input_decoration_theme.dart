@@ -7,24 +7,17 @@ class AppInputDecorationTheme {
   static const light = InputDecorationTheme(
     filled: true,
     fillColor: Colours.textFieldLight,
+    
     counterStyle: TextStyle(
       color: Colours.primary,
       letterSpacing: 1,
       fontWeight: FontWeight.w500,
     ),
+    
     hintStyle: TextStyle(color: Colours.grey600),
-    focusedBorder: OutlineInputBorder(
-      // borderRadius: BorderRadius.circular(30),
-      borderSide: BorderSide(color: Colours.textFieldLight),
-    ),
-    border: OutlineInputBorder(
-      // borderRadius: BorderRadius.circular(30),
-      borderSide: BorderSide(color: Colours.textFieldLight),
-    ),
-    enabledBorder: OutlineInputBorder(
-      // borderRadius: BorderRadius.circular(30),
-      borderSide: BorderSide(color: Colours.textFieldLight),
-    ),
+    focusedBorder: InputBorder.none,
+    border: InputBorder.none,
+    enabledBorder: InputBorder.none,
     suffixIconColor: Colours.black,
     prefixIconColor: Colours.black,
   );
@@ -38,9 +31,9 @@ class AppInputDecorationTheme {
       fontWeight: FontWeight.w500,
     ),
     hintStyle: TextStyle(color: Colours.grey600),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-    border: OutlineInputBorder(borderSide: BorderSide.none),
-    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+    focusedBorder: InputBorder.none,
+    border: InputBorder.none,
+    enabledBorder: InputBorder.none,
     suffixIconColor: Colours.white,
     prefixIconColor: Colours.white,
   );

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:mustye/core/extensions/string_extention.dart';
 import 'package:mustye/src/contact/domain/entities/local_contact.dart';
 import 'package:mustye/src/contact/domain/entities/remote_contact.dart';
+
 import 'package:mustye/src/contact/domain/usecase/add_contact.dart';
 import 'package:mustye/src/contact/domain/usecase/get_contacts.dart';
 
