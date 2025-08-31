@@ -1,4 +1,4 @@
-# 🛍️ Mustye (Real-time Chat App)
+# Mustye (Real-time Chat App)
 
 <h2> Video Demo </h2>
 
@@ -32,4 +32,5 @@ A real-time chat app with Firebase Auth, Firestore messaging, message seen statu
 | Backend              | Firebase               |
 | State Management     | Provider, Cubit & Bloc |
 | API's                | REST                   |
+
 | Notification         | FCM Cloud Messaging    |
