@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/app/widgets/my_field.dart';
 
 class SignInForm extends StatefulWidget {
@@ -40,13 +40,13 @@ class _SignInFormState extends State<SignInForm> {
             validatePassword: true,
             keyboardType: TextInputType.visiblePassword,
             suffixIcon: IconButton(
-              onPressed: (){
-                setState((){
+              onPressed: () {
+                setState(() {
                   obscurePassword = !obscurePassword;
                 });
               },
               icon: Icon(
-                obscurePassword ? IconlyLight.show : IconlyLight.hide,
+                obscurePassword ? LucideIcons.eye : LucideIcons.eyeOff,
                 color: Colors.grey,
               ),
             ),

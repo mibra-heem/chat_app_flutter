@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/app/resources/colors.dart';
 
 class AudioCallBottomBar extends StatelessWidget {
-  const AudioCallBottomBar({
-    super.key,
-    this.onEndCall,
-  });
+  const AudioCallBottomBar({super.key, this.onEndCall});
 
   final VoidCallback? onEndCall;
   @override
@@ -22,10 +19,10 @@ class AudioCallBottomBar extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.more_horiz_outlined),
+            icon: const Icon(LucideIcons.moreHorizontal),
           ),
-          IconButton(onPressed: () {}, icon: const Icon(IconlyBold.volume_up)),
-          IconButton(onPressed: () {}, icon: const Icon(IconlyBold.voice)),
+          IconButton(onPressed: () {}, icon: const Icon(LucideIcons.volume2)),
+          IconButton(onPressed: () {}, icon: const Icon(LucideIcons.mic)),
           Container(
             decoration: const BoxDecoration(
               color: Colors.red,
@@ -33,7 +30,7 @@ class AudioCallBottomBar extends StatelessWidget {
             ),
             child: IconButton(
               onPressed: onEndCall,
-              icon: const Icon(IconlyBold.call),
+              icon: const Icon(LucideIcons.phoneOff),
             ),
           ),
         ],

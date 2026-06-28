@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/app/widgets/my_field.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -58,7 +58,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 });
               },
               icon: Icon(
-                obscurePassword ? IconlyLight.show : IconlyLight.hide,
+                obscurePassword ? LucideIcons.eyeOff : LucideIcons.eye,
                 color: Colors.grey,
               ),
             ),
@@ -84,7 +84,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 });
               },
               icon: Icon(
-                obscurePassword ? IconlyLight.show : IconlyLight.hide,
+                obscurePassword ? LucideIcons.eye : LucideIcons.eyeOff,
                 color: Colors.grey,
               ),
             ),

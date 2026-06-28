@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/config/route_config.dart';
 
 class AddContactsFloatingButton extends StatelessWidget {
@@ -12,11 +12,10 @@ class AddContactsFloatingButton extends StatelessWidget {
       foregroundColor: Colors.white,
       tooltip: 'Select Contacts',
       shape: const CircleBorder(),
-      onPressed: (){
+      onPressed: () {
         context.pushNamed(RouteName.contact);
       },
-      child: const Icon(IconlyBold.add_user),
-
+      child: const Icon(LucideIcons.userPlus),
     );
   }
 }

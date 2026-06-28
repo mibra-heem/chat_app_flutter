@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:mustye/core/app/resources/colors.dart';
 import 'package:mustye/core/app/widgets/gradient_background.dart';
 import 'package:mustye/core/app/widgets/my_field.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
-import 'package:mustye/core/app/resources/colors.dart';
 import 'package:mustye/src/auth/data/models/local_user_model.dart';
 import 'package:mustye/src/chat/data/model/chat_model.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
@@ -33,8 +33,8 @@ class MessageFoot extends StatelessWidget {
                 child: MyField(
                   controller: messageController,
                   hintText: 'message',
-                  prefixIcon: const Icon(IconlyBold.image),
-                  suffixIcon: const Icon(Icons.attach_file),
+                  prefixIcon: const Icon(LucideIcons.image),
+                  suffixIcon: const Icon(LucideIcons.paperclip),
                   maxLines: 100,
                   isTextArea: true,
                   isFocusOnTapOutside: false,
@@ -70,17 +70,15 @@ class MessageFoot extends StatelessWidget {
                 width: 50,
                 decoration: BoxDecoration(
                   color:
-                      context.read<ThemeProvider>().themeMode ==
-                              ThemeMode.dark
+                      context.read<ThemeProvider>().themeMode == ThemeMode.dark
                           ? Colours.white
                           : Colours.primary,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  IconlyBold.send,
+                  LucideIcons.send,
                   color:
-                      context.read<ThemeProvider>().themeMode ==
-                              ThemeMode.dark
+                      context.read<ThemeProvider>().themeMode == ThemeMode.dark
                           ? Colours.primary
                           : Colours.white,
                 ),

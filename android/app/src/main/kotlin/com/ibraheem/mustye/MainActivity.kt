@@ -1,4 +1,4 @@
-package com.example.mustye
+package com.ibraheem.mustye
 
 import io.flutter.embedding.android.FlutterActivity
 
