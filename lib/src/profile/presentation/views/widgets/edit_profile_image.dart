@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/app/resources/media_res.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
 import 'package:mustye/src/profile/presentation/provider/profile_provider.dart';
@@ -45,7 +45,7 @@ class EditProfileImage extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: provider.pickImage,
-                  icon: const Icon(IconlyBold.edit, color: Colors.white),
+                  icon: const Icon(LucideIcons.edit, color: Colors.white),
                 ),
               ),
             ],

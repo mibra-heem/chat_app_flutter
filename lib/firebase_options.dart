@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,9 +28,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -41,56 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDRY0JdRrVV6hI0SGL900WXyplTLNo29RI',
-    appId: '1:194129986069:android:5a6a21d70ef1e8015cc41c',
-    messagingSenderId: '194129986069',
-    projectId: 'chat-app-187f5',
-    databaseURL: 'https://chat-app-187f5-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'chat-app-187f5.firebasestorage.app',
-  );
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAnKa-1635q20SbTfxqBmDtRgfELCSoZC8',
-    appId: '1:194129986069:web:3def4ee66d7b8bea5cc41c',
-    messagingSenderId: '194129986069',
-    projectId: 'chat-app-187f5',
-    authDomain: 'chat-app-187f5.firebaseapp.com',
-    databaseURL: 'https://chat-app-187f5-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'chat-app-187f5.firebasestorage.app',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDFCKa1vDVo1QRwJppNRCarbcvP2x-aiL4',
-    appId: '1:194129986069:ios:9c056b8f1372b7cb5cc41c',
-    messagingSenderId: '194129986069',
-    projectId: 'chat-app-187f5',
-    databaseURL: 'https://chat-app-187f5-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'chat-app-187f5.firebasestorage.app',
-    androidClientId: '194129986069-t32ehm5o4qvghb5p0imu9kov7h8vgj0n.apps.googleusercontent.com',
-    iosClientId: '194129986069-t514kqbrt21a7c3kutn3eu221kpc6qas.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mustye',
+    apiKey: 'AIzaSyBbEPcbB634zqqbX5Ao0FKZFvdFie_yYCk',
+    appId: '1:420936146127:android:191baf1a07621a43ceabba',
+    messagingSenderId: '420936146127',
+    projectId: 'fir-chat-app-904c9',
+    storageBucket: 'fir-chat-app-904c9.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDFCKa1vDVo1QRwJppNRCarbcvP2x-aiL4',
-    appId: '1:194129986069:ios:9c056b8f1372b7cb5cc41c',
-    messagingSenderId: '194129986069',
-    projectId: 'chat-app-187f5',
-    databaseURL: 'https://chat-app-187f5-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'chat-app-187f5.firebasestorage.app',
-    androidClientId: '194129986069-t32ehm5o4qvghb5p0imu9kov7h8vgj0n.apps.googleusercontent.com',
-    iosClientId: '194129986069-t514kqbrt21a7c3kutn3eu221kpc6qas.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mustye',
+    apiKey: 'AIzaSyBRiJ3o9FKDsw9VULNu1SskULcSWmd--yA',
+    appId: '1:420936146127:ios:51292c9fdd73d2f5ceabba',
+    messagingSenderId: '420936146127',
+    projectId: 'fir-chat-app-904c9',
+    storageBucket: 'fir-chat-app-904c9.firebasestorage.app',
+    iosClientId: '420936146127-i9918r3ssqt316gcpg366ov9mme339pm.apps.googleusercontent.com',
+    iosBundleId: 'com.ibraheem.mustye',
   );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAnKa-1635q20SbTfxqBmDtRgfELCSoZC8',
-    appId: '1:194129986069:web:be3f8587187cbbc45cc41c',
-    messagingSenderId: '194129986069',
-    projectId: 'chat-app-187f5',
-    authDomain: 'chat-app-187f5.firebaseapp.com',
-    databaseURL: 'https://chat-app-187f5-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'chat-app-187f5.firebasestorage.app',
-  );
-
 }

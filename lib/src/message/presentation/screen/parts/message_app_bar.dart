@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/app/widgets/arrow_back_button.dart';
 import 'package:mustye/core/config/route_config.dart';
 import 'package:mustye/core/extensions/context_extension.dart';
@@ -37,7 +37,7 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
                         debugPrint('Click on videoCall');
                         context.pushNamed(RouteName.videoCall, extra: chat);
                       },
-                      icon: const Icon(IconlyBold.video, size: 26),
+                      icon: const Icon(LucideIcons.video, size: 26),
                     ),
                     IconButton(
                       onPressed: () {
@@ -63,11 +63,11 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
                         sl<AudioCallProvider>().activateIncomingAudioCall(call);
                         context.pushNamed(RouteName.audioCall, extra: call);
                       },
-                      icon: const Icon(IconlyBold.call),
+                      icon: const Icon(LucideIcons.phone),
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: const Icon(Icons.more_vert_rounded),
+                      icon: const Icon(LucideIcons.moreVertical),
                     ),
                   ]
                   : [

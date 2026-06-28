@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/utils/stream_utils.dart';
 import 'package:mustye/src/auth/domain/entities/local_user.dart';
@@ -81,16 +81,16 @@ class _DashboardState extends State<Dashboard> {
                   label: 'Chat',
                   icon: Icon(
                     widget.shell.currentIndex == 0
-                        ? IconlyBold.paper
-                        : IconlyLight.paper,
+                        ? LucideIcons.messagesSquare
+                        : LucideIcons.messageSquare,
                   ),
                 ),
                 BottomNavigationBarItem(
                   label: 'Profile',
                   icon: Icon(
                     widget.shell.currentIndex == 1
-                        ? IconlyBold.profile
-                        : IconlyLight.profile,
+                        ? LucideIcons.personStanding
+                        : LucideIcons.user,
                   ),
                 ),
               ],

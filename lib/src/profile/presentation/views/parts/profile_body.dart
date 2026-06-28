@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/app/providers/user_provider.dart';
 import 'package:mustye/core/app/widgets/my_dialog_box.dart';
 import 'package:mustye/core/config/route_config.dart';
@@ -27,19 +27,19 @@ class ProfileBody extends StatelessWidget {
           children: [
             UserProfileTile(
               title: 'Edit Profile',
-              icon: IconlyLight.edit_square,
+              icon: LucideIcons.edit,
               iconColor: Colors.cyan,
               onTap: () => context.pushNamed(RouteName.editProfile),
             ),
             const UserProfileTile(
               title: 'Favourites',
-              icon: IconlyLight.heart,
+              icon: LucideIcons.heart,
               iconColor: Colors.amber,
               // onTap: () => context.pushNamed(RouteName.favourite),
             ),
             UserProfileTile(
               title: 'Theme',
-              icon: IconlyLight.filter,
+              icon: LucideIcons.filter,
               iconColor: Colors.lightBlue,
               onTap: () {
                 showDialog<Navigator>(
@@ -86,13 +86,13 @@ class ProfileBody extends StatelessWidget {
             ),
             const UserProfileTile(
               title: 'Privacy',
-              icon: IconlyLight.shield_done,
+              icon: LucideIcons.shield,
               iconColor: Colors.lightGreen,
               // onTap: () => context.pushNamed(RouteName.privacy),
             ),
             UserProfileTile(
               title: 'Logout',
-              icon: IconlyLight.logout,
+              icon: LucideIcons.logOut,
               iconColor: Colors.red,
               onTap: () {
                 showDialog<void>(

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/core/app/resources/colors.dart';
 import 'package:mustye/core/app/widgets/arrow_back_button.dart';
 import 'package:mustye/core/enums/call.dart';
@@ -99,7 +99,7 @@ class _AudioCallAppBarState extends State<AudioCallAppBar> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(IconlyBold.add_user, size: 26),
+          icon: const Icon(LucideIcons.userPlus, size: 26),
         ),
       ],
     );

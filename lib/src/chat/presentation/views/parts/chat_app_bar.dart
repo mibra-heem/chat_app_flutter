@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mustye/src/chat/domain/entity/chat.dart';
 import 'package:mustye/src/chat/presentation/provider/chat_provider.dart';
 
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ChatAppBar({
-    required this.longPressedTiles, super.key,
+    required this.longPressedTiles,
+    super.key,
     this.deleteChats = const [],
   });
 
@@ -35,11 +36,11 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
               : [
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.search, size: 26),
+                  icon: const Icon(LucideIcons.search),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(IconlyBold.notification),
+                  icon: const Icon(LucideIcons.bell),
                 ),
               ],
     );
